@@ -1,0 +1,1253 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaigns – HerKey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --purple:       #7B2D8B;
+      --purple-light: #9B3FAD;
+      --purple-bg:    #F5EEF8;
+      --purple-dark:  #5C1F6D;
+      --orange:       #F97316;
+      --orange-bg:    #FFF7ED;
+      --green:        #10B981;
+      --green-bg:     #ECFDF5;
+      --blue:         #3B82F6;
+      --blue-bg:      #EFF6FF;
+      --red:          #EF4444;
+      --red-bg:       #FEF2F2;
+      --yellow:       #F59E0B;
+      --yellow-bg:    #FFFBEB;
+      --text-dark:    #111827;
+      --text-mid:     #4B5563;
+      --text-light:   #9CA3AF;
+      --border:       #E5E7EB;
+      --bg:           #F3F4F6;
+      --white:        #FFFFFF;
+      --sidebar-w:    230px;
+      --header-h:     60px;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-dark); min-height: 100vh; }
+    svg { display: block; }
+
+    /* -- HEADER -- */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: var(--header-h); background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 20px; gap: 16px;
+    }
+    .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; min-width: calc(var(--sidebar-w) - 20px); }
+    .logo-mark { width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, var(--purple) 0%, #C84FC8 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 18px; }
+    .logo-text { font-size: 20px; font-weight: 700; color: var(--purple); }
+    .logo-text span { color: var(--orange); }
+    .search-bar { flex: 1; max-width: 420px; display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 24px; padding: 0 16px; height: 38px; }
+    .search-bar input { border: none; background: transparent; outline: none; font-size: 13px; color: var(--text-dark); width: 100%; }
+    .search-bar input::placeholder { color: var(--text-light); }
+    .header-nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+    .header-nav a, .header-nav button { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; background: transparent; color: var(--text-mid); transition: all .2s; }
+    .header-nav a:hover { background: var(--bg); color: var(--purple); }
+    .btn-business { background: var(--purple) !important; color: var(--white) !important; font-weight: 600 !important; }
+    .notif-btn { position: relative; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; background: var(--bg); display: flex; align-items: center; justify-content: center; color: var(--text-mid); }
+    .notif-badge { position: absolute; top: 4px; right: 4px; width: 16px; height: 16px; border-radius: 50%; background: #EF4444; color: white; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
+    .avatar-placeholder { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), var(--purple-light)); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600; cursor: pointer; border: 2px solid var(--purple); }
+
+    /* -- LAYOUT -- */
+    .layout { display: flex; padding-top: var(--header-h); min-height: 100vh; }
+
+    /* -- SIDEBAR -- */
+    aside.sidebar { width: var(--sidebar-w); background: var(--white); border-right: 1px solid var(--border); position: fixed; top: var(--header-h); bottom: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; padding: 16px 0; }
+    aside.sidebar::-webkit-scrollbar { width: 4px; }
+    aside.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .sidebar-section-title { font-size: 10px; font-weight: 600; color: var(--text-light); letter-spacing: .08em; text-transform: uppercase; padding: 8px 20px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px; cursor: pointer; text-decoration: none; color: var(--text-mid); font-size: 14px; font-weight: 500; transition: all .18s; border-left: 3px solid transparent; }
+    .nav-item:hover { background: var(--purple-bg); color: var(--purple); border-left-color: var(--purple); }
+    .nav-item.active { background: var(--purple-bg); color: var(--purple); border-left-color: var(--purple); font-weight: 600; }
+    .nav-item .nav-icon { width: 20px; height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .nav-item .nav-badge { margin-left: auto; background: var(--purple); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; }
+    .nav-item.campaigns-item { background: var(--orange-bg); border-left-color: var(--orange); color: var(--orange); font-weight: 600; }
+    .nav-item.campaigns-item:hover { background: #FFE0B2; color: #E65100; border-left-color: #E65100; }
+    .sidebar-divider { height: 1px; background: var(--border); margin: 8px 16px; }
+    .sidebar-footer { margin-top: auto; padding: 16px 20px; font-size: 11px; color: var(--text-light); line-height: 1.7; }
+    .sidebar-footer a { color: var(--text-light); text-decoration: none; }
+
+    /* -- MAIN -- */
+    main { margin-left: var(--sidebar-w); flex: 1; padding: 28px 32px 60px; max-width: calc(100% - var(--sidebar-w)); }
+
+    /* -- PAGE HEADER -- */
+    .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+    .page-title h1 { font-size: 24px; font-weight: 800; color: var(--text-dark); }
+    .page-title p { font-size: 14px; color: var(--text-mid); margin-top: 4px; }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 20px; border-radius: 22px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all .2s; }
+    .btn-primary { background: var(--purple); color: white; }
+    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(123,45,139,.3); }
+    .btn-outline { background: white; color: var(--purple); border: 1.5px solid var(--purple); }
+    .btn-outline:hover { background: var(--purple-bg); }
+    .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+    /* -- STATS ROW -- */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; display: flex; gap: 14px; align-items: center; }
+    .stat-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20px; }
+    .stat-icon.purple { background: var(--purple-bg); }
+    .stat-icon.orange { background: var(--orange-bg); }
+    .stat-icon.green  { background: var(--green-bg); }
+    .stat-icon.blue   { background: var(--blue-bg); }
+    .stat-label { font-size: 12px; color: var(--text-light); font-weight: 500; }
+    .stat-value { font-size: 24px; font-weight: 800; color: var(--text-dark); margin-top: 2px; }
+    .stat-delta { font-size: 11px; font-weight: 600; margin-top: 2px; }
+    .stat-delta.up { color: var(--green); }
+    .stat-delta.down { color: var(--red); }
+
+    /* -- FILTER TABS -- */
+    .filter-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .tabs { display: flex; gap: 4px; background: var(--white); border: 1px solid var(--border); border-radius: 24px; padding: 4px; }
+    .tab { padding: 7px 18px; border-radius: 20px; font-size: 13px; font-weight: 500; color: var(--text-mid); cursor: pointer; border: none; background: none; transition: all .18s; white-space: nowrap; }
+    .tab.active { background: var(--purple); color: white; font-weight: 600; }
+    .tab:hover:not(.active) { background: var(--purple-bg); color: var(--purple); }
+    .filter-right { display: flex; gap: 10px; align-items: center; }
+    .sort-select { padding: 7px 14px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; color: var(--text-mid); background: var(--white); cursor: pointer; outline: none; }
+    .view-toggle { display: flex; background: var(--white); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .view-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; background: none; color: var(--text-light); transition: all .18s; }
+    .view-btn.active { background: var(--purple-bg); color: var(--purple); }
+
+    /* -- CAMPAIGN LIST -- */
+    .campaign-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .campaign-card {
+      background: var(--white); border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden; transition: box-shadow .2s, transform .2s;
+    }
+    .campaign-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); transform: translateY(-1px); }
+
+    .campaign-card-inner { display: grid; grid-template-columns: auto 1fr auto; gap: 0; }
+
+    /* Left accent strip */
+    .campaign-accent { width: 5px; flex-shrink: 0; }
+    .accent-active   { background: var(--green); }
+    .accent-draft    { background: var(--yellow); }
+    .accent-scheduled{ background: var(--blue); }
+    .accent-ended    { background: var(--text-light); }
+    .accent-paused   { background: var(--orange); }
+
+    .campaign-main { padding: 20px 20px 16px; min-width: 0; }
+    .campaign-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .campaign-thumb {
+      width: 52px; height: 52px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 24px;
+    }
+    .campaign-info { flex: 1; min-width: 0; }
+    .campaign-name { font-size: 16px; font-weight: 700; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .campaign-desc { font-size: 13px; color: var(--text-mid); margin-top: 3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .campaign-meta { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--text-light); margin-top: 6px; }
+    .campaign-meta span { display: flex; align-items: center; gap: 4px; }
+    .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+    .badge-active    { background: var(--green-bg);  color: var(--green); }
+    .badge-draft     { background: var(--yellow-bg); color: var(--yellow); }
+    .badge-scheduled { background: var(--blue-bg);   color: var(--blue); }
+    .badge-ended     { background: var(--bg);         color: var(--text-mid); }
+    .badge-paused    { background: var(--orange-bg);  color: var(--orange); }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* Metrics grid */
+    .metrics-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border-top: 1px solid var(--border); border-radius: 0 0 0 12px; overflow: hidden; }
+    .metric-cell { background: var(--white); padding: 12px 16px; }
+    .metric-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+    .metric-value { font-size: 18px; font-weight: 800; color: var(--text-dark); margin-top: 3px; }
+    .metric-sub { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+    .metric-trend { display: inline-flex; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; margin-top: 2px; }
+    .metric-trend.up { color: var(--green); }
+    .metric-trend.down { color: var(--red); }
+
+    /* Progress bar */
+    .progress-wrap { margin-top: 10px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-light); margin-bottom: 4px; }
+    .progress-bar { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; transition: width .4s; }
+    .fill-green  { background: linear-gradient(90deg, var(--green), #34D399); }
+    .fill-blue   { background: linear-gradient(90deg, var(--blue), #60A5FA); }
+    .fill-orange { background: linear-gradient(90deg, var(--orange), #FBBF24); }
+    .fill-purple { background: linear-gradient(90deg, var(--purple), var(--purple-light)); }
+    .fill-gray   { background: var(--text-light); }
+
+    /* Right actions panel */
+    .campaign-actions { padding: 20px 16px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; justify-content: flex-start; border-left: 1px solid var(--border); min-width: 150px; }
+    .action-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; width: 100%; justify-content: center; transition: all .18s; white-space: nowrap; }
+    .action-btn.view-details { background: var(--purple-bg); color: var(--purple); }
+    .action-btn.view-details:hover { background: var(--purple); color: white; }
+    .action-btn.edit { background: var(--bg); color: var(--text-mid); }
+    .action-btn.edit:hover { background: var(--blue-bg); color: var(--blue); }
+    .action-btn.pause { background: var(--orange-bg); color: var(--orange); }
+    .action-btn.pause:hover { background: var(--orange); color: white; }
+    .action-btn.resume { background: var(--green-bg); color: var(--green); }
+    .action-btn.resume:hover { background: var(--green); color: white; }
+    .action-btn.publish { background: var(--green-bg); color: var(--green); }
+    .action-btn.publish:hover { background: var(--green); color: white; }
+    .action-btn.delete { background: var(--bg); color: var(--red); }
+    .action-btn.delete:hover { background: var(--red-bg); }
+    .campaign-budget { margin-top: 8px; text-align: right; border-top: 1px solid var(--border); padding-top: 10px; width: 100%; }
+    .budget-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: .06em; }
+    .budget-value { font-size: 15px; font-weight: 700; color: var(--text-dark); margin-top: 2px; }
+    .budget-spent { font-size: 11px; color: var(--text-light); }
+
+    /* Draft / No metrics placeholder */
+    .no-metrics { padding: 12px 16px; font-size: 13px; color: var(--text-light); font-style: italic; border-top: 1px solid var(--border); background: var(--bg); }
+
+    /* -- EMPTY STATE -- */
+    .empty-state { text-align: center; padding: 60px 20px; }
+    .empty-state .empty-icon { font-size: 56px; margin-bottom: 16px; }
+    .empty-state h3 { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+    .empty-state p { font-size: 14px; color: var(--text-mid); margin-top: 6px; margin-bottom: 24px; }
+
+    /* -- MODAL -- */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 20px; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+    .modal::-webkit-scrollbar { width: 4px; }
+    .modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .modal-header { padding: 24px 28px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--white); z-index: 1; border-radius: 20px 20px 0 0; }
+    .modal-title { font-size: 20px; font-weight: 800; color: var(--text-dark); }
+    .modal-subtitle { font-size: 13px; color: var(--text-mid); margin-top: 2px; }
+    .modal-close { width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; background: var(--bg); color: var(--text-mid); font-size: 18px; display: flex; align-items: center; justify-content: center; }
+    .modal-close:hover { background: var(--red-bg); color: var(--red); }
+
+    /* Steps indicator */
+    .steps { display: flex; gap: 0; padding: 20px 28px 0; }
+    .step { display: flex; align-items: center; flex: 1; }
+    .step-circle { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--text-light); flex-shrink: 0; transition: all .3s; }
+    .step.active .step-circle, .step.done .step-circle { border-color: var(--purple); background: var(--purple); color: white; }
+    .step-label { font-size: 11px; color: var(--text-light); margin-left: 8px; font-weight: 500; white-space: nowrap; }
+    .step.active .step-label, .step.done .step-label { color: var(--purple); font-weight: 600; }
+    .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 8px; }
+    .step.done .step-line { background: var(--purple); }
+
+    /* Form */
+    .modal-body { padding: 24px 28px; }
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+    .form-section { margin-bottom: 24px; }
+    .form-section-title { font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--text-dark); }
+    .form-label span { color: var(--red); }
+    .form-input, .form-select, .form-textarea {
+      padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+      font-size: 13px; font-family: inherit; color: var(--text-dark);
+      background: var(--white); outline: none; transition: border-color .2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(123,45,139,.1); }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-hint { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+    /* Type selector */
+    .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .type-card { border: 2px solid var(--border); border-radius: 12px; padding: 14px 12px; text-align: center; cursor: pointer; transition: all .2s; }
+    .type-card:hover { border-color: var(--purple-light); background: var(--purple-bg); }
+    .type-card.selected { border-color: var(--purple); background: var(--purple-bg); }
+    .type-card .type-icon { font-size: 26px; margin-bottom: 6px; }
+    .type-card .type-name { font-size: 12px; font-weight: 700; color: var(--text-dark); }
+    .type-card .type-desc { font-size: 10px; color: var(--text-light); margin-top: 2px; }
+
+    /* Audience tags */
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+    .audience-tag { padding: 6px 14px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--text-mid); cursor: pointer; transition: all .2s; }
+    .audience-tag:hover { border-color: var(--purple-light); color: var(--purple); }
+    .audience-tag.selected { border-color: var(--purple); background: var(--purple-bg); color: var(--purple); font-weight: 600; }
+
+    /* Channel selector */
+    .channel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .channel-card { border: 2px solid var(--border); border-radius: 10px; padding: 10px 8px; text-align: center; cursor: pointer; transition: all .2s; }
+    .channel-card:hover { border-color: var(--purple-light); }
+    .channel-card.selected { border-color: var(--purple); background: var(--purple-bg); }
+    .channel-card .ch-icon { font-size: 20px; margin-bottom: 4px; }
+    .channel-card .ch-name { font-size: 11px; font-weight: 600; color: var(--text-dark); }
+
+    /* Budget slider */
+    .budget-display { text-align: center; font-size: 28px; font-weight: 800; color: var(--purple); margin: 8px 0; }
+    .budget-display span { font-size: 14px; font-weight: 500; color: var(--text-light); }
+    input[type=range] { width: 100%; accent-color: var(--purple); }
+
+    /* Review card */
+    .review-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .review-item:last-child { border-bottom: none; }
+    .review-key { color: var(--text-mid); }
+    .review-val { font-weight: 600; color: var(--text-dark); text-align: right; }
+
+    /* Modal footer */
+    .modal-footer { padding: 16px 28px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .footer-note { font-size: 12px; color: var(--text-light); }
+
+    /* -- CAMPAIGN DETAIL MODAL -- */
+    .detail-modal { max-width: 860px; }
+    .detail-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); padding: 0 28px; }
+    .detail-tab { padding: 12px 20px; font-size: 13px; font-weight: 500; color: var(--text-mid); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+    .detail-tab.active { color: var(--purple); border-bottom-color: var(--purple); font-weight: 600; }
+    .detail-content { padding: 24px 28px; }
+
+    /* Big metric cards */
+    .big-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+    .big-metric-card { background: var(--bg); border-radius: 12px; padding: 16px; text-align: center; }
+    .big-metric-val { font-size: 26px; font-weight: 800; color: var(--text-dark); }
+    .big-metric-label { font-size: 11px; color: var(--text-light); margin-top: 2px; text-transform: uppercase; letter-spacing: .06em; }
+    .big-metric-trend { font-size: 12px; font-weight: 600; margin-top: 4px; }
+    .big-metric-trend.up { color: var(--green); }
+
+    /* Reach chart mockup */
+    .chart-wrap { background: var(--bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 16px; color: var(--text-dark); }
+    .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 120px; }
+    .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+    .bar { width: 100%; border-radius: 4px 4px 0 0; transition: height .4s; min-height: 4px; cursor: pointer; }
+    .bar:hover { opacity: .8; }
+    .bar-label { font-size: 10px; color: var(--text-light); }
+
+    /* Audience breakdown */
+    .breakdown-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .breakdown-row:last-child { border-bottom: none; }
+    .breakdown-name { font-size: 13px; color: var(--text-dark); min-width: 160px; }
+    .breakdown-bar-wrap { flex: 1; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+    .breakdown-fill { height: 100%; border-radius: 4px; }
+    .breakdown-pct { font-size: 12px; font-weight: 600; color: var(--text-dark); min-width: 40px; text-align: right; }
+
+    /* -- UTILS -- */
+    .text-center { text-align: center; }
+    .mb-16 { margin-bottom: 16px; }
+    @media (max-width: 900px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .metrics-grid { grid-template-columns: repeat(3, 1fr); }
+      .campaign-card-inner { grid-template-columns: auto 1fr; }
+      .campaign-actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-mark">H</div>
+    <span class="logo-text">her<span>key</span></span>
+  </a>
+  <div class="search-bar">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search campaigns, metrics, audiences…" />
+  </div>
+  <nav class="header-nav">
+    <a href="index.html">Home</a>
+    <a href="#">Sessions</a>
+    <a href="#">Jobs</a>
+    <button class="notif-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="notif-badge">3</span></button>
+    <div class="avatar-placeholder">R</div>
+    <a href="#" class="btn-business">HerKey for Business</a>
+  </nav>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section-title" style="padding-top:4px;">Main</div>
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>Home
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>Sessions<span class="nav-badge">2</span>
+    </a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></span>Simkey</a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>Clips</a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>Jobs</a>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">Explore</div>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>Companies</a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></span>Groups</a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Events</a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 2H7C5.3 2 4 3.3 4 5v14c0 1.7 1.3 3 3 3h10c1.7 0 3-1.3 3-3V5c0-1.7-1.3-3-3-3z"/><circle cx="12" cy="12" r="3"/></svg></span>Games</a>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">Campaigns</div>
+    <a href="campaigns.html" class="nav-item campaigns-item active">
+      <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Campaigns<span class="nav-badge" style="background:var(--orange)">New</span>
+    </a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></span>Active Drives</a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>My Campaigns</a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>Impact Reports</a>
+    <div class="sidebar-divider"></div>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></span>My Profile</a>
+    <a href="#" class="nav-item"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>Settings</a>
+    <div class="sidebar-footer"><a href="#">Terms</a> · <a href="#">Privacy</a> · <a href="#">Help</a><div style="margin-top:6px;">© HerKey 2026</div></div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-title">
+        <h1>Campaigns</h1>
+        <p>Create, manage and track your outreach campaigns across the HerKey network</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" onclick="/* export */">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export Report
+        </button>
+        <button class="btn btn-primary" onclick="openCreateModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create Campaign
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7B2D8B" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div><div class="stat-label">Total Campaigns</div><div class="stat-value">18</div><div class="stat-delta up">↑ 3 this month</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="stat-label">Active Now</div><div class="stat-value">4</div><div class="stat-delta up">↑ 1 vs last week</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+        <div><div class="stat-label">Total Reach</div><div class="stat-value">2.4M</div><div class="stat-delta up">↑ 18% vs last month</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div><div class="stat-label">Avg. Engagement</div><div class="stat-value">6.8%</div><div class="stat-delta up">↑ 0.4% this week</div></div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="tabs">
+        <button class="tab active" onclick="filterCampaigns('all',this)">All (5)</button>
+        <button class="tab" onclick="filterCampaigns('active',this)">Active (2)</button>
+        <button class="tab" onclick="filterCampaigns('scheduled',this)">Scheduled (1)</button>
+        <button class="tab" onclick="filterCampaigns('draft',this)">Draft (1)</button>
+        <button class="tab" onclick="filterCampaigns('ended',this)">Ended (1)</button>
+      </div>
+      <div class="filter-right">
+        <select class="sort-select">
+          <option>Sort: Newest First</option>
+          <option>Sort: Most Reach</option>
+          <option>Sort: Highest CTR</option>
+          <option>Sort: Ending Soon</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn active" title="List view">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </button>
+          <button class="view-btn" title="Grid view">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign List -->
+    <div class="campaign-list" id="campaignList">
+
+      <!-- -- CAMPAIGN 1: Active -- -->
+      <div class="campaign-card" data-status="active">
+        <div class="campaign-card-inner">
+          <div class="campaign-accent accent-active"></div>
+          <div class="campaign-main">
+            <div class="campaign-top">
+              <div class="campaign-thumb" style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE);">🚀</div>
+              <div class="campaign-info">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <div class="campaign-name">Women in Tech Summit 2026 – Registration Drive</div>
+                  <span class="status-badge badge-active"><span class="badge-dot"></span>Active</span>
+                </div>
+                <div class="campaign-desc">Drive registrations for the flagship HerKey Women in Tech Summit. Targeting mid-senior women professionals in Engineering, Product & Data across India's Tier-1 cities.</div>
+                <div class="campaign-meta">
+                  <span>📅 Apr 10 – May 20, 2026</span>
+                  <span>🎯 Job Seekers + Mid-Senior</span>
+                  <span>📢 Feed · Email · Push</span>
+                  <span style="color:var(--red);font-weight:600;">⏰ 19 days left</span>
+                </div>
+              </div>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Registration Goal</span><span style="font-weight:600;color:var(--text-dark);">4,218 / 5,000</span></div>
+              <div class="progress-bar"><div class="progress-fill fill-green" style="width:84%;"></div></div>
+            </div>
+          </div>
+          <div class="campaign-actions">
+            <button class="action-btn view-details" onclick="openDetailModal('summit')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              View Details
+            </button>
+            <button class="action-btn edit">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </button>
+            <button class="action-btn pause">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              Pause
+            </button>
+            <div class="campaign-budget">
+              <div class="budget-label">Budget</div>
+              <div class="budget-value">₹48,000</div>
+              <div class="budget-spent">₹31,200 spent (65%)</div>
+            </div>
+          </div>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-cell">
+            <div class="metric-label">Total Reach</div>
+            <div class="metric-value">8,42,310</div>
+            <div class="metric-trend up">↑ 12% this week</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">Impressions</div>
+            <div class="metric-value">2.1M</div>
+            <div class="metric-sub">Avg 4.9 per user</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">Clicks</div>
+            <div class="metric-value">62,480</div>
+            <div class="metric-trend up">↑ 8.3%</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">CTR</div>
+            <div class="metric-value">7.41%</div>
+            <div class="metric-sub">Benchmark: 4.2%</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">Conversions</div>
+            <div class="metric-value">4,218</div>
+            <div class="metric-trend up">↑ 84% of goal</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- -- CAMPAIGN 2: Active -- -->
+      <div class="campaign-card" data-status="active">
+        <div class="campaign-card-inner">
+          <div class="campaign-accent accent-active"></div>
+          <div class="campaign-main">
+            <div class="campaign-top">
+              <div class="campaign-thumb" style="background:linear-gradient(135deg,#D1FAE5,#A7F3D0);">💼</div>
+              <div class="campaign-info">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <div class="campaign-name">Return to Work Bootcamp – Spring 2026</div>
+                  <span class="status-badge badge-active"><span class="badge-dot"></span>Active</span>
+                </div>
+                <div class="campaign-desc">Awareness and enrollment campaign for women professionals returning from a career break of 1+ years. Partnered with 12 top employers offering returnship programs.</div>
+                <div class="campaign-meta">
+                  <span>📅 Apr 25 – Jun 15, 2026</span>
+                  <span>🎯 Career Break Women</span>
+                  <span>📢 Feed · Groups · WhatsApp</span>
+                  <span style="color:var(--green);font-weight:600;">🟢 On Track</span>
+                </div>
+              </div>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Enrollment Goal</span><span style="font-weight:600;color:var(--text-dark);">1,102 / 2,000</span></div>
+              <div class="progress-bar"><div class="progress-fill fill-blue" style="width:55%;"></div></div>
+            </div>
+          </div>
+          <div class="campaign-actions">
+            <button class="action-btn view-details" onclick="openDetailModal('returnship')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              View Details
+            </button>
+            <button class="action-btn edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+            <button class="action-btn pause"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Pause</button>
+            <div class="campaign-budget">
+              <div class="budget-label">Budget</div>
+              <div class="budget-value">₹28,500</div>
+              <div class="budget-spent">₹11,400 spent (40%)</div>
+            </div>
+          </div>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-cell">
+            <div class="metric-label">Total Reach</div>
+            <div class="metric-value">3,18,740</div>
+            <div class="metric-trend up">↑ 22% this week</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">Impressions</div>
+            <div class="metric-value">8,94,200</div>
+            <div class="metric-sub">Avg 2.8 per user</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">Clicks</div>
+            <div class="metric-value">24,160</div>
+            <div class="metric-trend up">↑ 15.1%</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">CTR</div>
+            <div class="metric-value">5.23%</div>
+            <div class="metric-sub">Benchmark: 4.2%</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">Enrollments</div>
+            <div class="metric-value">1,102</div>
+            <div class="metric-trend up">↑ 55% of goal</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- -- CAMPAIGN 3: Scheduled -- -->
+      <div class="campaign-card" data-status="scheduled">
+        <div class="campaign-card-inner">
+          <div class="campaign-accent accent-scheduled"></div>
+          <div class="campaign-main">
+            <div class="campaign-top">
+              <div class="campaign-thumb" style="background:linear-gradient(135deg,#DBEAFE,#BFDBFE);">🏢</div>
+              <div class="campaign-info">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <div class="campaign-name">HerKey Hiring Drive Q2 2026 – Top 25 Employers</div>
+                  <span class="status-badge badge-scheduled"><span class="badge-dot"></span>Scheduled</span>
+                </div>
+                <div class="campaign-desc">Partner-driven hiring campaign featuring 25 women-friendly employers. Promotes job openings, interview prep sessions, and direct-connect with HR teams.</div>
+                <div class="campaign-meta">
+                  <span>📅 Starts May 10, 2026</span>
+                  <span>🎯 All Active Job Seekers</span>
+                  <span>📢 Jobs · Feed · Email · Push</span>
+                  <span style="color:var(--blue);font-weight:600;">⏳ Starts in 9 days</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="campaign-actions">
+            <button class="action-btn edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+            <button class="action-btn delete">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+              Delete
+            </button>
+            <div class="campaign-budget">
+              <div class="budget-label">Planned Budget</div>
+              <div class="budget-value">₹75,000</div>
+              <div class="budget-spent">Not started yet</div>
+            </div>
+          </div>
+        </div>
+        <div class="no-metrics">📊 Metrics will appear once the campaign goes live on May 10, 2026</div>
+      </div>
+
+      <!-- -- CAMPAIGN 4: Draft -- -->
+      <div class="campaign-card" data-status="draft">
+        <div class="campaign-card-inner">
+          <div class="campaign-accent accent-draft"></div>
+          <div class="campaign-main">
+            <div class="campaign-top">
+              <div class="campaign-thumb" style="background:linear-gradient(135deg,#FEF9C3,#FDE68A);">✍️</div>
+              <div class="campaign-info">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <div class="campaign-name">Leadership Mentorship Program – Cohort 4</div>
+                  <span class="status-badge badge-draft"><span class="badge-dot"></span>Draft</span>
+                </div>
+                <div class="campaign-desc">Awareness campaign for the fourth cohort of the HerKey 1:1 Mentorship Program. Pair aspiring leaders with C-suite women mentors from Fortune 500 companies.</div>
+                <div class="campaign-meta">
+                  <span>📅 Not yet scheduled</span>
+                  <span>🎯 Mid-level managers</span>
+                  <span>📢 Channels not set</span>
+                  <span style="color:var(--yellow);font-weight:600;">⚠️ Incomplete – 2 fields missing</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="campaign-actions">
+            <button class="action-btn publish" onclick="openCreateModal()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Publish
+            </button>
+            <button class="action-btn edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Continue Editing</button>
+            <button class="action-btn delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>Delete</button>
+          </div>
+        </div>
+        <div class="no-metrics" style="background:#FFFBEB;">📝 Complete all required fields and publish to start tracking metrics</div>
+      </div>
+
+      <!-- -- CAMPAIGN 5: Ended -- -->
+      <div class="campaign-card" data-status="ended">
+        <div class="campaign-card-inner">
+          <div class="campaign-accent accent-ended"></div>
+          <div class="campaign-main">
+            <div class="campaign-top">
+              <div class="campaign-thumb" style="background:var(--bg);">🎯</div>
+              <div class="campaign-info">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <div class="campaign-name">New Year Career Reset 2026 – January Edition</div>
+                  <span class="status-badge badge-ended"><span class="badge-dot"></span>Ended</span>
+                </div>
+                <div class="campaign-desc">New year awareness campaign to help women professionals set career goals, explore job opportunities and book 1:1 coaching sessions with career mentors.</div>
+                <div class="campaign-meta">
+                  <span>📅 Jan 1 – Jan 31, 2026</span>
+                  <span>🎯 All Members</span>
+                  <span>📢 Feed · Email · Push · Groups</span>
+                  <span style="color:var(--green);font-weight:600;">✅ Goal exceeded by 34%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="campaign-actions">
+            <button class="action-btn view-details" onclick="openDetailModal('newyear')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              View Report
+            </button>
+            <button class="action-btn edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Duplicate</button>
+            <div class="campaign-budget">
+              <div class="budget-label">Total Spent</div>
+              <div class="budget-value">₹42,800</div>
+              <div class="budget-spent">of ₹50,000 budget</div>
+            </div>
+          </div>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-cell">
+            <div class="metric-label">Total Reach</div>
+            <div class="metric-value">12,84,000</div>
+            <div class="metric-sub">Final count</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">Impressions</div>
+            <div class="metric-value">4.7M</div>
+            <div class="metric-sub">Avg 3.7 per user</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">Clicks</div>
+            <div class="metric-value">1,01,200</div>
+            <div class="metric-sub">Total clicks</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">CTR</div>
+            <div class="metric-value">8.62%</div>
+            <div class="metric-sub">Best performing</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-label">Conversions</div>
+            <div class="metric-value">13,400</div>
+            <div class="metric-trend up">134% of goal</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /campaign-list -->
+  </main>
+</div>
+
+<!-- ========================================== -->
+<!-- CREATE CAMPAIGN MODAL                      -->
+<!-- ========================================== -->
+<div class="modal-overlay" id="createModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Create New Campaign</div>
+        <div class="modal-subtitle">Set up and publish your campaign in 3 simple steps</div>
+      </div>
+      <button class="modal-close" onclick="closeCreateModal()">x</button>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps">
+      <div class="step active" id="step-ind-1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Campaign Info</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step" id="step-ind-2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Audience & Channels</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step" id="step-ind-3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Budget & Publish</div>
+      </div>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- STEP 1: Campaign Info -->
+      <div class="form-step active" id="formStep1">
+        <div class="form-section">
+          <div class="form-section-title">🎯 Campaign Type</div>
+          <div class="type-grid">
+            <div class="type-card selected" onclick="selectType(this)">
+              <div class="type-icon">📢</div>
+              <div class="type-name">Awareness</div>
+              <div class="type-desc">Boost brand & reach</div>
+            </div>
+            <div class="type-card" onclick="selectType(this)">
+              <div class="type-icon">🎟️</div>
+              <div class="type-name">Event Drive</div>
+              <div class="type-desc">Drive registrations</div>
+            </div>
+            <div class="type-card" onclick="selectType(this)">
+              <div class="type-icon">💼</div>
+              <div class="type-name">Hiring Drive</div>
+              <div class="type-desc">Recruit top talent</div>
+            </div>
+            <div class="type-card" onclick="selectType(this)">
+              <div class="type-icon">🎓</div>
+              <div class="type-name">Learning</div>
+              <div class="type-desc">Promote sessions</div>
+            </div>
+            <div class="type-card" onclick="selectType(this)">
+              <div class="type-icon">🤝</div>
+              <div class="type-name">Mentorship</div>
+              <div class="type-desc">Connect mentors</div>
+            </div>
+            <div class="type-card" onclick="selectType(this)">
+              <div class="type-icon">✨</div>
+              <div class="type-name">Custom</div>
+              <div class="type-desc">Build your own</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">📝 Basic Details</div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">Campaign Name <span>*</span></label>
+              <input class="form-input" type="text" placeholder="e.g. Women Leaders Summit 2026 – Registration Drive" />
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">Description <span>*</span></label>
+              <textarea class="form-textarea" placeholder="Describe what this campaign is about, its goals, and what participants can expect…"></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Start Date <span>*</span></label>
+              <input class="form-input" type="date" value="2026-05-10" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">End Date <span>*</span></label>
+              <input class="form-input" type="date" value="2026-06-10" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Goal / Objective</label>
+              <select class="form-select">
+                <option>Select a goal</option>
+                <option>Registrations / Sign-ups</option>
+                <option>Profile Views</option>
+                <option>Job Applications</option>
+                <option>Session Attendance</option>
+                <option>Downloads</option>
+                <option>Community Growth</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Number</label>
+              <input class="form-input" type="number" placeholder="e.g. 5000" />
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">Campaign Link / Landing URL</label>
+              <input class="form-input" type="url" placeholder="https://herkey.com/…" />
+              <div class="form-hint">Where should users land after clicking? Leave blank to auto-generate.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Audience & Channels -->
+      <div class="form-step" id="formStep2">
+        <div class="form-section">
+          <div class="form-section-title">👥 Target Audience</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Experience Level</label>
+              <select class="form-select">
+                <option>All levels</option>
+                <option>Freshers (0–2 yrs)</option>
+                <option>Mid-level (3–8 yrs)</option>
+                <option>Senior (8–15 yrs)</option>
+                <option>Executive (15+ yrs)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Location</label>
+              <select class="form-select">
+                <option>All India</option>
+                <option>Tier 1 Cities</option>
+                <option>Tier 1 + Tier 2</option>
+                <option>Bengaluru</option>
+                <option>Mumbai</option>
+                <option>Delhi NCR</option>
+                <option>Hyderabad</option>
+                <option>Pune</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">Audience Segments (select all that apply)</label>
+            <div class="tag-cloud" style="margin-top:8px;">
+              <span class="audience-tag selected" onclick="toggleTag(this)">Active Job Seekers</span>
+              <span class="audience-tag" onclick="toggleTag(this)">Career Break Women</span>
+              <span class="audience-tag selected" onclick="toggleTag(this)">Women in Tech</span>
+              <span class="audience-tag" onclick="toggleTag(this)">Freshers</span>
+              <span class="audience-tag" onclick="toggleTag(this)">Mid-Senior Managers</span>
+              <span class="audience-tag" onclick="toggleTag(this)">Entrepreneurs</span>
+              <span class="audience-tag" onclick="toggleTag(this)">Returners (1–5 yr gap)</span>
+              <span class="audience-tag" onclick="toggleTag(this)">Women in Finance</span>
+              <span class="audience-tag" onclick="toggleTag(this)">Women in Healthcare</span>
+              <span class="audience-tag" onclick="toggleTag(this)">Remote-first</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Industry Focus</label>
+              <select class="form-select">
+                <option>All Industries</option>
+                <option>Technology / IT</option>
+                <option>Banking & Finance</option>
+                <option>Healthcare & Life Sciences</option>
+                <option>E-Commerce</option>
+                <option>Media & Marketing</option>
+                <option>Consulting</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Estimated Audience Size</label>
+              <input class="form-input" value="~4,80,000 members" readonly style="background:var(--bg);color:var(--purple);font-weight:600;" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">📢 Distribution Channels</div>
+          <div class="channel-grid">
+            <div class="channel-card selected" onclick="toggleChannel(this)"><div class="ch-icon">📰</div><div class="ch-name">Feed Posts</div></div>
+            <div class="channel-card selected" onclick="toggleChannel(this)"><div class="ch-icon">📧</div><div class="ch-name">Email</div></div>
+            <div class="channel-card selected" onclick="toggleChannel(this)"><div class="ch-icon">🔔</div><div class="ch-name">Push Notif.</div></div>
+            <div class="channel-card" onclick="toggleChannel(this)"><div class="ch-icon">💬</div><div class="ch-name">WhatsApp</div></div>
+            <div class="channel-card" onclick="toggleChannel(this)"><div class="ch-icon">👥</div><div class="ch-name">Groups</div></div>
+            <div class="channel-card" onclick="toggleChannel(this)"><div class="ch-icon">💼</div><div class="ch-name">Jobs Board</div></div>
+            <div class="channel-card" onclick="toggleChannel(this)"><div class="ch-icon">🎬</div><div class="ch-name">Clips</div></div>
+            <div class="channel-card" onclick="toggleChannel(this)"><div class="ch-icon">🎤</div><div class="ch-name">Sessions</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Budget & Publish -->
+      <div class="form-step" id="formStep3">
+        <div class="form-section">
+          <div class="form-section-title">💰 Budget</div>
+          <div class="budget-display" id="budgetDisplay">₹25,000 <span>/ campaign</span></div>
+          <input type="range" min="5000" max="200000" step="5000" value="25000" oninput="updateBudget(this.value)" style="margin-bottom:8px;" />
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-light);margin-bottom:16px;"><span>₹5,000 min</span><span>₹2,00,000 max</span></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Billing Model</label>
+              <select class="form-select">
+                <option>CPM – Cost per 1,000 Impressions</option>
+                <option>CPC – Cost per Click</option>
+                <option>CPA – Cost per Action</option>
+                <option>Fixed / Flat Fee</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Daily Spend Cap</label>
+              <input class="form-input" type="text" placeholder="e.g. ₹2,500 / day" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">📋 Review & Confirm</div>
+          <div style="background:var(--bg);border-radius:12px;padding:16px;">
+            <div class="review-item"><span class="review-key">Campaign Name</span><span class="review-val">New Campaign</span></div>
+            <div class="review-item"><span class="review-key">Type</span><span class="review-val">Awareness</span></div>
+            <div class="review-item"><span class="review-key">Duration</span><span class="review-val">May 10 – Jun 10, 2026 (31 days)</span></div>
+            <div class="review-item"><span class="review-key">Audience</span><span class="review-val">~4,80,000 members</span></div>
+            <div class="review-item"><span class="review-key">Channels</span><span class="review-val">Feed, Email, Push</span></div>
+            <div class="review-item"><span class="review-key">Total Budget</span><span class="review-val" style="color:var(--purple);">₹25,000</span></div>
+          </div>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;">
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;">
+              <input type="radio" name="publish_action" value="now" checked style="margin-top:3px;accent-color:var(--purple);" />
+              <div><strong>Publish Now</strong> — Campaign goes live immediately after approval</div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;">
+              <input type="radio" name="publish_action" value="scheduled" style="margin-top:3px;accent-color:var(--purple);" />
+              <div><strong>Schedule for later</strong> — Launch automatically on the start date</div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;">
+              <input type="radio" name="publish_action" value="draft" style="margin-top:3px;accent-color:var(--purple);" />
+              <div><strong>Save as Draft</strong> — Come back and publish when ready</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /modal-body -->
+
+    <div class="modal-footer">
+      <div class="footer-note" id="stepNote">Step 1 of 3 – Fill campaign details</div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-outline" id="backBtn" onclick="prevStep()" style="display:none;">← Back</button>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">Next: Audience →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- CAMPAIGN DETAIL MODAL                      -->
+<!-- ========================================== -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal detail-modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="detailTitle">Campaign Details</div>
+        <div class="modal-subtitle" id="detailSubtitle">Live performance report</div>
+      </div>
+      <button class="modal-close" onclick="closeDetailModal()">x</button>
+    </div>
+    <div class="detail-tabs">
+      <div class="detail-tab active" onclick="switchDetailTab(this,'overview')">Overview</div>
+      <div class="detail-tab" onclick="switchDetailTab(this,'reach')">Reach & Impressions</div>
+      <div class="detail-tab" onclick="switchDetailTab(this,'audience')">Audience Breakdown</div>
+      <div class="detail-tab" onclick="switchDetailTab(this,'engagement')">Engagement</div>
+    </div>
+    <div class="detail-content">
+
+      <!-- Overview Tab -->
+      <div id="tab-overview">
+        <div class="big-metrics">
+          <div class="big-metric-card">
+            <div class="big-metric-val" id="dm-reach">8,42,310</div>
+            <div class="big-metric-label">Total Reach</div>
+            <div class="big-metric-trend up">↑ 12% this week</div>
+          </div>
+          <div class="big-metric-card">
+            <div class="big-metric-val" id="dm-impr">2.1M</div>
+            <div class="big-metric-label">Impressions</div>
+            <div class="big-metric-trend up">↑ 9%</div>
+          </div>
+          <div class="big-metric-card">
+            <div class="big-metric-val" id="dm-ctr">7.41%</div>
+            <div class="big-metric-label">Click-Through Rate</div>
+            <div class="big-metric-trend up">↑ vs 4.2% avg</div>
+          </div>
+          <div class="big-metric-card">
+            <div class="big-metric-val" id="dm-conv">4,218</div>
+            <div class="big-metric-label">Conversions</div>
+            <div class="big-metric-trend up">84% of goal</div>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <div class="chart-title">Daily Reach – Last 14 Days</div>
+          <div class="bar-chart" id="reachChart"></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="background:var(--bg);border-radius:12px;padding:16px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text-dark);">Top Performing Channels</div>
+            <div class="breakdown-row"><span class="breakdown-name">📰 Feed Posts</span><div class="breakdown-bar-wrap"><div class="breakdown-fill fill-purple" style="width:78%;height:100%;border-radius:4px;background:var(--purple);"></div></div><span class="breakdown-pct">78%</span></div>
+            <div class="breakdown-row"><span class="breakdown-name">📧 Email</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:62%;height:100%;border-radius:4px;background:var(--blue);"></div></div><span class="breakdown-pct">62%</span></div>
+            <div class="breakdown-row"><span class="breakdown-name">🔔 Push Notif.</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:44%;height:100%;border-radius:4px;background:var(--orange);"></div></div><span class="breakdown-pct">44%</span></div>
+          </div>
+          <div style="background:var(--bg);border-radius:12px;padding:16px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text-dark);">Key Milestones</div>
+            <div style="font-size:13px;display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-mid);">Campaign Launched</span><span style="font-weight:600;">Apr 10, 2026</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-mid);">100K Reach</span><span style="font-weight:600;">Apr 13 (Day 3)</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-mid);">1,000 Conversions</span><span style="font-weight:600;">Apr 16 (Day 6)</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-mid);">Best Day</span><span style="font-weight:600;">Apr 22 · 68,400 reach</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other tabs (hidden by default) -->
+      <div id="tab-reach" style="display:none;">
+        <div style="text-align:center;padding:40px;color:var(--text-light);">Detailed reach breakdown by day, city and platform will appear here.</div>
+      </div>
+      <div id="tab-audience" style="display:none;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:16px;">Audience Demographics</div>
+        <div class="breakdown-row"><span class="breakdown-name">Mid-Senior (3–8 yrs)</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:46%;height:100%;border-radius:4px;background:var(--purple);"></div></div><span class="breakdown-pct">46%</span></div>
+        <div class="breakdown-row"><span class="breakdown-name">Senior (8–15 yrs)</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:28%;height:100%;border-radius:4px;background:var(--blue);"></div></div><span class="breakdown-pct">28%</span></div>
+        <div class="breakdown-row"><span class="breakdown-name">Freshers (0–2 yrs)</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:18%;height:100%;border-radius:4px;background:var(--green);"></div></div><span class="breakdown-pct">18%</span></div>
+        <div class="breakdown-row"><span class="breakdown-name">Executive (15+ yrs)</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:8%;height:100%;border-radius:4px;background:var(--orange);"></div></div><span class="breakdown-pct">8%</span></div>
+        <div style="margin-top:20px;font-size:13px;font-weight:600;margin-bottom:16px;">Top Cities</div>
+        <div class="breakdown-row"><span class="breakdown-name">Bengaluru</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:38%;height:100%;border-radius:4px;background:var(--purple);"></div></div><span class="breakdown-pct">38%</span></div>
+        <div class="breakdown-row"><span class="breakdown-name">Mumbai</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:24%;height:100%;border-radius:4px;background:var(--blue);"></div></div><span class="breakdown-pct">24%</span></div>
+        <div class="breakdown-row"><span class="breakdown-name">Hyderabad</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:18%;height:100%;border-radius:4px;background:var(--green);"></div></div><span class="breakdown-pct">18%</span></div>
+        <div class="breakdown-row"><span class="breakdown-name">Delhi NCR</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:14%;height:100%;border-radius:4px;background:var(--orange);"></div></div><span class="breakdown-pct">14%</span></div>
+        <div class="breakdown-row"><span class="breakdown-name">Others</span><div class="breakdown-bar-wrap"><div class="breakdown-fill" style="width:6%;height:100%;border-radius:4px;background:var(--text-light);"></div></div><span class="breakdown-pct">6%</span></div>
+      </div>
+      <div id="tab-engagement" style="display:none;">
+        <div style="text-align:center;padding:40px;color:var(--text-light);">Engagement breakdown by content type and user action will appear here.</div>
+      </div>
+
+    </div><!-- /detail-content -->
+  </div>
+</div>
+
+<script>
+  /* -- CREATE MODAL -- */
+  let currentStep = 1;
+  const stepNotes = ['Step 1 of 3 – Fill campaign details', 'Step 2 of 3 – Define audience & channels', 'Step 3 of 3 – Set budget & publish'];
+  const nextLabels = ['Next: Audience →', 'Next: Budget →', 'Publish Campaign'];
+
+  function openCreateModal() {
+    document.getElementById('createModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCreateModal() {
+    document.getElementById('createModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function nextStep() {
+    if (currentStep < 3) {
+      document.getElementById('formStep' + currentStep).classList.remove('active');
+      document.getElementById('step-ind-' + currentStep).classList.remove('active');
+      document.getElementById('step-ind-' + currentStep).classList.add('done');
+      currentStep++;
+      document.getElementById('formStep' + currentStep).classList.add('active');
+      document.getElementById('step-ind-' + currentStep).classList.add('active');
+      document.getElementById('stepNote').textContent = stepNotes[currentStep - 1];
+      document.getElementById('nextBtn').textContent = nextLabels[currentStep - 1];
+      document.getElementById('backBtn').style.display = 'flex';
+    } else {
+      // Publish
+      closeCreateModal();
+      showToast('🎉 Campaign published successfully!');
+      currentStep = 1;
+      resetSteps();
+    }
+  }
+  function prevStep() {
+    if (currentStep > 1) {
+      document.getElementById('formStep' + currentStep).classList.remove('active');
+      document.getElementById('step-ind-' + currentStep).classList.remove('active');
+      currentStep--;
+      document.getElementById('formStep' + currentStep).classList.add('active');
+      document.getElementById('step-ind-' + currentStep).classList.remove('done');
+      document.getElementById('step-ind-' + currentStep).classList.add('active');
+      document.getElementById('stepNote').textContent = stepNotes[currentStep - 1];
+      document.getElementById('nextBtn').textContent = nextLabels[currentStep - 1];
+      if (currentStep === 1) document.getElementById('backBtn').style.display = 'none';
+    }
+  }
+  function resetSteps() {
+    [1,2,3].forEach(i => {
+      document.getElementById('formStep'+i).classList.remove('active');
+      const ind = document.getElementById('step-ind-'+i);
+      ind.classList.remove('active','done');
+    });
+    document.getElementById('formStep1').classList.add('active');
+    document.getElementById('step-ind-1').classList.add('active');
+    document.getElementById('nextBtn').textContent = nextLabels[0];
+    document.getElementById('stepNote').textContent = stepNotes[0];
+    document.getElementById('backBtn').style.display = 'none';
+  }
+
+  /* -- DETAIL MODAL -- */
+  const detailData = {
+    summit:      { title: 'Women in Tech Summit 2026 – Registration Drive', subtitle: 'Active · Apr 10 – May 20, 2026', reach:'8,42,310', impr:'2.1M', ctr:'7.41%', conv:'4,218' },
+    returnship:  { title: 'Return to Work Bootcamp – Spring 2026',           subtitle: 'Active · Apr 25 – Jun 15, 2026', reach:'3,18,740', impr:'8,94,200', ctr:'5.23%', conv:'1,102' },
+    newyear:     { title: 'New Year Career Reset 2026 – January Edition',     subtitle: 'Ended · Jan 1 – Jan 31, 2026', reach:'12,84,000', impr:'4.7M', ctr:'8.62%', conv:'13,400' }
+  };
+
+  function openDetailModal(key) {
+    const d = detailData[key];
+    document.getElementById('detailTitle').textContent = d.title;
+    document.getElementById('detailSubtitle').textContent = d.subtitle;
+    document.getElementById('dm-reach').textContent = d.reach;
+    document.getElementById('dm-impr').textContent = d.impr;
+    document.getElementById('dm-ctr').textContent = d.ctr;
+    document.getElementById('dm-conv').textContent = d.conv;
+    buildChart();
+    document.getElementById('detailModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDetailModal() {
+    document.getElementById('detailModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function switchDetailTab(el, id) {
+    document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    ['overview','reach','audience','engagement'].forEach(t => {
+      document.getElementById('tab-'+t).style.display = t === id ? 'block' : 'none';
+    });
+  }
+
+  /* -- BAR CHART -- */
+  function buildChart() {
+    const wrap = document.getElementById('reachChart');
+    wrap.innerHTML = '';
+    const labels = ['Apr 18','19','20','21','22','23','24','25','26','27','28','29','30','May 1'];
+    const values = [42,38,55,61,82,68,71,58,64,70,75,80,78,85];
+    const colors = ['#7B2D8B','#8B3D9B','#9B4DAB','#AB5DBB','#7B2D8B','#C84FC8','#7B2D8B','#9B3FAD','#8B3D9B','#7B2D8B','#AB5DBB','#C84FC8','#9B3FAD','#7B2D8B'];
+    const max = Math.max(...values);
+    labels.forEach((l, i) => {
+      const col = document.createElement('div');
+      col.className = 'bar-col';
+      const pct = Math.round((values[i]/max)*100);
+      col.innerHTML = `<div class="bar" style="height:${pct}%;background:${colors[i % colors.length]};" title="${l}: ${values[i]}K reach"></div><div class="bar-label">${l.replace('Apr ','').replace('May ','')}</div>`;
+      wrap.appendChild(col);
+    });
+  }
+
+  /* -- FILTER -- */
+  function filterCampaigns(status, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.campaign-card').forEach(card => {
+      card.style.display = (status === 'all' || card.dataset.status === status) ? 'block' : 'none';
+    });
+  }
+
+  /* -- AUDIENCE / CHANNEL TOGGLES -- */
+  function selectType(el) {
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  function toggleTag(el) { el.classList.toggle('selected'); }
+  function toggleChannel(el) { el.classList.toggle('selected'); }
+
+  /* -- BUDGET SLIDER -- */
+  function updateBudget(v) {
+    document.getElementById('budgetDisplay').innerHTML = '₹' + parseInt(v).toLocaleString('en-IN') + ' <span>/ campaign</span>';
+  }
+
+  /* -- TOAST -- */
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.textContent = msg;
+    Object.assign(t.style, {
+      position:'fixed', bottom:'28px', left:'50%', transform:'translateX(-50%)',
+      background:'#1A1A2E', color:'white', padding:'12px 24px',
+      borderRadius:'24px', fontSize:'14px', fontWeight:'600',
+      zIndex:'9999', boxShadow:'0 8px 24px rgba(0,0,0,.2)',
+      fontFamily:'Inter,sans-serif', whiteSpace:'nowrap'
+    });
+    document.body.appendChild(t);
+    setTimeout(() => t.style.opacity='0', 2800);
+    setTimeout(() => t.remove(), 3200);
+  }
+
+  /* Close modal on overlay click */
+  document.getElementById('createModal').addEventListener('click', e => { if(e.target === e.currentTarget) closeCreateModal(); });
+  document.getElementById('detailModal').addEventListener('click', e => { if(e.target === e.currentTarget) closeDetailModal(); });
+</script>
+</body>
+</html>

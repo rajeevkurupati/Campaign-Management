@@ -1,0 +1,2883 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HerKey â€“ India's Largest Career Engagement Platform for Women</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:       #7B2D8B;
+      --purple-light: #9B3FAD;
+      --purple-bg:    #F5EEF8;
+      --purple-dark:  #5C1F6D;
+      --green:        #1DB954;
+      --orange:       #F97316;
+      --text-dark:    #1A1A2E;
+      --text-mid:     #4B5563;
+      --text-light:   #9CA3AF;
+      --border:       #E5E7EB;
+      --bg:           #F3F4F6;
+      --white:        #FFFFFF;
+      --sidebar-w:    230px;
+      --header-h:     60px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* â”€â”€â”€â”€â”€ HEADER â”€â”€â”€â”€â”€ */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--header-h);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 20px; gap: 16px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px; text-decoration: none;
+      min-width: calc(var(--sidebar-w) - 20px);
+    }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--purple) 0%, #C84FC8 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 800; font-size: 18px; letter-spacing: -1px;
+    }
+    .logo-text { font-size: 20px; font-weight: 700; color: var(--purple); }
+    .logo-text span { color: var(--orange); }
+
+    .search-bar {
+      flex: 1; max-width: 420px;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 24px; padding: 0 16px; height: 38px;
+    }
+    .search-bar input {
+      border: none; background: transparent; outline: none;
+      font-size: 13px; color: var(--text-dark); width: 100%;
+    }
+    .search-bar input::placeholder { color: var(--text-light); }
+
+    .header-nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+    .header-nav a, .header-nav button {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 20px;
+      font-size: 13px; font-weight: 500; text-decoration: none;
+      border: none; cursor: pointer; background: transparent;
+      color: var(--text-mid); transition: all .2s;
+    }
+    .header-nav a:hover, .header-nav button:hover { background: var(--bg); color: var(--purple); }
+    .btn-business {
+      background: var(--purple) !important;
+      color: var(--white) !important;
+      font-weight: 600 !important;
+    }
+    .btn-business:hover { background: var(--purple-dark) !important; }
+
+    .notif-btn {
+      position: relative; width: 38px; height: 38px;
+      border-radius: 50%; border: none; cursor: pointer;
+      background: var(--bg); display: flex; align-items: center; justify-content: center;
+      color: var(--text-mid); transition: all .2s;
+    }
+    .notif-btn:hover { background: var(--purple-bg); color: var(--purple); }
+    .notif-badge {
+      position: absolute; top: 4px; right: 4px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #EF4444; color: white; font-size: 9px;
+      font-weight: 700; display: flex; align-items: center; justify-content: center;
+      border: 2px solid white;
+    }
+    .avatar-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      overflow: hidden; cursor: pointer; border: 2px solid var(--purple);
+    }
+    .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-placeholder {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 14px; font-weight: 600; cursor: pointer;
+      border: 2px solid var(--purple);
+    }
+
+    /* â”€â”€â”€â”€â”€ LAYOUT â”€â”€â”€â”€â”€ */
+    .layout {
+      display: flex;
+      padding-top: var(--header-h);
+      min-height: 100vh;
+    }
+
+    /* â”€â”€â”€â”€â”€ LEFT SIDEBAR â”€â”€â”€â”€â”€ */
+    aside.sidebar {
+      width: var(--sidebar-w);
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: var(--header-h); bottom: 0;
+      overflow-y: auto; overflow-x: hidden;
+      display: flex; flex-direction: column;
+      padding: 16px 0;
+    }
+    aside.sidebar::-webkit-scrollbar { width: 4px; }
+    aside.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .sidebar-section { margin-bottom: 4px; }
+    .sidebar-section-title {
+      font-size: 10px; font-weight: 600; color: var(--text-light);
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 8px 20px 4px;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 20px; cursor: pointer;
+      border-radius: 0; text-decoration: none;
+      color: var(--text-mid); font-size: 14px; font-weight: 500;
+      transition: all .18s; position: relative;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover {
+      background: var(--purple-bg);
+      color: var(--purple);
+      border-left-color: var(--purple);
+    }
+    .nav-item.active {
+      background: var(--purple-bg);
+      color: var(--purple);
+      border-left-color: var(--purple);
+      font-weight: 600;
+    }
+    .nav-item .nav-icon {
+      width: 20px; height: 20px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-item .nav-badge {
+      margin-left: auto;
+      background: var(--purple); color: white;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 10px;
+    }
+    .nav-item.campaigns-item {
+      background: linear-gradient(90deg, #FFF3E0 0%, #FFFFFF 100%);
+      border-left-color: var(--orange);
+      color: var(--orange);
+    }
+    .nav-item.campaigns-item:hover {
+      background: linear-gradient(90deg, #FFE0B2 0%, #FFF3E0 100%);
+      color: #E65100;
+      border-left-color: #E65100;
+    }
+    .nav-item.campaigns-item .nav-icon svg { fill: var(--orange); }
+
+    .sidebar-divider {
+      height: 1px; background: var(--border);
+      margin: 8px 16px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto; padding: 16px 20px;
+      font-size: 11px; color: var(--text-light); line-height: 1.7;
+    }
+    .sidebar-footer a { color: var(--text-light); text-decoration: none; }
+    .sidebar-footer a:hover { text-decoration: underline; color: var(--purple); }
+
+    /* â”€â”€â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€ */
+    main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 24px 24px 48px;
+      max-width: calc(100% - var(--sidebar-w));
+    }
+
+    .feed { flex: 1; max-width: 580px; display: flex; flex-direction: column; gap: 16px; }
+
+    /* â”€â”€â”€â”€â”€ CARDS â”€â”€â”€â”€â”€ */
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    /* Post creator */
+    .post-creator { padding: 16px; }
+    .post-creator-top {
+      display: flex; gap: 12px; align-items: center; margin-bottom: 12px;
+    }
+    .post-creator-input {
+      flex: 1; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 24px;
+      padding: 10px 18px; font-size: 14px; color: var(--text-light);
+      cursor: pointer; transition: border-color .2s;
+    }
+    .post-creator-input:hover { border-color: var(--purple-light); }
+    .post-creator-actions {
+      display: flex; gap: 4px; justify-content: space-between;
+      padding-top: 12px; border-top: 1px solid var(--border);
+    }
+    .post-action-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 8px; border: none;
+      background: transparent; cursor: pointer;
+      font-size: 12px; font-weight: 500; color: var(--text-mid);
+      transition: background .18s;
+    }
+    .post-action-btn:hover { background: var(--bg); color: var(--purple); }
+
+    /* Story / Clips bar */
+    .clips-bar { padding: 14px 16px; display: flex; gap: 12px; overflow-x: auto; }
+    .clips-bar::-webkit-scrollbar { height: 0; }
+    .clip-item {
+      flex-shrink: 0; width: 60px;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      cursor: pointer;
+    }
+    .clip-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 2.5px solid var(--purple);
+      overflow: hidden; padding: 2px; background: white;
+    }
+    .clip-avatar-inner {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: linear-gradient(135deg, #C084FC, #7B2D8B);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .clip-add {
+      border-color: var(--border);
+      position: relative;
+    }
+    .clip-add .plus-badge {
+      position: absolute; bottom: 2px; right: 2px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--purple); color: white;
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid white;
+    }
+    .clip-label { font-size: 10px; color: var(--text-mid); text-align: center; font-weight: 500; }
+
+    /* Feed Post */
+    .post-card { padding: 0; }
+    .post-header { display: flex; align-items: flex-start; gap: 10px; padding: 16px 16px 10px; }
+    .post-avatar {
+      width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--purple), #E879F9);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; color: white;
+    }
+    .post-meta { flex: 1; }
+    .post-author { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+    .post-role { font-size: 12px; color: var(--text-light); margin-top: 1px; }
+    .post-time { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+    .post-more-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-light); padding: 4px; border-radius: 4px;
+    }
+    .post-body { padding: 0 16px 12px; font-size: 14px; line-height: 1.6; color: var(--text-dark); }
+    .post-body .read-more { color: var(--purple); cursor: pointer; font-weight: 500; }
+    .post-tag {
+      display: inline-block; background: var(--purple-bg);
+      color: var(--purple); font-size: 12px; font-weight: 500;
+      padding: 2px 10px; border-radius: 12px; margin: 2px 2px 8px 0;
+    }
+    .post-image {
+      width: 100%; max-height: 300px; object-fit: cover;
+      background: linear-gradient(135deg, #EDE9FE, #FCE7F3);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 200px; font-size: 40px;
+    }
+    .post-stats {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 16px; font-size: 12px; color: var(--text-light);
+    }
+    .post-stats .reactions { display: flex; align-items: center; gap: 4px; }
+    .reaction-icon { font-size: 14px; }
+    .post-actions {
+      display: flex; border-top: 1px solid var(--border);
+      padding: 4px 8px;
+    }
+    .post-action {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 8px; border-radius: 8px; cursor: pointer;
+      font-size: 13px; font-weight: 500; color: var(--text-mid);
+      border: none; background: none; transition: background .18s;
+    }
+    .post-action:hover { background: var(--bg); color: var(--purple); }
+
+    /* Job card */
+    .job-listing { padding: 16px; display: flex; gap: 14px; }
+    .job-logo {
+      width: 48px; height: 48px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, #DBEAFE, #EDE9FE);
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+    }
+    .job-info { flex: 1; }
+    .job-title { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+    .job-company { font-size: 13px; color: var(--purple); font-weight: 500; }
+    .job-details { font-size: 12px; color: var(--text-light); margin-top: 3px; }
+    .job-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .job-tag {
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--text-mid); font-size: 11px;
+      padding: 3px 10px; border-radius: 12px;
+    }
+    .job-apply-btn {
+      align-self: center; padding: 8px 20px;
+      background: var(--purple); color: white;
+      border: none; border-radius: 20px; font-size: 13px;
+      font-weight: 600; cursor: pointer; transition: background .2s; white-space: nowrap;
+    }
+    .job-apply-btn:hover { background: var(--purple-dark); }
+
+    /* Session card */
+    .session-card { padding: 16px; }
+    .session-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .session-type {
+      background: var(--purple); color: white;
+      font-size: 10px; font-weight: 700; padding: 3px 10px;
+      border-radius: 10px; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .session-live { background: #EF4444; }
+    .session-title { font-size: 15px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; }
+    .session-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--text-light); }
+    .session-speaker {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 0; border-top: 1px solid var(--border); margin-top: 10px;
+    }
+    .speaker-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, #FDE68A, #F97316);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: white;
+    }
+    .speaker-name { font-size: 13px; font-weight: 600; }
+    .speaker-role { font-size: 11px; color: var(--text-light); }
+    .join-btn {
+      margin-left: auto; padding: 7px 18px;
+      background: var(--purple); color: white;
+      border: none; border-radius: 20px; font-size: 12px;
+      font-weight: 600; cursor: pointer; transition: background .2s;
+    }
+    .join-btn:hover { background: var(--purple-dark); }
+    .join-btn.live {
+      background: #EF4444; animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .8; }
+    }
+
+    /* â”€â”€â”€â”€â”€ RIGHT SIDEBAR â”€â”€â”€â”€â”€ */
+    .right-sidebar {
+      width: 300px; flex-shrink: 0;
+      position: sticky; top: var(--header-h);
+      height: calc(100vh - var(--header-h));
+      overflow-y: auto; overflow-x: hidden;
+      display: flex; flex-direction: column; gap: 16px;
+      padding-bottom: 24px;
+    }
+    .right-sidebar::-webkit-scrollbar { width: 0; }
+
+    .widget { background: var(--white); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+    .widget-header {
+      padding: 14px 16px 10px;
+      font-size: 14px; font-weight: 600; color: var(--text-dark);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .widget-header a { font-size: 12px; color: var(--purple); text-decoration: none; font-weight: 500; }
+    .widget-body { padding: 12px 16px; }
+
+    /* Profile widget */
+    .profile-banner {
+      height: 70px;
+      background: linear-gradient(135deg, var(--purple) 0%, #C84FC8 50%, #F97316 100%);
+    }
+    .profile-body { padding: 0 16px 16px; }
+    .profile-avatar-wrap {
+      margin-top: -24px; margin-bottom: 8px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .profile-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), #E879F9);
+      border: 3px solid white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; color: white;
+    }
+    .edit-profile-btn {
+      padding: 5px 14px; border: 1.5px solid var(--purple);
+      color: var(--purple); font-size: 12px; font-weight: 600;
+      border-radius: 16px; background: none; cursor: pointer;
+    }
+    .profile-name { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+    .profile-title { font-size: 12px; color: var(--text-mid); margin-top: 2px; }
+    .profile-stats {
+      display: flex; gap: 0; margin-top: 14px;
+      border-top: 1px solid var(--border); padding-top: 12px;
+    }
+    .profile-stat {
+      flex: 1; text-align: center;
+      font-size: 11px; color: var(--text-light);
+      border-right: 1px solid var(--border);
+    }
+    .profile-stat:last-child { border-right: none; }
+    .profile-stat strong { display: block; font-size: 16px; font-weight: 700; color: var(--text-dark); }
+
+    /* People you may know */
+    .person-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .person-item:last-child { border-bottom: none; }
+    .person-avatar {
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: white;
+    }
+    .person-info { flex: 1; min-width: 0; }
+    .person-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .person-role { font-size: 11px; color: var(--text-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .connect-btn {
+      padding: 5px 14px; border: 1.5px solid var(--purple);
+      color: var(--purple); font-size: 11px; font-weight: 600;
+      border-radius: 16px; background: none; cursor: pointer; flex-shrink: 0;
+    }
+    .connect-btn:hover { background: var(--purple-bg); }
+
+    /* Ad banner */
+    .ad-banner {
+      padding: 16px; text-align: center;
+      background: linear-gradient(135deg, #FFF7ED, #FDF2F8);
+      cursor: pointer;
+    }
+    .ad-banner .ad-icon { font-size: 36px; margin-bottom: 8px; }
+    .ad-banner h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .ad-banner p { font-size: 12px; color: var(--text-mid); margin-bottom: 12px; line-height: 1.5; }
+    .ad-cta {
+      padding: 8px 20px;
+      background: linear-gradient(135deg, var(--purple), #C84FC8);
+      color: white; border: none; border-radius: 20px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .ad-label { font-size: 10px; color: var(--text-light); margin-top: 8px; }
+
+    /* Trending */
+    .trend-item {
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .trend-item:last-child { border-bottom: none; }
+    .trend-item:hover .trend-title { color: var(--purple); }
+    .trend-category { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: .05em; }
+    .trend-title { font-size: 13px; font-weight: 600; color: var(--text-dark); margin-top: 1px; }
+    .trend-count { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+
+    /* â”€â”€â”€â”€â”€ FOOTER â”€â”€â”€â”€â”€ */
+    .page-footer {
+      grid-column: 1/-1;
+      padding: 24px 24px;
+      font-size: 11px; color: var(--text-light);
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      margin-left: var(--sidebar-w);
+      border-top: 1px solid var(--border);
+      background: var(--white);
+    }
+    .page-footer a { color: var(--text-light); text-decoration: none; }
+    .page-footer a:hover { color: var(--purple); text-decoration: underline; }
+    .social-links { display: flex; gap: 10px; margin-left: auto; }
+    .social-link {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--bg); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: var(--text-mid); text-decoration: none;
+      transition: all .2s;
+    }
+    .social-link:hover { background: var(--purple-bg); color: var(--purple); }
+
+    /* â”€â”€â”€â”€â”€ SVG ICONS â”€â”€â”€â”€â”€ */
+    svg { display: block; }
+
+    /* â”€â”€â”€â”€â”€ UTILITY â”€â”€â”€â”€â”€ */
+    .flex-center { display: flex; align-items: center; justify-content: center; }
+    .gap-4 { gap: 4px; }
+    .mt-2 { margin-top: 8px; }
+
+    /* â”€â”€â”€â”€â”€ CAMPAIGN CARDS (full-width view) â”€â”€â”€â”€â”€ */
+    .cv-card {
+      display: flex; gap: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .cv-accent { width: 5px; flex-shrink: 0; }
+    .cv-body { flex: 1; padding: 16px 18px; min-width: 0; }
+    .cv-top { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+    .cv-thumb {
+      width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+    }
+    .cv-name { font-size: 14px; font-weight: 700; color: var(--text-dark); line-height: 1.3; }
+    .cv-desc { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+    .cv-metrics {
+      display: flex; flex-wrap: wrap; gap: 20px;
+      padding: 12px 0; border-top: 1px solid var(--border);
+    }
+    .cv-metric { min-width: 70px; }
+    .cv-mval { font-size: 15px; font-weight: 800; color: var(--text-dark); }
+    .cv-mlbl { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: .04em; margin-top: 1px; }
+    .cv-mtag { font-size: 10px; color: #10B981; font-weight: 600; margin-top: 1px; }
+    .cv-mtag.down { color: #EF4444; }
+    .cv-actions {
+      width: 150px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 6px;
+      padding: 14px 14px 14px 0;
+    }
+    .cv-btn {
+      padding: 7px 14px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      border: none; text-align: center; width: 100%;
+      transition: all .18s;
+    }
+    .cv-btn-primary { background: var(--purple); color: white; }
+    .cv-btn-primary:hover { background: var(--purple-dark); }
+    .cv-btn-secondary { background: var(--bg); color: var(--text-mid); border: 1px solid var(--border); }
+    .cv-btn-secondary:hover { border-color: var(--purple); color: var(--purple); }
+    .cv-btn-warn { background: #FEF2F2; color: #EF4444; border: 1px solid #FECACA; }
+    .cv-btn-warn:hover { background: #FEE2E2; }
+
+    .cp-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      background: var(--white);
+    }
+    .cp-title { font-size: 15px; font-weight: 800; color: var(--text-dark); }
+    .cp-subtitle { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+    .cp-create-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 12px; background: var(--purple); color: white;
+      border: none; border-radius: 16px; font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: background .2s; white-space: nowrap;
+    }
+    .cp-create-btn:hover { background: var(--purple-dark); }
+
+    .cp-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .cp-stat { background: var(--white); padding: 10px 8px; text-align: center; }
+    .cp-stat-val { font-size: 17px; font-weight: 800; color: var(--text-dark); }
+    .cp-stat-lbl { font-size: 9px; color: var(--text-light); text-transform: uppercase; letter-spacing: .06em; margin-top: 1px; }
+
+    .cp-tabs {
+      display: flex; overflow-x: auto; padding: 0 4px;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .cp-tabs::-webkit-scrollbar { height: 0; }
+    .cp-tab {
+      padding: 8px 10px; font-size: 11px; font-weight: 500;
+      color: var(--text-mid); cursor: pointer; border: none; background: none;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: all .18s; white-space: nowrap; flex-shrink: 0;
+    }
+    .cp-tab.active { color: var(--purple); border-bottom-color: var(--purple); font-weight: 700; }
+    .cp-tab:hover:not(.active) { color: var(--purple); }
+
+    .cp-list { flex: 1; overflow-y: auto; }
+    .cp-list::-webkit-scrollbar { width: 3px; }
+    .cp-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .cp-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 14px; cursor: pointer;
+      border-bottom: 1px solid var(--border); transition: background .15s;
+    }
+    .cp-item:last-child { border-bottom: none; }
+    .cp-item:hover { background: var(--bg); }
+
+    .cp-item-accent {
+      width: 3px; border-radius: 2px; flex-shrink: 0;
+      align-self: stretch;
+    }
+    .cp-thumb {
+      width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 17px;
+    }
+    .cp-item-body { flex: 1; min-width: 0; }
+    .cp-item-top { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+    .cp-item-name {
+      font-size: 12px; font-weight: 700; color: var(--text-dark);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;
+    }
+    .cp-badge {
+      flex-shrink: 0; padding: 2px 6px; border-radius: 8px;
+      font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
+    }
+    .cp-badge-active    { background: #ECFDF5; color: #10B981; }
+    .cp-badge-draft     { background: #FFFBEB; color: #F59E0B; }
+    .cp-badge-scheduled { background: #EFF6FF; color: #3B82F6; }
+    .cp-badge-ended     { background: var(--bg); color: var(--text-light); }
+    .cp-item-desc {
+      font-size: 10px; color: var(--text-light); margin-bottom: 6px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .cp-metrics { display: flex; gap: 10px; }
+    .cp-metric { text-align: center; }
+    .cp-metric-val { font-size: 12px; font-weight: 700; color: var(--text-dark); }
+    .cp-metric-lbl { font-size: 9px; color: var(--text-light); }
+    .cp-progress-bar { height: 3px; background: var(--bg); border-radius: 2px; overflow: hidden; margin-top: 6px; }
+    .cp-progress-fill { height: 100%; border-radius: 2px; }
+
+    .cp-footer {
+      padding: 10px 14px; border-top: 1px solid var(--border); flex-shrink: 0;
+    }
+    .cp-view-all {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      width: 100%; padding: 8px; border-radius: 8px;
+      border: 1.5px solid var(--border); background: none;
+      font-size: 12px; font-weight: 600; color: var(--text-mid);
+      cursor: pointer; transition: all .18s;
+    }
+    .cp-view-all:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-bg); }
+
+    /* Create campaign form */
+    .cp-create-form { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+    .cp-create-form.visible { display: flex; }
+    .cp-form-body { flex: 1; overflow-y: auto; padding: 14px; }
+    .cp-form-body::-webkit-scrollbar { width: 3px; }
+    .cp-form-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .cf-group { margin-bottom: 12px; }
+    .cf-label { font-size: 11px; font-weight: 600; color: var(--text-dark); margin-bottom: 5px; display: block; }
+    .cf-label em { color: #EF4444; font-style: normal; }
+    .cf-input, .cf-select, .cf-textarea {
+      width: 100%; padding: 8px 10px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      font-size: 12px; font-family: inherit; color: var(--text-dark);
+      background: var(--white); outline: none; transition: border-color .2s;
+    }
+    .cf-input:focus, .cf-select:focus, .cf-textarea:focus {
+      border-color: var(--purple); box-shadow: 0 0 0 2px rgba(123,45,139,.08);
+    }
+    .cf-textarea { resize: vertical; min-height: 60px; }
+    .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .cf-type-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+    .cf-type-card {
+      border: 2px solid var(--border); border-radius: 8px;
+      padding: 8px 6px; text-align: center; cursor: pointer; transition: all .2s;
+    }
+    .cf-type-card:hover { border-color: var(--purple-light); background: var(--purple-bg); }
+    .cf-type-card.sel { border-color: var(--purple); background: var(--purple-bg); }
+    .cf-type-icon { font-size: 18px; margin-bottom: 3px; }
+    .cf-type-name { font-size: 10px; font-weight: 700; color: var(--text-dark); }
+    .cf-section-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--text-light);
+      margin: 14px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border);
+    }
+    .cf-tag-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+    .cf-tag {
+      padding: 4px 10px; border: 1.5px solid var(--border); border-radius: 12px;
+      font-size: 10px; font-weight: 500; color: var(--text-mid); cursor: pointer;
+    }
+    .cf-tag:hover { border-color: var(--purple-light); color: var(--purple); }
+    .cf-tag.sel { border-color: var(--purple); background: var(--purple-bg); color: var(--purple); font-weight: 600; }
+    .cp-form-footer {
+      padding: 10px 14px; border-top: 1px solid var(--border);
+      display: flex; gap: 8px; flex-shrink: 0;
+    }
+    .cf-btn-publish {
+      flex: 1; padding: 9px; background: var(--purple); color: white;
+      border: none; border-radius: 8px; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: background .2s;
+    }
+    .cf-btn-publish:hover { background: var(--purple-dark); }
+    .cf-btn-draft {
+      padding: 9px 14px; background: var(--bg); color: var(--text-mid);
+      border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px;
+      font-weight: 600; cursor: pointer; transition: all .18s;
+    }
+    .cf-btn-draft:hover { border-color: var(--purple); color: var(--purple); }
+    .cf-btn-preview {
+      padding: 9px 18px; background: var(--white); color: var(--purple);
+      border: 1.5px solid var(--purple); border-radius: 8px; font-size: 13px;
+      font-weight: 700; cursor: pointer; transition: all .18s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .cf-btn-preview:hover { background: var(--purple-bg); }
+
+    /* Preview Modal */
+    .preview-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.55); backdrop-filter: blur(3px);
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .preview-overlay.open { display: flex; }
+    .preview-modal {
+      background: var(--white); border-radius: 16px; width: 100%;
+      max-width: 560px; max-height: 88vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,.25);
+      animation: ai-fadeIn .25s ease;
+    }
+    .preview-modal::-webkit-scrollbar { width: 4px; }
+    .preview-modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .pm-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px 14px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--white); z-index: 1;
+    }
+    .pm-title { font-size: 16px; font-weight: 800; color: var(--text-dark); }
+    .pm-close {
+      width: 30px; height: 30px; border-radius: 50%; border: none;
+      background: var(--bg); cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-mid); transition: background .18s;
+    }
+    .pm-close:hover { background: var(--border); }
+    .pm-visual { width: 100%; height: 200px; position: relative; overflow: hidden; }
+    .pm-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 18px; }
+    .pm-section-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--text-light);
+      margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border);
+    }
+    .pm-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pm-chip {
+      padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600;
+      background: var(--purple-bg); color: var(--purple);
+    }
+    .pm-chip.gray { background: var(--bg); color: var(--text-mid); }
+    .pm-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .pm-kv-item { }
+    .pm-kv-label { font-size: 10px; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
+    .pm-kv-val { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+    .pm-footer {
+      display: flex; gap: 10px; padding: 14px 22px;
+      border-top: 1px solid var(--border); position: sticky; bottom: 0; background: var(--white);
+    }
+
+    /* â”€â”€â”€â”€â”€ AI IMAGE GENERATOR â”€â”€â”€â”€â”€ */
+    .ai-style-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 4px;
+    }
+    .ai-style-card {
+      border: 2px solid var(--border); border-radius: 10px;
+      overflow: hidden; cursor: pointer; transition: all .2s;
+    }
+    .ai-style-card:hover { border-color: var(--purple-light); transform: translateY(-1px); }
+    .ai-style-card.sel { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(123,45,139,.12); }
+    .ai-style-swatch { height: 46px; width: 100%; }
+    .ai-style-name {
+      font-size: 10px; font-weight: 600; color: var(--text-dark);
+      text-align: center; padding: 5px 4px;
+    }
+    .ai-style-card.sel .ai-style-name { color: var(--purple); }
+
+    .ai-preview-wrap {
+      width: 100%; height: 180px; border-radius: 10px;
+      overflow: hidden; position: relative;
+      border: 1px solid var(--border);
+    }
+
+    @keyframes ai-spin { to { transform: rotate(360deg); } }
+    .ai-spin { animation: ai-spin .8s linear infinite; }
+
+    @keyframes ai-fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+    .ai-fade-in { animation: ai-fadeIn .4s ease forwards; }
+
+    /* â”€â”€â”€â”€â”€ WIZARD â”€â”€â”€â”€â”€ */
+    @keyframes aiPulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.35; transform:scale(1.4); }
+    }
+    @keyframes aiFadeIn {
+      from { opacity:0; transform:translateY(8px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    #aiResultCard { animation: aiFadeIn .35s ease; }
+
+    .wiz-steps {
+      display: flex; align-items: flex-start;
+      padding: 22px 28px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .wiz-step-item {
+      display: flex; flex-direction: column; align-items: center;
+      flex: 1; position: relative;
+    }
+    .wiz-step-item:not(:last-child)::after {
+      content: ''; position: absolute;
+      top: 13px; left: calc(50% + 14px);
+      width: calc(100% - 28px); height: 2px;
+      background: var(--border); transition: background .3s;
+    }
+    .wiz-step-item.done:not(:last-child)::after { background: var(--purple); }
+    .wiz-step-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid var(--border); background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--text-light);
+      position: relative; z-index: 1; transition: all .25s;
+    }
+    .wiz-step-item.done .wiz-step-dot  { background: var(--purple); border-color: var(--purple); color: white; }
+    .wiz-step-item.active .wiz-step-dot { background: var(--purple); border-color: var(--purple); color: white; box-shadow: 0 0 0 4px rgba(123,45,139,.14); }
+    .wiz-step-label {
+      font-size: 10px; font-weight: 600; color: var(--text-light);
+      margin-top: 6px; text-align: center; white-space: nowrap;
+    }
+    .wiz-step-item.active .wiz-step-label { color: var(--purple); font-weight: 700; }
+    .wiz-step-item.done .wiz-step-label  { color: var(--text-mid); }
+
+    .wiz-panel { display: none; padding: 24px 24px; min-height: 220px; }
+    .wiz-panel.active { display: block; }
+
+    .wiz-nav {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 24px; border-top: 1px solid var(--border);
+      background: var(--white); flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• HEADER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<header>
+  <a href="#" class="logo">
+    <div class="logo-mark">H</div>
+    <span class="logo-text">her<span>key</span></span>
+  </a>
+
+  <!-- Search -->
+  <div class="search-bar">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.2" stroke-linecap="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" placeholder="Search for jobs, people, sessionsâ€¦" />
+  </div>
+
+  <!-- Header nav -->
+  <nav class="header-nav">
+    <a href="#">Sessions</a>
+    <a href="#">Jobs</a>
+    <a href="#">Groups</a>
+    <a href="#">Events</a>
+
+    <button class="notif-btn" title="Notifications">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+      <span class="notif-badge">3</span>
+    </button>
+
+    <button class="notif-btn" title="Messages">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+    </button>
+
+    <div class="avatar-placeholder" title="Profile">R</div>
+
+    <a href="#" class="btn-business">HerKey for Business</a>
+  </nav>
+</header>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• BODY LAYOUT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="layout">
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• LEFT SIDEBAR â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <aside class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Main</div>
+
+      <a href="#" class="nav-item active">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+        </span>
+        Home
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </span>
+        Sessions
+        <span class="nav-badge">2</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+          </svg>
+        </span>
+        Simkey
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
+          </svg>
+        </span>
+        Clips
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </span>
+        Jobs
+      </a>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Explore</div>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </span>
+        Companies
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </span>
+        Groups
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </span>
+        Events
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M17 2H7C5.3 2 4 3.3 4 5v14c0 1.7 1.3 3 3 3h10c1.7 0 3-1.3 3-3V5c0-1.7-1.3-3-3-3z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+        </span>
+        Games
+      </a>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- â˜… NEW: CAMPAIGNS SECTION â˜… -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Campaigns</div>
+
+      <a href="#" class="nav-item campaigns-item" onclick="openCampaignsPanel(); return false;">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </span>
+        Campaigns
+        <span class="nav-badge" style="background:var(--orange)">New</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
+          </svg>
+        </span>
+        Active Drives
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+        </span>
+        My Campaigns
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </span>
+        Impact Reports
+      </a>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/>
+          </svg>
+        </span>
+        My Profile
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        </span>
+        Settings
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div>
+        <a href="#">Terms</a> Â· <a href="#">Privacy</a> Â· <a href="#">Help</a>
+      </div>
+      <div style="margin-top:6px;">Â© HerKey 2026</div>
+    </div>
+  </aside>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• MAIN FEED â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <main>
+    <div class="feed">
+
+      <!-- Post Creator -->
+      <div class="card post-creator">
+        <div class="post-creator-top">
+          <div class="avatar-placeholder" style="width:42px;height:42px;font-size:16px;border-radius:50%;">R</div>
+          <div class="post-creator-input">Share your thoughts, achievements or questionsâ€¦</div>
+        </div>
+        <div class="post-creator-actions">
+          <button class="post-action-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
+            Photo / Video
+          </button>
+          <button class="post-action-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>
+            </svg>
+            Session
+          </button>
+          <button class="post-action-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Article
+          </button>
+          <button class="post-action-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+            More
+          </button>
+        </div>
+      </div>
+
+      <!-- Clips / Stories Bar -->
+      <div class="card">
+        <div style="padding:14px 16px 4px;font-size:13px;font-weight:600;color:var(--text-mid);">Clips</div>
+        <div class="clips-bar">
+          <div class="clip-item">
+            <div class="clip-avatar clip-add" style="border-color:var(--purple);">
+              <div class="clip-avatar-inner">R</div>
+              <div class="plus-badge">+</div>
+            </div>
+            <span class="clip-label">Your Clip</span>
+          </div>
+          <div class="clip-item">
+            <div class="clip-avatar" style="border-color:#F97316;">
+              <div class="clip-avatar-inner" style="background:linear-gradient(135deg,#FDE68A,#F97316);">P</div>
+            </div>
+            <span class="clip-label">Priya S.</span>
+          </div>
+          <div class="clip-item">
+            <div class="clip-avatar" style="border-color:#10B981;">
+              <div class="clip-avatar-inner" style="background:linear-gradient(135deg,#A7F3D0,#10B981);">A</div>
+            </div>
+            <span class="clip-label">Ananya</span>
+          </div>
+          <div class="clip-item">
+            <div class="clip-avatar">
+              <div class="clip-avatar-inner" style="background:linear-gradient(135deg,#FBCFE8,#EC4899);">S</div>
+            </div>
+            <span class="clip-label">Sneha K.</span>
+          </div>
+          <div class="clip-item">
+            <div class="clip-avatar" style="border-color:#3B82F6;">
+              <div class="clip-avatar-inner" style="background:linear-gradient(135deg,#BFDBFE,#3B82F6);">D</div>
+            </div>
+            <span class="clip-label">Divya M.</span>
+          </div>
+          <div class="clip-item">
+            <div class="clip-avatar" style="border-color:#8B5CF6;">
+              <div class="clip-avatar-inner" style="background:linear-gradient(135deg,#DDD6FE,#8B5CF6);">N</div>
+            </div>
+            <span class="clip-label">Nidhi R.</span>
+          </div>
+          <div class="clip-item">
+            <div class="clip-avatar" style="border-color:#EF4444;">
+              <div class="clip-avatar-inner" style="background:linear-gradient(135deg,#FEE2E2,#EF4444);">K</div>
+            </div>
+            <span class="clip-label">Kavya T.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Session Card -->
+      <div class="card session-card">
+        <div class="session-header">
+          <span class="session-type session-live">â— Live Now</span>
+          <span style="font-size:12px;color:var(--text-light);">1,240 watching</span>
+        </div>
+        <div class="session-title">Breaking the Glass Ceiling: Women in Tech Leadership 2026</div>
+        <div class="session-meta">
+          <span>ðŸ•’ Started 12 min ago</span>
+          <span>ðŸ“ Virtual</span>
+          <span>Free</span>
+        </div>
+        <div class="session-speaker">
+          <div class="speaker-avatar">M</div>
+          <div>
+            <div class="speaker-name">Meera Iyer</div>
+            <div class="speaker-role">VP Engineering Â· Google India</div>
+          </div>
+          <button class="join-btn live">Join Live</button>
+        </div>
+      </div>
+
+      <!-- Feed Post 1 -->
+      <div class="card post-card">
+        <div class="post-header">
+          <div class="post-avatar">P</div>
+          <div class="post-meta">
+            <div class="post-author">Priya Sharma</div>
+            <div class="post-role">Senior Product Manager Â· Microsoft</div>
+            <div class="post-time">2 hours ago Â· ðŸŒ</div>
+          </div>
+          <button class="post-more-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </button>
+        </div>
+        <div class="post-body">
+          Excited to share that I've just completed the <strong>HerKey Leadership Bootcamp 2026</strong>! ðŸŽ‰
+          <br/><br/>
+          3 months of intense learning, networking with 500+ incredible women leaders, and gaining skills that will shape my career for years to come.
+          <br/><br/>
+          If you're looking to level up your career, apply for the next cohort â€” applications close May 31!
+          <span class="read-more"> See more</span>
+          <br/><br/>
+          <span class="post-tag">#WomenInTech</span>
+          <span class="post-tag">#Leadership</span>
+          <span class="post-tag">#HerKey</span>
+          <span class="post-tag">#CareerGrowth</span>
+        </div>
+        <div class="post-image flex-center" style="background:linear-gradient(135deg,#EDE9FE,#FCE7F3);font-size:60px;">
+          ðŸ†
+        </div>
+        <div class="post-stats">
+          <div class="reactions">
+            <span class="reaction-icon">â¤ï¸</span>
+            <span class="reaction-icon">ðŸ‘</span>
+            <span class="reaction-icon">ðŸŽ‰</span>
+            <span>842 reactions</span>
+          </div>
+          <span>138 comments Â· 56 reposts</span>
+        </div>
+        <div class="post-actions">
+          <button class="post-action">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Like
+          </button>
+          <button class="post-action">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Comment
+          </button>
+          <button class="post-action">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            Repost
+          </button>
+          <button class="post-action">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Share
+          </button>
+        </div>
+      </div>
+
+      <!-- Job Listing Card -->
+      <div class="card" style="padding:14px 16px 10px;">
+        <div style="font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:10px;">Recommended Jobs</div>
+
+        <div class="job-listing" style="padding:10px 0;border-bottom:1px solid var(--border);">
+          <div class="job-logo">ðŸ¢</div>
+          <div class="job-info">
+            <div class="job-title">Senior UX Designer</div>
+            <div class="job-company">Flipkart</div>
+            <div class="job-details">Bengaluru Â· Hybrid Â· 8â€“14 LPA</div>
+            <div class="job-tags">
+              <span class="job-tag">Figma</span>
+              <span class="job-tag">Product Design</span>
+              <span class="job-tag">Women-friendly</span>
+            </div>
+          </div>
+          <button class="job-apply-btn">Apply</button>
+        </div>
+
+        <div class="job-listing" style="padding:10px 0;">
+          <div class="job-logo">ðŸ’»</div>
+          <div class="job-info">
+            <div class="job-title">Product Manager â€“ Growth</div>
+            <div class="job-company">Razorpay</div>
+            <div class="job-details">Bengaluru / Remote Â· Full-time Â· 20â€“30 LPA</div>
+            <div class="job-tags">
+              <span class="job-tag">Growth</span>
+              <span class="job-tag">Analytics</span>
+              <span class="job-tag">Returnship OK</span>
+            </div>
+          </div>
+          <button class="job-apply-btn">Apply</button>
+        </div>
+
+        <div style="text-align:center;padding:10px 0 4px;">
+          <a href="#" style="font-size:13px;color:var(--purple);font-weight:600;text-decoration:none;">View all recommended jobs â†’</a>
+        </div>
+      </div>
+
+      <!-- Feed Post 2 -->
+      <div class="card post-card">
+        <div class="post-header">
+          <div class="post-avatar" style="background:linear-gradient(135deg,#FDE68A,#F97316);">A</div>
+          <div class="post-meta">
+            <div class="post-author">Ananya Krishnan</div>
+            <div class="post-role">Data Scientist Â· Swiggy | IIT Bombay Alumni</div>
+            <div class="post-time">5 hours ago</div>
+          </div>
+          <button class="post-more-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </button>
+        </div>
+        <div class="post-body">
+          ðŸ’¡ <strong>My experience returning to work after a 2-year career break</strong>
+          <br/><br/>
+          When I took a break to care for my family, I feared I'd never catch up with the industry. Fast forward to today â€” I'm working as a Data Scientist at Swiggy.
+          <br/><br/>
+          Here are 5 things that helped me make the comeback: <span class="read-more">See more</span>
+          <br/><br/>
+          <span class="post-tag">#CareerBreak</span>
+          <span class="post-tag">#Returnship</span>
+          <span class="post-tag">#WomenWhoCode</span>
+        </div>
+        <div class="post-stats">
+          <div class="reactions">
+            <span class="reaction-icon">â¤ï¸</span>
+            <span class="reaction-icon">ðŸ’ª</span>
+            <span>2.3k reactions</span>
+          </div>
+          <span>412 comments Â· 218 reposts</span>
+        </div>
+        <div class="post-actions">
+          <button class="post-action">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Like
+          </button>
+          <button class="post-action">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Comment
+          </button>
+          <button class="post-action">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            Repost
+          </button>
+          <button class="post-action">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Share
+          </button>
+        </div>
+      </div>
+
+      <!-- Upcoming Session -->
+      <div class="card session-card">
+        <div class="session-header">
+          <span class="session-type">Upcoming Session</span>
+          <span style="font-size:12px;color:var(--text-light);">Tomorrow, 6:00 PM IST</span>
+        </div>
+        <div class="session-title">Negotiation Skills for Women: Getting the Salary You Deserve</div>
+        <div class="session-meta">
+          <span>â± 60 mins</span>
+          <span>ðŸ‘¥ 387 registered</span>
+          <span style="color:var(--green);font-weight:600;">Free</span>
+        </div>
+        <div class="session-speaker">
+          <div class="speaker-avatar" style="background:linear-gradient(135deg,#BFDBFE,#3B82F6);">R</div>
+          <div>
+            <div class="speaker-name">Radhika Menon</div>
+            <div class="speaker-role">Executive Coach Â· Ex-Amazon HR Director</div>
+          </div>
+          <button class="join-btn">Register Free</button>
+        </div>
+      </div>
+
+    </div><!-- /feed -->
+
+    <aside class="right-sidebar">
+
+      <!-- Profile Widget -->
+      <div class="widget">
+        <div class="profile-banner"></div>
+        <div class="profile-body">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar">R</div>
+            <button class="edit-profile-btn">Edit Profile</button>
+          </div>
+          <div class="profile-name">Rajeev Kurupati</div>
+          <div class="profile-title">Product Leader Â· Building for Women Professionals</div>
+          <div class="profile-stats">
+            <div class="profile-stat"><strong>48</strong>Connections</div>
+            <div class="profile-stat"><strong>12</strong>Sessions</div>
+            <div class="profile-stat"><strong>5</strong>Groups</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- People you may know -->
+      <div class="widget">
+        <div class="widget-header">People You May Know<a href="#">See all</a></div>
+        <div class="widget-body" style="padding:8px 16px;">
+          <div class="person-item">
+            <div class="person-avatar" style="background:linear-gradient(135deg,#DDD6FE,#7C3AED);">N</div>
+            <div class="person-info"><div class="person-name">Neha Gupta</div><div class="person-role">Engineering Manager Â· Zomato</div></div>
+            <button class="connect-btn">Connect</button>
+          </div>
+          <div class="person-item">
+            <div class="person-avatar" style="background:linear-gradient(135deg,#FEE2E2,#EF4444);">S</div>
+            <div class="person-info"><div class="person-name">Sunita Rao</div><div class="person-role">Senior SDE Â· Infosys</div></div>
+            <button class="connect-btn">Connect</button>
+          </div>
+          <div class="person-item">
+            <div class="person-avatar" style="background:linear-gradient(135deg,#D1FAE5,#10B981);">L</div>
+            <div class="person-info"><div class="person-name">Lavanya Pillai</div><div class="person-role">Data Analyst Â· HDFC Bank</div></div>
+            <button class="connect-btn">Connect</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trending -->
+      <div class="widget">
+        <div class="widget-header">Trending on HerKey <a href="#">See all</a></div>
+        <div class="widget-body" style="padding:4px 16px 8px;">
+          <div class="trend-item"><div class="trend-category">Career</div><div class="trend-title">#WomenInLeadership</div><div class="trend-count">4,821 posts this week</div></div>
+          <div class="trend-item"><div class="trend-category">Technology</div><div class="trend-title">#AIForWomen</div><div class="trend-count">2,104 posts this week</div></div>
+          <div class="trend-item"><div class="trend-category">Events</div><div class="trend-title">HerKey Summit 2026</div><div class="trend-count">Mumbai Â· June 14</div></div>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- â•â•â• CAMPAIGNS VIEW â€” replaces main when Campaigns is clicked â•â•â• -->
+  <div id="campaignsView" style="display:none; margin-left:var(--sidebar-w); flex:1; padding:28px 32px 60px; max-width:calc(100% - var(--sidebar-w));">
+
+    <!-- Page header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h1 style="font-size:22px;font-weight:800;color:var(--text-dark);">Campaigns</h1>
+        <p style="font-size:13px;color:var(--text-mid);margin-top:3px;">Create, manage and track your campaigns across the HerKey network</p>
+      </div>
+      <button onclick="showCreateForm()" style="display:flex;align-items:center;gap:7px;padding:10px 20px;background:var(--purple);color:white;border:none;border-radius:22px;font-size:13px;font-weight:700;cursor:pointer;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Create Campaign
+      </button>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;gap:12px;align-items:center;">
+        <div style="width:42px;height:42px;border-radius:10px;background:var(--purple-bg);display:flex;align-items:center;justify-content:center;font-size:18px;">&#x1F4E2;</div>
+        <div><div style="font-size:11px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Total</div><div style="font-size:22px;font-weight:800;color:var(--text-dark);">5</div></div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;gap:12px;align-items:center;">
+        <div style="width:42px;height:42px;border-radius:10px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;font-size:18px;">&#x1F7E2;</div>
+        <div><div style="font-size:11px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Active</div><div style="font-size:22px;font-weight:800;color:#10B981;">2</div></div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;gap:12px;align-items:center;">
+        <div style="width:42px;height:42px;border-radius:10px;background:#FFF7ED;display:flex;align-items:center;justify-content:center;font-size:18px;">&#x1F465;</div>
+        <div><div style="font-size:11px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Total Reach</div><div style="font-size:22px;font-weight:800;color:var(--text-dark);">2.4M</div></div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;gap:12px;align-items:center;">
+        <div style="width:42px;height:42px;border-radius:10px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-size:18px;">&#x1F4CA;</div>
+        <div><div style="font-size:11px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Avg CTR</div><div style="font-size:22px;font-weight:800;color:var(--text-dark);">6.8%</div></div>
+      </div>
+    </div>
+
+    <!-- Filter tabs + list/create toggle -->
+    <div id="cvListSection">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div class="cp-tabs" style="padding:0;border:1px solid var(--border);border-radius:24px;padding:4px;background:white;">
+          <button class="cp-tab active" onclick="cpFilter('all',this)" style="padding:6px 16px;">All (5)</button>
+          <button class="cp-tab" onclick="cpFilter('active',this)" style="padding:6px 16px;">Active (2)</button>
+          <button class="cp-tab" onclick="cpFilter('scheduled',this)" style="padding:6px 16px;">Scheduled (1)</button>
+          <button class="cp-tab" onclick="cpFilter('draft',this)" style="padding:6px 16px;">Draft (1)</button>
+          <button class="cp-tab" onclick="cpFilter('ended',this)" style="padding:6px 16px;">Ended (1)</button>
+        </div>
+      </div>
+
+      <!-- Campaign cards -->
+      <div id="cpList" style="display:flex;flex-direction:column;gap:14px;">
+
+        <div class="cv-card" data-status="active" data-type="Event Drive" data-audience="Women in Tech,Job Seekers,Mid-Senior" data-locations="Bengaluru,Mumbai,Delhi NCR" data-objective="Registrations" data-target="5000" data-start="2026-04-10" data-end="2026-05-20">
+          <div class="cv-accent" style="background:#10B981;"></div>
+          <div class="cv-body">
+            <div class="cv-top">
+              <div class="cv-thumb" style="background:linear-gradient(135deg,#EDE9FE,#DDD6FE);">&#x1F680;</div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span class="cv-name">Women in Tech Summit 2026 &ndash; Registration Drive</span>
+                  <span class="cp-badge cp-badge-active">&#x25CF; Active</span>
+                </div>
+                <div class="cv-desc">Drive registrations for the flagship HerKey Women in Tech Summit. Apr 10 &ndash; May 20, 2026 &bull; 19 days left</div>
+              </div>
+            </div>
+            <div class="cv-metrics">
+              <div class="cv-metric"><div class="cv-mval">8,42,310</div><div class="cv-mlbl">Total Reach</div><div class="cv-mtag up">&#x2191; 12%</div></div>
+              <div class="cv-metric"><div class="cv-mval">2.1M</div><div class="cv-mlbl">Impressions</div></div>
+              <div class="cv-metric"><div class="cv-mval">62,480</div><div class="cv-mlbl">Clicks</div></div>
+              <div class="cv-metric"><div class="cv-mval">7.41%</div><div class="cv-mlbl">CTR</div><div class="cv-mtag up">vs 4.2% avg</div></div>
+              <div class="cv-metric"><div class="cv-mval">4,218</div><div class="cv-mlbl">Conversions</div><div class="cv-mtag up">84% of goal</div></div>
+            </div>
+            <div style="margin-top:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-light);margin-bottom:4px;"><span>Registration goal progress</span><span style="font-weight:700;color:var(--text-dark);">4,218 / 5,000 &nbsp; 84%</span></div>
+              <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;"><div style="height:100%;width:84%;background:linear-gradient(90deg,#10B981,#34D399);border-radius:3px;"></div></div>
+            </div>
+          </div>
+          <div class="cv-actions">
+            <button class="cv-btn cv-btn-primary" onclick="showCampaignDetail(this.closest('.cv-card'))">View Details</button>
+            <button class="cv-btn cv-btn-secondary">Edit</button>
+            <button class="cv-btn cv-btn-warn">Pause</button>
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);text-align:right;">
+              <div style="font-size:10px;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;">Budget</div>
+              <div style="font-size:15px;font-weight:800;color:var(--text-dark);">&#x20B9;48,000</div>
+              <div style="font-size:11px;color:var(--text-light);">&#x20B9;31,200 spent</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cv-card" data-status="active" data-type="Awareness" data-audience="Career Break,Returnees,Freshers" data-locations="All India" data-objective="Registrations" data-target="2500" data-start="2026-04-25" data-end="2026-06-15">
+          <div class="cv-accent" style="background:#10B981;"></div>
+          <div class="cv-body">
+            <div class="cv-top">
+              <div class="cv-thumb" style="background:linear-gradient(135deg,#D1FAE5,#A7F3D0);">&#x1F4BC;</div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span class="cv-name">Return to Work Bootcamp &ndash; Spring 2026</span>
+                  <span class="cp-badge cp-badge-active">&#x25CF; Active</span>
+                </div>
+                <div class="cv-desc">Awareness &amp; enrollment for women returning from a career break. Apr 25 &ndash; Jun 15, 2026 &bull; On track</div>
+              </div>
+            </div>
+            <div class="cv-metrics">
+              <div class="cv-metric"><div class="cv-mval">3,18,740</div><div class="cv-mlbl">Total Reach</div><div class="cv-mtag up">&#x2191; 22%</div></div>
+              <div class="cv-metric"><div class="cv-mval">8,94,200</div><div class="cv-mlbl">Impressions</div></div>
+              <div class="cv-metric"><div class="cv-mval">24,160</div><div class="cv-mlbl">Clicks</div></div>
+              <div class="cv-metric"><div class="cv-mval">5.23%</div><div class="cv-mlbl">CTR</div></div>
+              <div class="cv-metric"><div class="cv-mval">1,102</div><div class="cv-mlbl">Enrollments</div><div class="cv-mtag up">55% of goal</div></div>
+            </div>
+            <div style="margin-top:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-light);margin-bottom:4px;"><span>Enrollment goal progress</span><span style="font-weight:700;color:var(--text-dark);">1,102 / 2,000 &nbsp; 55%</span></div>
+              <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;"><div style="height:100%;width:55%;background:linear-gradient(90deg,#3B82F6,#60A5FA);border-radius:3px;"></div></div>
+            </div>
+          </div>
+          <div class="cv-actions">
+            <button class="cv-btn cv-btn-primary" onclick="showCampaignDetail(this.closest('.cv-card'))">View Details</button>
+            <button class="cv-btn cv-btn-secondary">Edit</button>
+            <button class="cv-btn cv-btn-warn">Pause</button>
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);text-align:right;">
+              <div style="font-size:10px;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;">Budget</div>
+              <div style="font-size:15px;font-weight:800;color:var(--text-dark);">&#x20B9;28,500</div>
+              <div style="font-size:11px;color:var(--text-light);">&#x20B9;11,400 spent</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cv-card" data-status="scheduled" data-type="Hiring Drive" data-audience="Job Seekers,Women in Tech,Mid-Senior" data-locations="Bengaluru,Mumbai,Delhi NCR,Hyderabad,Pune" data-objective="Job Applications" data-target="1000" data-start="2026-05-10" data-end="2026-07-31">
+          <div class="cv-accent" style="background:#3B82F6;"></div>
+          <div class="cv-body">
+            <div class="cv-top">
+              <div class="cv-thumb" style="background:linear-gradient(135deg,#DBEAFE,#BFDBFE);">&#x1F3E2;</div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span class="cv-name">HerKey Hiring Drive Q2 2026 &ndash; Top 25 Employers</span>
+                  <span class="cp-badge cp-badge-scheduled">Scheduled</span>
+                </div>
+                <div class="cv-desc">Partner-driven hiring campaign. Starts May 10, 2026 &bull; 9 days to launch &bull; &#x20B9;75,000 budget</div>
+              </div>
+            </div>
+            <div style="padding:10px 0;font-size:12px;color:var(--text-light);font-style:italic;">&#x1F4CA; Metrics will appear once the campaign goes live on May 10, 2026</div>
+          </div>
+          <div class="cv-actions">
+            <button class="cv-btn cv-btn-secondary">Edit</button>
+            <button class="cv-btn" style="background:var(--bg);color:#EF4444;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;width:100%;">Delete</button>
+          </div>
+        </div>
+
+        <div class="cv-card" data-status="draft" data-type="Mentorship" data-audience="Mid-Senior,Entrepreneurs,Women in Tech" data-locations="All India" data-objective="Registrations" data-target="200" data-start="" data-end="">
+          <div class="cv-accent" style="background:#F59E0B;"></div>
+          <div class="cv-body">
+            <div class="cv-top">
+              <div class="cv-thumb" style="background:linear-gradient(135deg,#FEF9C3,#FDE68A);">&#x270D;&#xFE0F;</div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span class="cv-name">Leadership Mentorship Program &ndash; Cohort 4</span>
+                  <span class="cp-badge cp-badge-draft">Draft</span>
+                </div>
+                <div class="cv-desc">&#x26A0;&#xFE0F; 2 required fields missing &bull; Not yet scheduled</div>
+              </div>
+            </div>
+            <div style="padding:10px 0;font-size:12px;color:var(--text-light);font-style:italic;">&#x1F4DD; Complete all required fields and publish to start tracking metrics</div>
+          </div>
+          <div class="cv-actions">
+            <button class="cv-btn cv-btn-primary" onclick="showCreateForm()" style="background:#10B981;">Publish Now</button>
+            <button class="cv-btn cv-btn-secondary" onclick="showCreateForm()">Continue Editing</button>
+          </div>
+        </div>
+
+        <div class="cv-card" data-status="ended" data-type="Learning" data-audience="Job Seekers,Freshers,Career Break" data-locations="All India" data-objective="Community Growth" data-target="10000" data-start="2026-01-01" data-end="2026-01-31">
+          <div class="cv-accent" style="background:#9CA3AF;"></div>
+          <div class="cv-body">
+            <div class="cv-top">
+              <div class="cv-thumb" style="background:var(--bg);">&#x1F3AF;</div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span class="cv-name">New Year Career Reset 2026 &ndash; January Edition</span>
+                  <span class="cp-badge cp-badge-ended">Ended</span>
+                </div>
+                <div class="cv-desc">Jan 1 &ndash; Jan 31, 2026 &bull; &#x2705; Goal exceeded by 34%</div>
+              </div>
+            </div>
+            <div class="cv-metrics">
+              <div class="cv-metric"><div class="cv-mval">12,84,000</div><div class="cv-mlbl">Total Reach</div></div>
+              <div class="cv-metric"><div class="cv-mval">4.7M</div><div class="cv-mlbl">Impressions</div></div>
+              <div class="cv-metric"><div class="cv-mval">1,01,200</div><div class="cv-mlbl">Clicks</div></div>
+              <div class="cv-metric"><div class="cv-mval">8.62%</div><div class="cv-mlbl">CTR</div></div>
+              <div class="cv-metric"><div class="cv-mval">13,400</div><div class="cv-mlbl">Conversions</div><div class="cv-mtag up">134% of goal</div></div>
+            </div>
+          </div>
+          <div class="cv-actions">
+            <button class="cv-btn cv-btn-primary" onclick="showCampaignDetail(this.closest('.cv-card'))">View Report</button>
+            <button class="cv-btn cv-btn-secondary">Duplicate</button>
+          </div>
+        </div>
+
+      </div><!-- /cpList -->
+    </div><!-- /cvListSection -->
+
+    <!-- Campaign Detail Modal (overlay) -->
+    <div id="cpDetailModal" onclick="if(event.target===this)closeCampaignDetail()" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.55);overflow-y:auto;padding:40px 20px;">
+      <div style="background:white;border-radius:16px;width:100%;max-width:780px;margin:0 auto;position:relative;" onclick="event.stopPropagation()">
+
+        <!-- Modal header -->
+        <div style="padding:28px 28px 0;">
+          <button onclick="closeCampaignDetail()" style="position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--border);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-mid);">&#x2715;</button>
+          <h2 id="cdModalTitle" style="font-size:20px;font-weight:800;color:var(--text-dark);padding-right:44px;margin-bottom:4px;">Campaign</h2>
+          <div id="cdModalSub" style="font-size:13px;color:var(--text-mid);"></div>
+        </div>
+
+        <!-- Tabs -->
+        <div style="display:flex;padding:0 28px;margin-top:18px;border-bottom:2px solid var(--border);gap:0;">
+          <button class="cd-tab active" id="cdTabBtn0" onclick="cdSwitchTab(0)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--purple);border-bottom:2px solid var(--purple);margin-bottom:-2px;cursor:pointer;">Overview</button>
+          <button class="cd-tab" id="cdTabBtn1" onclick="cdSwitchTab(1)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text-mid);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;">Reach &amp; Impressions</button>
+          <button class="cd-tab" id="cdTabBtn2" onclick="cdSwitchTab(2)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text-mid);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;">Audience Breakdown</button>
+          <button class="cd-tab" id="cdTabBtn3" onclick="cdSwitchTab(3)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text-mid);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;">Engagement</button>
+        </div>
+
+        <!-- TAB 0: OVERVIEW -->
+        <div id="cdTab0" style="padding:24px 28px 28px;">
+          <!-- 4 KPI tiles -->
+          <div id="cdKpiTiles" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;"></div>
+
+          <!-- Bar chart -->
+          <div style="background:var(--bg);border-radius:12px;padding:20px 20px 14px;margin-bottom:18px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:16px;">Daily Reach &ndash; Last 14 Days</div>
+            <div id="cdBarChart" style="display:flex;align-items:flex-end;gap:5px;height:90px;"></div>
+            <div id="cdBarLabels" style="display:flex;gap:5px;margin-top:6px;"></div>
+          </div>
+
+          <!-- Channels + Milestones -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="background:var(--bg);border-radius:12px;padding:18px;">
+              <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:14px;">Top Performing Channels</div>
+              <div id="cdChannels"></div>
+            </div>
+            <div style="background:var(--bg);border-radius:12px;padding:18px;">
+              <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:14px;">Key Milestones</div>
+              <div id="cdMilestones"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1: REACH & IMPRESSIONS -->
+        <div id="cdTab1" style="display:none;padding:24px 28px 28px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;" id="cdReachKpis"></div>
+          <div style="background:var(--bg);border-radius:12px;padding:20px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:14px;">Impressions by Channel</div>
+            <div id="cdImprChannels"></div>
+          </div>
+        </div>
+
+        <!-- TAB 2: AUDIENCE BREAKDOWN -->
+        <div id="cdTab2" style="display:none;padding:24px 28px 28px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="background:var(--bg);border-radius:12px;padding:18px;">
+              <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:14px;">Experience Level</div>
+              <div id="cdAudExp"></div>
+            </div>
+            <div style="background:var(--bg);border-radius:12px;padding:18px;">
+              <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:14px;">Top Locations</div>
+              <div id="cdAudLoc"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: ENGAGEMENT -->
+        <div id="cdTab3" style="display:none;padding:24px 28px 28px;">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;" id="cdEngKpis"></div>
+          <div style="background:var(--bg);border-radius:12px;padding:18px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:14px;">Engagement Breakdown</div>
+            <div id="cdEngBreakdown"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Create Campaign Form (wizard) -->
+    <div id="cpCreateForm" style="display:none;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <button onclick="showList()" style="display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--bg);border:1px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;color:var(--text-mid);cursor:pointer;">&#x2190; Back</button>
+        <h2 style="font-size:18px;font-weight:800;color:var(--text-dark);">Create New Campaign</h2>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;max-height:calc(100vh - 315px);">
+
+        <!-- STEP INDICATOR -->
+        <div class="wiz-steps">
+          <div class="wiz-step-item active" id="wizDot1"><div class="wiz-step-dot">1</div><div class="wiz-step-label">Basics</div></div>
+          <div class="wiz-step-item" id="wizDot2"><div class="wiz-step-dot">2</div><div class="wiz-step-label">Visual</div></div>
+          <div class="wiz-step-item" id="wizDot3"><div class="wiz-step-dot">3</div><div class="wiz-step-label">Audience</div></div>
+          <div class="wiz-step-item" id="wizDot4"><div class="wiz-step-dot">4</div><div class="wiz-step-label">Channels</div></div>
+          <div class="wiz-step-item" id="wizDot5"><div class="wiz-step-dot">5</div><div class="wiz-step-label">Preview</div></div>
+        </div>
+
+        <!-- SCROLLABLE PANEL AREA -->
+        <div id="wizPanelScroll" style="flex:1;overflow-y:auto;">
+
+        <!-- STEP 1: AI-FIRST BRIEF -->
+        <div id="wizStep1" class="wiz-panel active">
+
+          <!-- Phase A: plain-English input -->
+          <div id="wizAiInputPhase">
+            <div style="text-align:center;padding:4px 0 22px;">
+              <div style="font-size:32px;margin-bottom:10px;">&#x2728;</div>
+              <div style="font-size:17px;font-weight:800;color:var(--text-dark);margin-bottom:6px;">Describe Your Campaign</div>
+              <div style="font-size:13px;color:var(--text-mid);max-width:420px;margin:0 auto;line-height:1.6;">Tell us what you want to achieve in plain English — AI will extract the objective, tone, headline, body copy, and audience for you.</div>
+            </div>
+            <textarea id="aiCampaignBrief" class="cf-textarea" style="min-height:110px;font-size:14px;" placeholder="e.g. We're running a hiring drive for women in tech roles at top companies. Looking for mid-senior candidates in Bengaluru and Mumbai. Goal is 500 job applications by end of May 2026."></textarea>
+            <div style="margin-top:14px;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-light);margin-bottom:9px;">Try an example</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <button onclick="aiExFill('Hiring drive for women in tech roles at top 25 companies. Mid-senior candidates across Bengaluru, Mumbai and Delhi NCR. Target 500 job applications by May 31 2026.')" style="padding:6px 13px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);cursor:pointer;" onmouseover="this.style.borderColor='var(--purple)';this.style.color='var(--purple)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-mid)'">&#x1F4BC; Hiring drive · Women in Tech</button>
+                <button onclick="aiExFill('Awareness campaign to help women returning from career breaks find re-entry opportunities. Warm and inclusive tone. Target 10,000 profile visits by June 15 2026. Focus on Tier 1 cities.')" style="padding:6px 13px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);cursor:pointer;" onmouseover="this.style.borderColor='var(--purple)';this.style.color='var(--purple)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-mid)'">&#x1F49C; Career-break returnees</button>
+                <button onclick="aiExFill('Online learning program for freshers and early-career women in tech. Festive and energetic tone. Goal is 2000 session registrations before end of June 2026.')" style="padding:6px 13px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);cursor:pointer;" onmouseover="this.style.borderColor='var(--purple)';this.style.color='var(--purple)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-mid)'">&#x1F393; Learning · Freshers</button>
+                <button onclick="aiExFill('Mentorship cohort for mid-senior women leaders aiming for the C-suite. Professional and aspirational tone. 200 mentor-mentee matches by July 2026. Pan-India.')" style="padding:6px 13px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);cursor:pointer;" onmouseover="this.style.borderColor='var(--purple)';this.style.color='var(--purple)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-mid)'">&#x1F91D; Mentorship cohort</button>
+              </div>
+            </div>
+            <button id="aiExtractBtn" onclick="aiExtract()" style="margin-top:18px;width:100%;padding:12px;background:linear-gradient(135deg,var(--purple),#C84FC8);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Extract with AI
+            </button>
+          </div>
+
+          <!-- Phase B: AI extraction results (shown after extraction) -->
+          <div id="wizAiResultPhase" style="display:none;">
+            <!-- Shimmer / thinking bar (shown during extraction) -->
+            <div id="aiThinkingBar" style="display:none;padding:18px 0 8px;text-align:center;">
+              <div style="display:inline-flex;align-items:center;gap:10px;background:var(--purple-bg);border:1.5px solid var(--border);border-radius:30px;padding:10px 22px;">
+                <div id="aiThinkDot" style="width:8px;height:8px;border-radius:50%;background:var(--purple);animation:aiPulse 1s infinite;"></div>
+                <span style="font-size:13px;font-weight:600;color:var(--purple);">AI is reading your brief…</span>
+              </div>
+            </div>
+            <!-- Extracted card -->
+            <div id="aiResultCard" style="display:none;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#C84FC8);display:flex;align-items:center;justify-content:center;font-size:13px;">&#x2728;</div>
+                  <span style="font-size:14px;font-weight:800;color:var(--text-dark);">AI Extracted Details</span>
+                  <span style="font-size:11px;padding:2px 10px;background:#ECFDF5;color:#10B981;border-radius:20px;font-weight:700;">Ready</span>
+                </div>
+                <button onclick="aiReExtract()" style="display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);cursor:pointer;">&#x21BB; Edit brief</button>
+              </div>
+
+              <!-- Type + Tone row -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                <div style="background:var(--purple-bg);border:1.5px solid #DDD6FE;border-radius:10px;padding:12px 14px;">
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">Campaign Type</div>
+                  <select id="aiResType" class="cf-select" style="background:transparent;border:none;box-shadow:none;padding:0;font-size:14px;font-weight:800;color:var(--text-dark);width:100%;cursor:pointer;">
+                    <option>&#x1F4E2; Awareness</option>
+                    <option>&#x1F39F;&#xFE0F; Event Drive</option>
+                    <option>&#x1F4BC; Hiring Drive</option>
+                    <option>&#x1F393; Learning</option>
+                    <option>&#x1F91D; Mentorship</option>
+                  </select>
+                </div>
+                <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px;">Tone</div>
+                  <select id="aiResTone" class="cf-select" style="background:transparent;border:none;box-shadow:none;padding:0;font-size:13px;font-weight:700;color:var(--text-dark);width:100%;cursor:pointer;">
+                    <option>Professional &amp; Aspirational</option>
+                    <option>Warm &amp; Inclusive</option>
+                    <option>Bold &amp; Celebratory</option>
+                    <option>Tech-Forward</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Headline -->
+              <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px;">Headline</div>
+                <input class="cf-input" id="aiResHeadline" style="font-size:15px;font-weight:700;background:transparent;border:none;padding:0;box-shadow:none;width:100%;" />
+              </div>
+
+              <!-- Body copy -->
+              <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px;">Body Copy</div>
+                <textarea class="cf-textarea" id="aiResBody" style="min-height:72px;background:transparent;border:none;padding:0;box-shadow:none;font-size:13px;width:100%;"></textarea>
+              </div>
+
+              <!-- Objective + Target + Start Date + End Date — all editable -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px;">Objective</div>
+                  <select id="aiResObjective" class="cf-select" style="background:transparent;border:none;box-shadow:none;padding:0;font-size:13px;font-weight:700;color:var(--text-dark);width:100%;cursor:pointer;">
+                    <option>Job Applications</option>
+                    <option>Registrations</option>
+                    <option>Session Attendance</option>
+                    <option>Community Growth</option>
+                    <option>Profile Views</option>
+                  </select>
+                </div>
+                <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px;">Target Number</div>
+                  <input type="number" id="aiResTarget" class="cf-input" min="1" style="background:transparent;border:none;box-shadow:none;padding:0;font-size:13px;font-weight:700;color:var(--text-dark);width:100%;" placeholder="e.g. 500" />
+                </div>
+                <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px;">Start Date</div>
+                  <input type="date" id="aiResStartDate" class="cf-input" style="background:transparent;border:none;box-shadow:none;padding:0;font-size:13px;font-weight:700;color:var(--text-dark);width:100%;cursor:pointer;" />
+                </div>
+                <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;">
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);margin-bottom:6px;">End Date</div>
+                  <input type="date" id="aiResDate" class="cf-input" style="background:transparent;border:none;box-shadow:none;padding:0;font-size:13px;font-weight:700;color:var(--text-dark);width:100%;cursor:pointer;" />
+                </div>
+              </div>
+
+              <!-- Audience tags — toggleable chips -->
+              <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;">
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);">Audience &amp; Location — click to toggle</div>
+                </div>
+                <div id="aiResAudTags" style="display:flex;flex-wrap:wrap;gap:7px;"></div>
+              </div>
+
+              <!-- Hidden fields consumed by wizBuildPreview -->
+              <input type="hidden" id="cfNameInput" />
+              <input type="hidden" id="cfDescInput" />
+              <input type="hidden" id="cfStartDate" value="2026-05-10" />
+              <input type="hidden" id="cfEndDate" value="2026-06-10" />
+              <select style="display:none" id="cfObjectiveSelect"><option>Select goal</option><option>Registrations</option><option>Job Applications</option><option>Session Attendance</option><option>Community Growth</option></select>
+              <input type="hidden" id="cfTargetInput" />
+            </div>
+          </div>
+
+        </div>
+
+        <!-- STEP 2: VISUAL -->
+        <div id="wizStep2" class="wiz-panel">
+          <div style="display:flex;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px;">
+            <button id="visTabAI" onclick="visTab('ai')" style="flex:1;padding:9px 12px;font-size:12px;font-weight:700;border:none;cursor:pointer;background:var(--purple);color:white;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .18s;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              AI Generate
+            </button>
+            <button id="visTabUpload" onclick="visTab('upload')" style="flex:1;padding:9px 12px;font-size:12px;font-weight:700;border:none;cursor:pointer;background:var(--white);color:var(--text-mid);display:flex;align-items:center;justify-content:center;gap:6px;transition:all .18s;border-left:1.5px solid var(--border);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              Upload Image
+            </button>
+          </div>
+          <div id="visPanelAI">
+            <label class="cf-label">Choose a Visual Style</label>
+            <div class="ai-style-grid">
+              <div class="ai-style-card sel" onclick="aiSelectStyle(this,'professional')"><div class="ai-style-swatch" style="background:linear-gradient(135deg,#1A1A2E,#7B2D8B);"></div><div class="ai-style-name">Professional</div></div>
+              <div class="ai-style-card" onclick="aiSelectStyle(this,'vibrant')"><div class="ai-style-swatch" style="background:linear-gradient(135deg,#F97316,#C84FC8,#7B2D8B);"></div><div class="ai-style-name">Bold &amp; Vibrant</div></div>
+              <div class="ai-style-card" onclick="aiSelectStyle(this,'warm')"><div class="ai-style-swatch" style="background:linear-gradient(135deg,#FDE68A,#F97316,#EC4899);"></div><div class="ai-style-name">Warm &amp; Human</div></div>
+              <div class="ai-style-card" onclick="aiSelectStyle(this,'minimal')"><div class="ai-style-swatch" style="background:linear-gradient(135deg,#F9FAFB,#E5E7EB,#D1D5DB);"></div><div class="ai-style-name">Minimalist</div></div>
+              <div class="ai-style-card" onclick="aiSelectStyle(this,'tech')"><div class="ai-style-swatch" style="background:linear-gradient(135deg,#0F172A,#1E3A5F,#3B82F6);"></div><div class="ai-style-name">Tech-Focused</div></div>
+              <div class="ai-style-card" onclick="aiSelectStyle(this,'festive')"><div class="ai-style-swatch" style="background:linear-gradient(135deg,#FEF9C3,#34D399,#3B82F6,#C84FC8);"></div><div class="ai-style-name">Celebration</div></div>
+            </div>
+            <label class="cf-label" style="margin-top:14px;">Describe Your Image <span style="font-weight:400;color:var(--text-light);">â€” or edit the suggestion below</span></label>
+            <div style="position:relative;">
+              <textarea class="cf-textarea" id="aiPromptInput" style="min-height:68px;padding-right:36px;">A confident woman professional at a corporate event, deep purple and dark tones, premium feel, space for text overlay</textarea>
+              <button onclick="aiClearPrompt()" title="Clear" style="position:absolute;top:8px;right:10px;background:none;border:none;cursor:pointer;color:var(--text-light);font-size:15px;line-height:1;">&#x2715;</button>
+            </div>
+            <button id="aiGenerateBtn" onclick="aiGenerate()" style="margin-top:10px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;background:linear-gradient(135deg,var(--purple),#C84FC8);color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Generate with AI
+            </button>
+            <div id="aiPreviewArea" style="display:none;margin-top:14px;">
+              <div class="ai-preview-wrap" id="aiPreviewImg"></div>
+              <div style="display:flex;gap:8px;margin-top:10px;">
+                <button onclick="aiGenerate()" style="flex:1;padding:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--text-mid);cursor:pointer;" onmouseover="this.style.borderColor='var(--purple)';this.style.color='var(--purple)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-mid)'">&#x21BB; Regenerate</button>
+                <button id="aiUseBtn" onclick="aiUseImage()" style="flex:2;padding:8px;background:var(--purple);color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">&#x2713; Use This Image</button>
+              </div>
+              <div id="aiUsedBadge" style="display:none;margin-top:8px;padding:8px 12px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:8px;font-size:12px;color:#10B981;font-weight:600;text-align:center;">&#x2713; Image selected for your campaign</div>
+            </div>
+          </div>
+          <div id="visPanelUpload" style="display:none;">
+            <div id="uploadDropzone" onclick="document.getElementById('uploadFileInput').click()" ondragover="uploadDragOver(event)" ondragleave="uploadDragLeave(event)" ondrop="uploadDrop(event)" style="border:2px dashed var(--border);border-radius:10px;padding:30px 20px;text-align:center;cursor:pointer;background:var(--bg);transition:all .2s;">
+              <div style="font-size:30px;margin-bottom:8px;">&#x1F5BC;&#xFE0F;</div>
+              <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:4px;">Drag &amp; drop your image here</div>
+              <div style="font-size:12px;color:var(--text-light);margin-bottom:14px;">or click to browse files</div>
+              <span style="display:inline-block;padding:7px 20px;background:var(--purple);color:white;border-radius:20px;font-size:12px;font-weight:600;">Browse Files</span>
+              <div style="margin-top:12px;font-size:10px;color:var(--text-light);">JPG, PNG or WebP &nbsp;Â·&nbsp; Max 5 MB &nbsp;Â·&nbsp; Recommended 1200 &times; 628 px</div>
+            </div>
+            <input type="file" id="uploadFileInput" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="uploadFileSelected(event)" />
+            <div id="uploadPreviewArea" style="display:none;margin-top:14px;">
+              <div style="position:relative;width:100%;height:180px;border-radius:10px;overflow:hidden;border:1px solid var(--border);">
+                <img id="uploadPreviewImg" src="" alt="Preview" style="width:100%;height:100%;object-fit:cover;" />
+                <button onclick="uploadClear()" title="Remove" style="position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);border:none;color:white;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#x2715;</button>
+              </div>
+              <div id="uploadFileMeta" style="margin-top:6px;font-size:11px;color:var(--text-light);"></div>
+              <button id="uploadUseBtn" onclick="uploadUseImage()" style="margin-top:10px;width:100%;padding:9px;background:var(--purple);color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:background .2s;">&#x2713; Use This Image</button>
+              <div id="uploadUsedBadge" style="display:none;margin-top:8px;padding:8px 12px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:8px;font-size:12px;color:#10B981;font-weight:600;text-align:center;">&#x2713; Image selected for your campaign</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: AUDIENCE -->
+        <div id="wizStep3" class="wiz-panel">
+          <div class="cf-section-title" style="margin-top:0;">Audience Segments</div>
+          <div class="cf-group"><div class="cf-tag-wrap"><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Job Seekers</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Career Break</span><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Women in Tech</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Mid-Senior</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Freshers</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Returnees</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Entrepreneurs</span></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+            <div class="cf-group"><label class="cf-label">Experience Level</label><select class="cf-select" id="cfExpSelect"><option>All levels</option><option>Freshers</option><option>Mid-level (3-8 yrs)</option><option>Senior (8-15 yrs)</option></select></div>
+            <div class="cf-group"><label class="cf-label">Location</label><select class="cf-select" id="cfLocSelect"><option>All India</option><option>Tier 1 Cities</option><option>Bengaluru</option><option>Mumbai</option><option>Delhi NCR</option></select></div>
+          </div>
+        </div>
+
+        <!-- STEP 4: CHANNELS & BUDGET -->
+        <div id="wizStep4" class="wiz-panel">
+          <div class="cf-section-title" style="margin-top:0;">Distribution Channels</div>
+          <div class="cf-group"><div class="cf-tag-wrap"><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Feed Posts</span><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Email</span><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Push Notifications</span><span class="cf-tag" onclick="this.classList.toggle('sel')">WhatsApp</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Groups</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Jobs Board</span></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+            <div class="cf-group"><label class="cf-label">Budget (&#x20B9;)</label><input class="cf-input" id="cfBudgetInput" type="number" placeholder="e.g. 25000" /></div>
+            <div class="cf-group"><label class="cf-label">Publish</label><select class="cf-select" id="cfPublishSelect"><option>Publish immediately</option><option>Schedule for start date</option><option>Save as draft</option></select></div>
+          </div>
+        </div>
+
+        <!-- STEP 5: PREVIEW & PUBLISH -->
+        <div id="wizStep5" class="wiz-panel">
+          <p style="font-size:13px;color:var(--text-mid);margin-bottom:18px;">Review your campaign before publishing.</p>
+          <div style="width:100%;height:200px;border-radius:12px;overflow:hidden;margin-bottom:20px;border:1px solid var(--border);" id="pmVisual"></div>
+          <div style="margin-bottom:18px;">
+            <div class="pm-section-title">Campaign</div>
+            <div style="font-size:20px;font-weight:800;color:var(--text-dark);margin-bottom:8px;" id="pmName">â€”</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;"><span class="pm-chip" id="pmType">â€”</span><span class="pm-chip" style="background:#ECFDF5;color:#10B981;">Draft</span></div>
+          </div>
+          <div id="pmDescBlock" style="margin-bottom:18px;">
+            <div class="pm-section-title">Description</div>
+            <div style="font-size:13px;color:var(--text-mid);line-height:1.6;" id="pmDesc">â€”</div>
+          </div>
+          <div style="margin-bottom:18px;">
+            <div class="pm-section-title">Schedule &amp; Goal</div>
+            <div class="pm-kv">
+              <div class="pm-kv-item"><div class="pm-kv-label">Start Date</div><div class="pm-kv-val" id="pmStart">â€”</div></div>
+              <div class="pm-kv-item"><div class="pm-kv-label">End Date</div><div class="pm-kv-val" id="pmEnd">â€”</div></div>
+              <div class="pm-kv-item"><div class="pm-kv-label">Objective</div><div class="pm-kv-val" id="pmObjective">â€”</div></div>
+              <div class="pm-kv-item"><div class="pm-kv-label">Target</div><div class="pm-kv-val" id="pmTarget">â€”</div></div>
+            </div>
+          </div>
+          <div style="margin-bottom:18px;">
+            <div class="pm-section-title">Target Audience</div>
+            <div class="pm-row" id="pmAudience"></div>
+            <div class="pm-kv" style="margin-top:10px;">
+              <div class="pm-kv-item"><div class="pm-kv-label">Experience</div><div class="pm-kv-val" id="pmExp">â€”</div></div>
+              <div class="pm-kv-item"><div class="pm-kv-label">Location</div><div class="pm-kv-val" id="pmLoc">â€”</div></div>
+            </div>
+          </div>
+          <div>
+            <div class="pm-section-title">Channels &amp; Budget</div>
+            <div class="pm-row" id="pmChannels"></div>
+            <div class="pm-kv" style="margin-top:10px;">
+              <div class="pm-kv-item"><div class="pm-kv-label">Budget</div><div class="pm-kv-val" id="pmBudget">â€”</div></div>
+              <div class="pm-kv-item"><div class="pm-kv-label">Publish</div><div class="pm-kv-val" id="pmPublish">â€”</div></div>
+            </div>
+          </div>
+        </div>
+
+        </div><!-- /wizPanelScroll -->
+
+        <!-- WIZARD NAV -->
+        <div class="wiz-nav">
+          <button id="wizSaveDraftBtn" onclick="cfSaveDraft()" class="cf-btn-draft">Save as Draft</button>
+          <div style="flex:1;"></div>
+          <button id="wizBackBtn" onclick="wizBack()" style="display:none;padding:9px 18px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;color:var(--text-mid);cursor:pointer;">&#x2190; Back</button>
+          <button id="wizNextBtn" onclick="wizNext()" style="display:flex;padding:9px 22px;background:var(--purple);color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;align-items:center;gap:6px;">Next <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <button id="wizPublishBtn" onclick="cfPublish()" style="display:none;padding:9px 22px;background:var(--purple);color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">&#x1F680; Publish Campaign</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /campaignsView -->
+
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<footer class="page-footer">
+  <a href="#">Terms and Conditions</a>
+  <span>Â·</span>
+  <a href="#">Privacy Policy</a>
+  <span>Â·</span>
+  <a href="#">Refund &amp; Cancellations</a>
+  <span>Â·</span>
+  <a href="#">Advertising Terms</a>
+  <span>Â·</span>
+  <a href="#">Help Center</a>
+  <span style="margin-left:auto;margin-right:8px;">Â© Copyright HerKey 2026</span>
+  <div class="social-links">
+    <a href="#" class="social-link" title="WhatsApp">ðŸ’¬</a>
+    <a href="#" class="social-link" title="Instagram">ðŸ“·</a>
+    <a href="#" class="social-link" title="LinkedIn">in</a>
+    <a href="#" class="social-link" title="Facebook">f</a>
+  </div>
+</footer>
+
+<script>
+  // Active nav highlighting
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', e => {
+      if (item.classList.contains('campaigns-item')) return;
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  // Post creator click
+  document.querySelector('.post-creator-input').addEventListener('click', () => {
+    document.querySelector('.post-creator-input').style.borderColor = 'var(--purple)';
+  });
+
+  // Like button toggle
+  document.querySelectorAll('.post-action').forEach(btn => {
+    if (btn.textContent.trim() === 'Like') {
+      btn.addEventListener('click', () => {
+        btn.style.color = btn.style.color === 'var(--purple)' ? '' : 'var(--purple)';
+      });
+    }
+  });
+
+  // â”€â”€ CAMPAIGNS PANEL â”€â”€
+  function openCampaignsPanel() {
+    document.querySelector('main').style.display = 'none';
+    document.getElementById('campaignsView').style.display = 'block';
+
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelector('.campaigns-item').classList.add('active');
+    showList();
+  }
+
+  function closeCampaignsPanel() {
+    document.querySelector('main').style.display = '';
+    document.getElementById('campaignsView').style.display = 'none';
+
+    document.querySelector('.campaigns-item').classList.remove('active');
+    document.querySelector('.nav-item').classList.add('active');
+  }
+
+  function showList() {
+    document.getElementById('cvListSection').style.display = 'block';
+    document.getElementById('cpCreateForm').style.display = 'none';
+    closeCampaignDetail();
+  }
+
+  function closeCampaignDetail() {
+    document.getElementById('cpDetailModal').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function cdSwitchTab(idx) {
+    for (let i = 0; i < 4; i++) {
+      const panel = document.getElementById('cdTab' + i);
+      const btn   = document.getElementById('cdTabBtn' + i);
+      const active = i === idx;
+      panel.style.display = active ? 'block' : 'none';
+      btn.style.color       = active ? 'var(--purple)' : 'var(--text-mid)';
+      btn.style.borderBottomColor = active ? 'var(--purple)' : 'transparent';
+      btn.style.fontWeight  = active ? '700' : '600';
+    }
+  }
+
+  function cdBar(label, pct, color) {
+    return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:11px;">
+      <div style="font-size:12px;color:var(--text-mid);width:72px;flex-shrink:0;">${label}</div>
+      <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden;">
+        <div style="width:${pct}%;height:100%;background:${color};border-radius:4px;"></div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:var(--text-dark);width:32px;text-align:right;">${pct}%</div>
+    </div>`;
+  }
+
+  function cdMilestone(label, value) {
+    return `<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">
+      <span style="font-size:12px;color:var(--text-mid);">${label}</span>
+      <span style="font-size:12px;font-weight:700;color:var(--text-dark);">${value}</span>
+    </div>`;
+  }
+
+  function showCampaignDetail(card) {
+    // ── Read card DOM ──────────────────────────────────────────────────────────
+    const name      = card.querySelector('.cv-name')?.textContent.trim() || '—';
+    const desc      = card.querySelector('.cv-desc')?.textContent.trim()  || '—';
+    const status    = card.dataset.status   || 'active';
+    const campType  = card.dataset.type     || 'Custom';
+    const audRaw    = card.dataset.audience || '';
+    const locRaw    = card.dataset.locations|| 'All India';
+    const objective = card.dataset.objective|| 'Registrations';
+    const target    = parseInt(card.dataset.target || '0', 10);
+    const startStr  = card.dataset.start    || '';
+    const endStr    = card.dataset.end      || '';
+
+    const metricEls = card.querySelectorAll('.cv-metric');
+    const metrics   = [...metricEls].map(m => ({
+      val: m.querySelector('.cv-mval')?.textContent.trim() || '0',
+      lbl: m.querySelector('.cv-mlbl')?.textContent.trim() || '',
+      tag: m.querySelector('.cv-mtag')?.textContent.trim() || '',
+      up:  !!m.querySelector('.cv-mtag.up'),
+    }));
+
+    // Helper: parse a display number string ("8,42,310" / "2.1M" / "62,480") → float
+    const parseNum = s => {
+      if (!s || s === '—') return 0;
+      s = s.replace(/,/g,'');
+      if (s.endsWith('M')) return parseFloat(s) * 1e6;
+      if (s.endsWith('K')) return parseFloat(s) * 1e3;
+      return parseFloat(s) || 0;
+    };
+    const fmtNum = n => {
+      if (n >= 1e6) return (n/1e6).toFixed(1) + 'M';
+      if (n >= 1e3) return Math.round(n).toLocaleString('en-IN');
+      return String(Math.round(n));
+    };
+    const fmtDate = d => {
+      if (!d) return '';
+      const dt = new Date(d + 'T00:00:00');
+      return dt.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    };
+    const addDays = (d, n) => {
+      const dt = new Date(d + 'T00:00:00'); dt.setDate(dt.getDate() + n);
+      return dt.toLocaleDateString('en-IN', { day:'numeric', month:'short' });
+    };
+    // Consistent pseudo-random seed from campaign name
+    const seed = name.split('').reduce((a,c) => a + c.charCodeAt(0), 0);
+    const seededRand = (i, min, max) => {
+      const x = Math.sin(seed + i * 7.3) * 10000;
+      return min + (x - Math.floor(x)) * (max - min);
+    };
+
+    // Parse metric values
+    const reach       = parseNum(metrics[0]?.val);
+    const impressions = parseNum(metrics[1]?.val);
+    const clicks      = parseNum(metrics[2]?.val);
+    const ctrStr      = metrics[3]?.val || '0%';
+    const conversions = parseNum(metrics[4]?.val);
+
+    const uniqueViewers = Math.round(reach * 0.68);
+    const avgFreq       = reach > 0 ? (impressions / reach).toFixed(1) + '×' : '—';
+    const saves         = Math.round(clicks * 0.29);
+    const budgetEl      = card.querySelector('.cv-actions [style*="font-size:15px"]');
+    const budgetText    = budgetEl?.textContent.trim() || '—';
+    const spentEl       = card.querySelector('.cv-actions [style*="font-size:11px"]');
+    const spentText     = spentEl?.textContent.trim() || '';
+
+    // Audience segments array
+    const audSegs  = audRaw ? audRaw.split(',').map(s => s.trim()).filter(Boolean) : ['Job Seekers'];
+    // Assign descending percentages to segments
+    const audBase  = [48, 32, 20, 14, 9, 6, 4];
+    const audPercs = audSegs.map((seg, i) => ({
+      label: seg,
+      pct:   audBase[i] || Math.max(4, audBase[audSegs.length - 1] - i * 2),
+    }));
+
+    // Locations array
+    const locList  = locRaw ? locRaw.split(',').map(s => s.trim()).filter(Boolean) : ['All India'];
+    const locBase  = [38, 25, 20, 15, 10, 7];
+    const locPercs = locList.map((loc, i) => ({
+      label: loc,
+      pct:   locBase[i] || 5,
+    }));
+
+    // Channel config by type
+    const chanByType = {
+      'Event Drive':  [['Feed Posts',85,'#7B2D8B'],['Email',74,'#3B82F6'],['Push Notif.',52,'#F97316'],['WhatsApp',38,'#10B981']],
+      'Hiring Drive': [['Jobs Board',88,'#7B2D8B'],['Email',70,'#3B82F6'],['Feed Posts',55,'#F97316'],['Push Notif.',42,'#10B981']],
+      'Awareness':    [['Feed Posts',80,'#7B2D8B'],['Groups',65,'#C84FC8'],['Push Notif.',48,'#F97316'],['Email',44,'#3B82F6']],
+      'Learning':     [['Feed Posts',75,'#7B2D8B'],['Email',68,'#3B82F6'],['Push Notif.',50,'#F97316'],['WhatsApp',35,'#10B981']],
+      'Mentorship':   [['Feed Posts',72,'#7B2D8B'],['Email',66,'#3B82F6'],['Groups',44,'#C84FC8'],['Push Notif.',30,'#F97316']],
+      'Custom':       [['Feed Posts',70,'#7B2D8B'],['Email',58,'#3B82F6'],['Push Notif.',40,'#F97316'],['WhatsApp',28,'#10B981']],
+    };
+    const channels = chanByType[campType] || chanByType['Custom'];
+
+    // ── Header ─────────────────────────────────────────────────────────────────
+    document.getElementById('cdModalTitle').textContent = name;
+    const badgeLbl = { active:'Active', scheduled:'Scheduled', draft:'Draft', ended:'Ended' };
+    const dateRange = startStr && endStr
+      ? fmtDate(startStr) + ' – ' + fmtDate(endStr)
+      : (desc.match(/([A-Z][a-z]+ \d+\s*[–-]\s*[A-Z][a-z]+ \d+,\s*20\d\d)/) || [])[1] || '';
+    document.getElementById('cdModalSub').textContent =
+      (badgeLbl[status] || status) + (dateRange ? ' · ' + dateRange : '');
+
+    // ── KPI tiles (Overview tab) ─────────────────────────────────────��────────
+    const kpiLabels = ['TOTAL REACH','IMPRESSIONS','CLICK-THROUGH RATE','CONVERSIONS'];
+    const kpi4 = metrics.length >= 5 ? [metrics[0],metrics[1],metrics[3],metrics[4]] : metrics.slice(0,4);
+    document.getElementById('cdKpiTiles').innerHTML = kpi4.map((m, i) => `
+      <div style="background:var(--bg);border-radius:12px;padding:16px;">
+        <div style="font-size:22px;font-weight:800;color:var(--text-dark);">${m.val}</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);margin:4px 0;">${kpiLabels[i]||m.lbl.toUpperCase()}</div>
+        ${m.tag ? `<div style="font-size:11px;color:${m.up?'#10B981':'var(--text-light)'};">↑ ${m.tag.replace(/^[↑↓]\s*/,'')}</div>` : ''}
+      </div>`).join('');
+
+    // ── Bar chart — seeded from campaign, scaled to actual reach ─────────────
+    const today = new Date();
+    const barRaw = Array.from({length:14}, (_,i) =>
+      Math.round(Math.abs(seededRand(i, 0.4, 1.0) * (reach / 14) * 1.4))
+    );
+    // Scale so sum ≈ reach (if reach > 0), else just show seeded pattern
+    const barSum = barRaw.reduce((a,b) => a+b, 0);
+    const barData = reach > 0 && barSum > 0
+      ? barRaw.map(v => Math.round(v * reach / barSum / 1000))
+      : barRaw.map(v => Math.round(v / 1000) || 1);
+    const maxBar = Math.max(...barData, 1);
+    const barColors = ['#7B2D8B','#9B3FAD','#C84FC8','#A855F7','#7B2D8B','#9B3FAD'];
+    document.getElementById('cdBarChart').innerHTML = barData.map((v, i) =>
+      `<div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+        <div style="width:100%;background:${barColors[i%barColors.length]};border-radius:4px 4px 0 0;height:${Math.round((v/maxBar)*80)}px;" title="${v}K reach"></div>
+      </div>`).join('');
+    document.getElementById('cdBarLabels').innerHTML = Array.from({length:14}, (_,i) => {
+      const d = new Date(today); d.setDate(d.getDate() - 13 + i);
+      return `<div style="flex:1;text-align:center;font-size:10px;color:var(--text-light);">${d.getDate()}</div>`;
+    }).join('');
+
+    // ── Channels (Overview) ───────────────────────────────────────────────────
+    document.getElementById('cdChannels').innerHTML = channels.map(([l,p,c]) => cdBar(l,p,c)).join('');
+
+    // ── Milestones ────────────────────────────────────────────────────────────
+    let milestonesHtml = '';
+    if (status === 'draft') {
+      milestonesHtml =
+        cdMilestone('Status', 'Draft — not yet scheduled') +
+        cdMilestone('Audience', audSegs.join(', ')) +
+        cdMilestone('Target', target > 0 ? target.toLocaleString('en-IN') + ' ' + objective : '—') +
+        cdMilestone('Budget', budgetText);
+    } else if (status === 'scheduled') {
+      milestonesHtml =
+        cdMilestone('Scheduled Start', startStr ? fmtDate(startStr) : '—') +
+        cdMilestone('End Date', endStr ? fmtDate(endStr) : '—') +
+        cdMilestone('Audience', audSegs.join(', ')) +
+        cdMilestone('Target', target > 0 ? target.toLocaleString('en-IN') + ' ' + objective : '—');
+    } else {
+      const d1 = startStr ? addDays(startStr, 2) : 'Day 3';
+      const d6 = startStr ? addDays(startStr, 5) : 'Day 6';
+      const d12 = startStr ? addDays(startStr, 11) : 'Day 12';
+      milestonesHtml =
+        cdMilestone('Campaign Launched', startStr ? fmtDate(startStr) : '—') +
+        (reach > 0 ? cdMilestone('Early Reach Milestone', d1 + ' · ' + fmtNum(reach * 0.12) + ' users') : '') +
+        (conversions > 0 ? cdMilestone('First 100 Conversions', d6) : '') +
+        cdMilestone('Best Performing Day', d12 + ' · ' + fmtNum(reach * 0.09) + ' reach');
+    }
+    document.getElementById('cdMilestones').innerHTML = milestonesHtml;
+
+    // ── Tab 1: Reach & Impressions ────────────────────────────────────────────
+    document.getElementById('cdReachKpis').innerHTML = [
+      ['Total Reach',     metrics[0]?.val||'—',  metrics[0]?.tag ? '↑ ' + metrics[0].tag.replace(/^[↑↓]\s*/,'') : '', '#10B981'],
+      ['Impressions',     metrics[1]?.val||'—',  metrics[1]?.tag ? '↑ ' + metrics[1].tag.replace(/^[↑↓]\s*/,'') : '', '#10B981'],
+      ['Unique Viewers',  fmtNum(uniqueViewers), Math.round(uniqueViewers/reach*100||0) + '% of reach', '#3B82F6'],
+      ['Avg. Frequency',  avgFreq,                'Impressions per user', 'var(--text-light)'],
+    ].map(([l,v,t,c]) => `<div style="background:var(--bg);border-radius:12px;padding:16px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);margin-bottom:6px;">${l}</div>
+      <div style="font-size:22px;font-weight:800;color:var(--text-dark);">${v}</div>
+      <div style="font-size:11px;color:${c};margin-top:4px;">${t}</div>
+    </div>`).join('');
+    document.getElementById('cdImprChannels').innerHTML = channels.map(([l,p,c]) => cdBar(l,p,c)).join('');
+
+    // ── Tab 2: Audience ───────────────────────────────────────────────────────
+    document.getElementById('cdAudExp').innerHTML =
+      audPercs.map(({label,pct}) => cdBar(label, pct, '#7B2D8B')).join('') ||
+      cdBar('Job Seekers',48,'#7B2D8B') + cdBar('Mid-Senior',32,'#3B82F6');
+
+    document.getElementById('cdAudLoc').innerHTML =
+      locPercs.map(({label,pct}, i) => {
+        const colors = ['#7B2D8B','#3B82F6','#C84FC8','#F97316','#10B981','#6B7280'];
+        return cdBar(label, pct, colors[i % colors.length]);
+      }).join('');
+
+    // ── Tab 3: Engagement ─────────────────────────────────────────────────────
+    document.getElementById('cdEngKpis').innerHTML = [
+      ['Clicks',             metrics[2]?.val || '—',         metrics[2]?.tag || ''],
+      ['CTR',                ctrStr,                          'vs 4.2% platform avg'],
+      ['Saves / Bookmarks',  saves > 0 ? fmtNum(saves) : '—', clicks > 0 ? '≈' + Math.round(saves/clicks*100) + '% of clicks' : ''],
+    ].map(([l,v,t]) => `<div style="background:var(--bg);border-radius:12px;padding:16px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);margin-bottom:6px;">${l}</div>
+      <div style="font-size:22px;font-weight:800;color:var(--text-dark);">${v}</div>
+      <div style="font-size:11px;color:var(--text-light);margin-top:4px;">${t}</div>
+    </div>`).join('');
+
+    const convRate = clicks > 0 ? Math.round(conversions/clicks*100) : 0;
+    document.getElementById('cdEngBreakdown').innerHTML =
+      cdBar('Clicked & Converted', Math.min(convRate, 60), '#7B2D8B') +
+      cdBar('Clicked & Registered', Math.round(convRate * 0.75), '#C84FC8') +
+      cdBar('Shared', Math.round(Math.abs(seededRand(1,8,28))), '#3B82F6') +
+      cdBar('Saved', Math.round(Math.abs(seededRand(2,6,22))), '#F97316') +
+      cdBar('Comments', Math.round(Math.abs(seededRand(3,3,12))), '#10B981');
+
+    // ── Show modal ────────────────────────────────────────────────────────────
+    cdSwitchTab(0);
+    document.getElementById('cpDetailModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+  function showCreateForm() {
+    document.getElementById('cvListSection').style.display = 'none';
+    document.getElementById('cpCreateForm').style.display = 'block';
+    // Reset AI state
+    aiExtracted = false;
+    document.getElementById('wizAiInputPhase').style.display = 'block';
+    document.getElementById('wizAiResultPhase').style.display = 'none';
+    document.getElementById('aiCampaignBrief').value = '';
+    const btn = document.getElementById('aiExtractBtn');
+    if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+    wizGo(1);
+  }
+
+  function cpFilter(status, btn) {
+    document.querySelectorAll('.cp-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#cpList .cv-card').forEach(item => {
+      item.style.display = (status === 'all' || item.dataset.status === status) ? 'flex' : 'none';
+    });
+  }
+
+  function cfSelectType(el) {
+    document.querySelectorAll('.cf-type-card').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+  }
+
+  // â”€â”€ WIZARD â”€â”€
+  let wizStep = 1;
+
+  function wizGo(step) {
+    document.querySelectorAll('.wiz-step-item').forEach((item, i) => {
+      const n = i + 1;
+      item.classList.toggle('active', n === step);
+      item.classList.toggle('done',   n < step);
+      item.querySelector('.wiz-step-dot').textContent = n < step ? 'âœ“' : n;
+    });
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('wizStep' + i).classList.toggle('active', i === step);
+    }
+    document.getElementById('wizBackBtn').style.display    = step > 1 ? 'block' : 'none';
+    document.getElementById('wizNextBtn').style.display    = step < 5 ? 'flex'  : 'none';
+    document.getElementById('wizPublishBtn').style.display = step === 5 ? 'block' : 'none';
+    document.getElementById('wizSaveDraftBtn').style.display = step < 5 ? 'block' : 'none';
+    if (step === 5) wizBuildPreview();
+    wizStep = step;
+
+    // Scroll the panel area back to top on step change
+    const scrollWrap = document.getElementById('wizPanelScroll');
+    if (scrollWrap) scrollWrap.scrollTop = 0;
+  }
+
+  // ── AI BRIEF EXTRACTION ─────────────────────────────────────────
+  let aiExtracted = false;
+
+  const AI_CORPUS = {
+    types: [
+      { keys:['hiring','recruit','job','placement','talent','roles','employer'],  label:'Hiring Drive',  icon:'💼', objective:'Job Applications' },
+      { keys:['event','summit','conference','webinar','session','workshop'],       label:'Event Drive',   icon:'🎟️', objective:'Session Attendance' },
+      { keys:['learn','course','training','upskill','bootcamp','program','skill'], label:'Learning',      icon:'🎓', objective:'Session Attendance' },
+      { keys:['mentor','coach','leader','leadership','cohort','c-suite'],         label:'Mentorship',    icon:'🤝', objective:'Community Growth' },
+      { keys:['awareness','brand','visibility','reach','community','return','returnee','career break'], label:'Awareness', icon:'📢', objective:'Community Growth' },
+    ],
+    tones: [
+      { keys:['professional','corporate','formal','executive','premium'],   label:'Professional & Aspirational' },
+      { keys:['warm','inclusive','human','community','support','empower'],  label:'Warm & Inclusive' },
+      { keys:['festive','celebrat','energetic','vibrant','exciting'],       label:'Bold & Celebratory' },
+      { keys:['tech','digital','engineer','developer','data'],              label:'Tech-Forward' },
+    ],
+    audience: [
+      { keys:['tech','engineer','developer','data','product'],     tag:'Women in Tech' },
+      { keys:['career break','return','returnee','re-entry'],      tag:'Career Break' },
+      { keys:['fresh','entry','junior','0-2','graduate','intern'], tag:'Freshers' },
+      { keys:['mid','senior','manager','lead','8','10','12'],      tag:'Mid-Senior' },
+      { keys:['entrepreneur','founder','startup'],                  tag:'Entrepreneurs' },
+      { keys:['mentor','leadership','c-suite','director','vp'],    tag:'Mid-Senior' },
+    ],
+    locations: [
+      { keys:['bengaluru','bangalore'],  tag:'Bengaluru' },
+      { keys:['mumbai','bombay'],        tag:'Mumbai' },
+      { keys:['delhi','ncr','gurgaon','noida'], tag:'Delhi NCR' },
+      { keys:['hyderabad'],              tag:'Hyderabad' },
+      { keys:['pune'],                   tag:'Pune' },
+    ],
+    headlines: {
+      'Hiring Drive': ['Your Next Big Career Move Starts Here', 'Top Companies Are Waiting for You', 'Land Your Dream Role This Season'],
+      'Event Drive':  ['Be Part of Something Bigger', 'Where Women Leaders Connect', 'The Event That Changes Careers'],
+      'Learning':     ['Skills That Open Doors', 'Level Up Your Career Today', 'Learn. Grow. Lead.'],
+      'Mentorship':   ['Find Your Mentor. Own Your Future.', 'Guided by the Best, Built for You', 'Mentorship That Moves Careers'],
+      'Awareness':    ['Your Comeback Story Starts Now', 'HerKey — Where Careers Restart', 'Every Woman Deserves a Great Career'],
+    },
+    bodies: {
+      'Hiring Drive': 'Join HerKey\'s flagship hiring drive and connect directly with top employers actively seeking talented women professionals. Your next role is closer than you think.',
+      'Event Drive':  'Don\'t miss an inspiring line-up of speakers, workshops, and networking sessions designed exclusively for women building careers on their own terms.',
+      'Learning':     'Unlock in-demand skills through expert-led sessions, live projects, and a community that celebrates every milestone on your learning journey.',
+      'Mentorship':   'Get matched with seasoned leaders who\'ve walked the path you\'re on. Build your roadmap, grow your network, and accelerate your career with the right guidance.',
+      'Awareness':    'Returning to work? HerKey connects you with flexible opportunities, supportive employers, and a community that understands your journey.',
+    },
+  };
+
+  function aiExFill(text) {
+    document.getElementById('aiCampaignBrief').value = text;
+    document.getElementById('aiCampaignBrief').focus();
+  }
+
+  // ── Shared helper: populate the result card from a structured data object ──
+  function aiPopulateCard(d, audTags, locTags) {
+    const typeEl = document.getElementById('aiResType');
+    [...typeEl.options].forEach(o => { if (o.text.includes(d.campaign_type)) o.selected = true; });
+
+    const toneEl = document.getElementById('aiResTone');
+    [...toneEl.options].forEach(o => { if (o.text === d.tone) o.selected = true; });
+
+    document.getElementById('aiResHeadline').value = d.headline;
+    document.getElementById('aiResBody').value     = d.body_copy;
+
+    const objResEl = document.getElementById('aiResObjective');
+    [...objResEl.options].forEach(o => { if (o.text === d.objective) o.selected = true; });
+
+    document.getElementById('aiResTarget').value    = String(d.target_number);
+    document.getElementById('aiResStartDate').value = d.start_date;
+    document.getElementById('aiResDate').value      = d.end_date;
+    document.getElementById('cfStartDate').value    = d.start_date;
+    document.getElementById('cfEndDate').value      = d.end_date;
+
+    // Audience chips
+    const allAudOptions = [
+      'Job Seekers','Career Break','Women in Tech','Mid-Senior','Freshers','Returnees','Entrepreneurs',
+      '📍 Bengaluru','📍 Mumbai','📍 Delhi NCR','📍 Hyderabad','📍 Pune','📍 All India'
+    ];
+    const selectedSet = new Set([...audTags, ...locTags.map(l => '📍 ' + l)]);
+    document.getElementById('aiResAudTags').innerHTML = allAudOptions.map(t => {
+      const sel = selectedSet.has(t);
+      return `<span onclick="this.classList.toggle('ai-aud-sel');this.style.background=this.classList.contains('ai-aud-sel')?'var(--purple-bg)':'var(--bg)';this.style.borderColor=this.classList.contains('ai-aud-sel')?'#DDD6FE':'var(--border)';this.style.color=this.classList.contains('ai-aud-sel')?'var(--purple)':'var(--text-mid)';"
+        class="${sel?'ai-aud-sel':''}"
+        style="padding:5px 12px;background:${sel?'var(--purple-bg)':'var(--bg)'};border:1.5px solid ${sel?'#DDD6FE':'var(--border)'};border-radius:20px;font-size:12px;font-weight:600;color:${sel?'var(--purple)':'var(--text-mid)'};cursor:pointer;transition:all .15s;">${t}</span>`;
+    }).join('');
+
+    // Sync hidden fields
+    document.getElementById('cfNameInput').value   = d.headline;
+    document.getElementById('cfDescInput').value   = d.body_copy;
+    document.getElementById('cfTargetInput').value = String(d.target_number);
+    const objEl = document.getElementById('cfObjectiveSelect');
+    [...objEl.options].forEach(o => { o.selected = o.text === d.objective; });
+
+    // Live-sync on user edits
+    document.getElementById('aiResHeadline').oninput   = () => { document.getElementById('cfNameInput').value   = document.getElementById('aiResHeadline').value; };
+    document.getElementById('aiResBody').oninput       = () => { document.getElementById('cfDescInput').value   = document.getElementById('aiResBody').value; };
+    document.getElementById('aiResTarget').oninput     = () => { document.getElementById('cfTargetInput').value = document.getElementById('aiResTarget').value; };
+    document.getElementById('aiResStartDate').onchange = () => { document.getElementById('cfStartDate').value   = document.getElementById('aiResStartDate').value; };
+    document.getElementById('aiResDate').onchange      = () => { document.getElementById('cfEndDate').value     = document.getElementById('aiResDate').value; };
+    document.getElementById('aiResObjective').onchange = () => {
+      const v = document.getElementById('aiResObjective').value;
+      [...document.getElementById('cfObjectiveSelect').options].forEach(o => { o.selected = o.text === v; });
+    };
+
+    // Pre-select Step 3 audience tags
+    document.querySelectorAll('#wizStep3 .cf-tag').forEach(tag => {
+      tag.classList.toggle('sel', audTags.some(a => tag.textContent.includes(a)));
+    });
+  }
+
+  function aiExtract() {
+    const brief = document.getElementById('aiCampaignBrief').value.trim();
+    if (!brief) {
+      document.getElementById('aiCampaignBrief').focus();
+      document.getElementById('aiCampaignBrief').style.borderColor = '#EF4444';
+      setTimeout(() => document.getElementById('aiCampaignBrief').style.borderColor = '', 2000);
+      return;
+    }
+
+    // Show thinking state
+    const btn = document.getElementById('aiExtractBtn');
+    btn.disabled = true; btn.style.opacity = '.6';
+    document.getElementById('wizAiResultPhase').style.display = 'block';
+    document.getElementById('aiThinkingBar').style.display = 'block';
+    document.getElementById('aiResultCard').style.display = 'none';
+
+    // ── Try real backend first, fall back to mock ──────────────────────────
+    fetch('http://localhost:8000/api/campaigns/extract', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ brief }),
+      signal: AbortSignal.timeout(15000),
+    })
+    .then(res => {
+      if (!res.ok) return res.json().then(e => { throw new Error(e.detail || 'API error'); });
+      return res.json();
+    })
+    .then(json => {
+      const d = json.data;
+      aiPopulateCard(d, d.audience_segments, d.locations);
+      document.getElementById('aiThinkingBar').style.display = 'none';
+      document.getElementById('aiResultCard').style.display = 'block';
+      aiExtracted = true;
+      btn.disabled = false; btn.style.opacity = '1';
+      // Show token usage in console for transparency
+      if (json.usage) console.log('[HerKey AI] Token usage:', json.usage);
+    })
+    .catch(() => {
+      // ── Mock fallback (backend not running) ────────────────────────────
+      console.warn('[HerKey AI] Backend unreachable — using local mock extraction');
+      const lower = brief.toLowerCase();
+      const type = AI_CORPUS.types.find(t => t.keys.some(k => lower.includes(k))) || AI_CORPUS.types[4];
+      const tone = AI_CORPUS.tones.find(t => t.keys.some(k => lower.includes(k))) || AI_CORPUS.tones[0];
+      const audTags = [...new Set(AI_CORPUS.audience.filter(a => a.keys.some(k => lower.includes(k))).map(a => a.tag))];
+      if (!audTags.length) audTags.push('Job Seekers');
+      const locTags = AI_CORPUS.locations.filter(l => l.keys.some(k => lower.includes(k))).map(l => l.tag);
+      if (!locTags.length) locTags.push('All India');
+      const numMatch = brief.match(/\b(\d[\d,]*)\s*(job applications?|registrations?|sign.?ups?|matches?|attendees?|participants?|users?)/i);
+      const targetNum = numMatch ? parseInt(numMatch[1].replace(/,/g,'')) : 5000;
+      const monthIdx = {jan:'01',feb:'02',mar:'03',apr:'04',may:'05',jun:'06',jul:'07',aug:'08',sep:'09',oct:'10',nov:'11',dec:'12'};
+      const days = {jan:31,feb:28,mar:31,apr:30,may:31,jun:30,jul:31,aug:31,sep:30,oct:31,nov:30,dec:31};
+      const mMatch = brief.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*/i);
+      const m = mMatch ? mMatch[1].toLowerCase().slice(0,3) : 'jun';
+      const headlines = AI_CORPUS.headlines[type.label] || AI_CORPUS.headlines['Awareness'];
+      const mockData = {
+        campaign_type: type.label,
+        tone: tone.label,
+        headline: headlines[Math.floor(Math.random() * headlines.length)],
+        body_copy: AI_CORPUS.bodies[type.label] || AI_CORPUS.bodies['Awareness'],
+        objective: type.objective,
+        target_number: targetNum,
+        start_date: '2026-05-10',
+        end_date: `2026-${monthIdx[m]||'06'}-${String(days[m]||30).padStart(2,'0')}`,
+        audience_segments: audTags,
+        locations: locTags,
+      };
+      setTimeout(() => {
+        aiPopulateCard(mockData, audTags, locTags);
+        document.getElementById('aiThinkingBar').style.display = 'none';
+        document.getElementById('aiResultCard').style.display = 'block';
+        aiExtracted = true;
+        btn.disabled = false; btn.style.opacity = '1';
+      }, 800);
+    });
+  }
+
+  function aiReExtract() {
+    aiExtracted = false;
+    document.getElementById('wizAiResultPhase').style.display = 'none';
+    document.getElementById('aiResultCard').style.display = 'none';
+    document.getElementById('aiCampaignBrief').focus();
+  }
+  // ─────────────────────────────────────────────────────────────────
+
+  function wizNext() {
+    if (wizStep === 1) {
+      if (!aiExtracted) {
+        // Trigger extraction if brief has text, else prompt
+        const brief = document.getElementById('aiCampaignBrief').value.trim();
+        if (!brief) {
+          document.getElementById('aiCampaignBrief').focus();
+          document.getElementById('aiCampaignBrief').style.borderColor = '#EF4444';
+          setTimeout(() => document.getElementById('aiCampaignBrief').style.borderColor = '', 2000);
+          showToast('Describe your campaign first');
+          return;
+        }
+        aiExtract();
+        showToast('AI is extracting details — click Next again once done ✨');
+        return;
+      }
+    }
+    if (wizStep < 5) wizGo(wizStep + 1);
+  }
+
+  function wizBack() {
+    if (wizStep > 1) wizGo(wizStep - 1);
+  }
+
+  function wizBuildPreview() {
+    // Visual
+    const pmVisual  = document.getElementById('pmVisual');
+    const aiPreview = document.getElementById('aiPreviewImg');
+    const uploadImg = document.getElementById('uploadPreviewImg');
+    if (document.getElementById('uploadUsedBadge').style.display !== 'none' && uploadImg.src) {
+      pmVisual.innerHTML = `<img src="${uploadImg.src}" style="width:100%;height:100%;object-fit:cover;">`;
+    } else if (aiPreview && aiPreview.innerHTML.trim()) {
+      pmVisual.innerHTML = aiPreview.innerHTML;
+    } else {
+      pmVisual.style.background = 'linear-gradient(135deg,var(--purple),#C84FC8)';
+      pmVisual.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(255,255,255,.7);">No visual selected</div>';
+    }
+    // Name + type
+    document.getElementById('pmName').textContent =
+      document.getElementById('cfNameInput').value.trim() || 'Untitled Campaign';
+    const typeEl = document.querySelector('#wizStep1 .cf-type-card.sel .cf-type-name');
+    document.getElementById('pmType').textContent = typeEl ? typeEl.textContent : 'â€”';
+    // Description
+    const desc = document.getElementById('cfDescInput').value.trim();
+    document.getElementById('pmDescBlock').style.display = desc ? 'block' : 'none';
+    document.getElementById('pmDesc').textContent = desc;
+    // Schedule
+    document.getElementById('pmStart').textContent = document.getElementById('cfStartDate').value || 'â€”';
+    document.getElementById('pmEnd').textContent   = document.getElementById('cfEndDate').value   || 'â€”';
+    document.getElementById('pmObjective').textContent = document.getElementById('cfObjectiveSelect').value;
+    const tgt = document.getElementById('cfTargetInput').value;
+    document.getElementById('pmTarget').textContent = tgt ? Number(tgt).toLocaleString('en-IN') : 'â€”';
+    // Audience
+    const audEl = document.getElementById('pmAudience');
+    audEl.innerHTML = '';
+    document.querySelectorAll('#wizStep3 .cf-tag.sel').forEach(t => {
+      audEl.insertAdjacentHTML('beforeend', `<span class="pm-chip">${t.textContent.trim()}</span>`);
+    });
+    if (!audEl.children.length) audEl.innerHTML = '<span class="pm-chip gray">All segments</span>';
+    document.getElementById('pmExp').textContent = document.getElementById('cfExpSelect').value;
+    document.getElementById('pmLoc').textContent = document.getElementById('cfLocSelect').value;
+    // Channels
+    const chanEl = document.getElementById('pmChannels');
+    chanEl.innerHTML = '';
+    document.querySelectorAll('#wizStep4 .cf-tag.sel').forEach(t => {
+      chanEl.insertAdjacentHTML('beforeend', `<span class="pm-chip gray">${t.textContent.trim()}</span>`);
+    });
+    if (!chanEl.children.length) chanEl.innerHTML = '<span class="pm-chip gray">â€”</span>';
+    const bgt = document.getElementById('cfBudgetInput').value;
+    document.getElementById('pmBudget').textContent  = bgt ? 'â‚¹' + Number(bgt).toLocaleString('en-IN') : 'â€”';
+    document.getElementById('pmPublish').textContent = document.getElementById('cfPublishSelect').value;
+  }
+
+  function cfSaveDraft() {
+    showToast('Draft saved');
+    wizGo(1);
+    showList();
+  }
+
+  function cfPublish() {
+    const nameInput = document.getElementById('cfNameInput');
+    if (!nameInput.value.trim()) {
+      wizGo(1);
+      setTimeout(() => { nameInput.focus(); nameInput.style.borderColor = '#EF4444'; setTimeout(() => nameInput.style.borderColor = '', 2000); }, 100);
+      showToast('Please enter a campaign name');
+      return;
+    }
+
+    // ── Gather all wizard data ────────────────────────────────────────────────
+    const name      = nameInput.value.trim();
+    const desc      = (document.getElementById('cfDescInput').value || '').trim();
+    const startDate = document.getElementById('cfStartDate').value;
+    const endDate   = document.getElementById('cfEndDate').value;
+    const target    = document.getElementById('cfTargetInput')?.value || '0';
+    const objective = document.getElementById('cfObjectiveSelect')?.value || 'Registrations';
+    const budget    = document.getElementById('cfBudgetInput')?.value || '';
+    const typeEl    = document.querySelector('#wizStep1 .cf-type-card.sel .cf-type-name');
+    const type      = typeEl ? typeEl.textContent.trim() : 'Custom';
+
+    // ── Type → visual config ──────────────────────────────────────────────────
+    const typeConfig = {
+      'Hiring Drive': { color: '#7B2D8B', bg: 'linear-gradient(135deg,#EDE9FE,#DDD6FE)', icon: '\u{1F4BC}' },
+      'Event Drive':  { color: '#3B82F6', bg: 'linear-gradient(135deg,#DBEAFE,#BFDBFE)', icon: '\u{1F3A4}' },
+      'Awareness':    { color: '#10B981', bg: 'linear-gradient(135deg,#D1FAE5,#A7F3D0)', icon: '\u{1F4E2}' },
+      'Learning':     { color: '#F59E0B', bg: 'linear-gradient(135deg,#FEF3C7,#FDE68A)', icon: '\u{1F4DA}' },
+      'Mentorship':   { color: '#EC4899', bg: 'linear-gradient(135deg,#FCE7F3,#FBCFE8)', icon: '\u{1F91D}' },
+      'Custom':       { color: '#6B7280', bg: 'linear-gradient(135deg,#F3F4F6,#E5E7EB)', icon: '⭐'    },
+    };
+    const cfg = typeConfig[type] || typeConfig['Custom'];
+
+    // ── Format helpers ────────────────────────────────────────────────────────
+    const fmtDate = d => {
+      if (!d) return '';
+      const dt = new Date(d + 'T00:00:00');
+      return dt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    };
+    const budgetDisplay = budget ? '₹' + Number(budget).toLocaleString('en-IN') : '—';
+    const dateRange     = startDate && endDate
+      ? fmtDate(startDate) + ' – ' + fmtDate(endDate)
+      : '';
+
+    // ── Build card DOM ────────────────────────────────────────────────────────
+    const card = document.createElement('div');
+    card.className = 'cv-card';
+    card.dataset.status = 'active';
+    card.dataset.type      = type;
+    card.dataset.audience  = document.querySelectorAll('#wizStep3 .cf-tag.sel').length
+                              ? [...document.querySelectorAll('#wizStep3 .cf-tag.sel')].map(t=>t.textContent.trim()).join(',')
+                              : '';
+    card.dataset.locations = document.getElementById('cfLocSelect')?.value || 'All India';
+    card.dataset.objective = objective;
+    card.dataset.target    = target;
+    card.dataset.start     = startDate;
+    card.dataset.end       = endDate;
+    card.innerHTML = `
+      <div class="cv-accent" style="background:${cfg.color};"></div>
+      <div class="cv-body">
+        <div class="cv-top">
+          <div class="cv-thumb" style="${cfg.bg}">${cfg.icon}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <span class="cv-name">${name}</span>
+              <span class="cp-badge cp-badge-active">&#x25CF; Active</span>
+            </div>
+            <div class="cv-desc">${desc || type + ' campaign'}${dateRange ? ' · ' + dateRange : ''}</div>
+          </div>
+        </div>
+        <div class="cv-metrics">
+          <div class="cv-metric"><div class="cv-mval">0</div><div class="cv-mlbl">Total Reach</div></div>
+          <div class="cv-metric"><div class="cv-mval">0</div><div class="cv-mlbl">Impressions</div></div>
+          <div class="cv-metric"><div class="cv-mval">0</div><div class="cv-mlbl">Clicks</div></div>
+          <div class="cv-metric"><div class="cv-mval">0%</div><div class="cv-mlbl">CTR</div></div>
+          <div class="cv-metric"><div class="cv-mval">0</div><div class="cv-mlbl">Conversions</div><div class="cv-mtag up">0% of goal</div></div>
+        </div>
+        <div style="margin-top:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-light);margin-bottom:4px;">
+            <span>${objective}</span>
+            <span style="font-weight:700;color:var(--text-dark);">0 / ${Number(target).toLocaleString('en-IN')} &nbsp; 0%</span>
+          </div>
+          <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:0%;background:${cfg.color};border-radius:3px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="cv-actions">
+        <button class="cv-btn cv-btn-primary" onclick="showCampaignDetail(this.closest('.cv-card'))">View Details</button>
+        <button class="cv-btn cv-btn-secondary">Edit</button>
+        <button class="cv-btn cv-btn-warn">Pause</button>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);text-align:right;">
+          <div style="font-size:10px;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;">Budget</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text-dark);">${budgetDisplay}</div>
+        </div>
+      </div>`;
+
+    // Prepend to list so it appears at the top
+    document.getElementById('cpList').prepend(card);
+
+    showToast('Campaign published! \u{1F389}');
+    wizGo(1);
+    showList();
+  }
+
+  // â”€â”€ VISUAL TAB TOGGLE â”€â”€
+  function visTab(tab) {
+    const isAI = tab === 'ai';
+    document.getElementById('visPanelAI').style.display     = isAI ? 'block' : 'none';
+    document.getElementById('visPanelUpload').style.display = isAI ? 'none'  : 'block';
+    document.getElementById('visTabAI').style.background     = isAI ? 'var(--purple)' : 'var(--white)';
+    document.getElementById('visTabAI').style.color          = isAI ? 'white' : 'var(--text-mid)';
+    document.getElementById('visTabUpload').style.background = isAI ? 'var(--white)' : 'var(--purple)';
+    document.getElementById('visTabUpload').style.color      = isAI ? 'var(--text-mid)' : 'white';
+  }
+
+  // â”€â”€ IMAGE UPLOAD â”€â”€
+  function uploadDragOver(e) {
+    e.preventDefault();
+    const dz = document.getElementById('uploadDropzone');
+    dz.style.borderColor = 'var(--purple)';
+    dz.style.background  = 'var(--purple-bg)';
+  }
+  function uploadDragLeave(e) {
+    const dz = document.getElementById('uploadDropzone');
+    dz.style.borderColor = 'var(--border)';
+    dz.style.background  = 'var(--bg)';
+  }
+  function uploadDrop(e) {
+    e.preventDefault();
+    uploadDragLeave(e);
+    const file = e.dataTransfer.files[0];
+    if (file) uploadProcess(file);
+  }
+  function uploadFileSelected(e) {
+    const file = e.target.files[0];
+    if (file) uploadProcess(file);
+  }
+  function uploadProcess(file) {
+    if (!['image/jpeg','image/png','image/webp'].includes(file.type)) {
+      showToast('Please upload a JPG, PNG, or WebP image'); return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('File too large â€” max 5 MB'); return;
+    }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('uploadPreviewImg').src = ev.target.result;
+      document.getElementById('uploadPreviewArea').style.display = 'block';
+      document.getElementById('uploadDropzone').style.display    = 'none';
+      document.getElementById('uploadFileMeta').textContent =
+        file.name + '  Â·  ' + (file.size / 1024).toFixed(0) + ' KB';
+      document.getElementById('uploadUsedBadge').style.display = 'none';
+      document.getElementById('uploadUseBtn').style.background  = 'var(--purple)';
+    };
+    reader.readAsDataURL(file);
+  }
+  function uploadClear() {
+    document.getElementById('uploadPreviewArea').style.display = 'none';
+    document.getElementById('uploadDropzone').style.display    = 'block';
+    document.getElementById('uploadFileInput').value = '';
+    document.getElementById('uploadUsedBadge').style.display   = 'none';
+  }
+  function uploadUseImage() {
+    document.getElementById('uploadUsedBadge').style.display  = 'block';
+    document.getElementById('uploadUseBtn').style.background  = '#10B981';
+    showToast('Campaign image saved');
+  }
+
+  // â”€â”€ AI IMAGE GENERATOR â”€â”€
+  const AI_PROMPTS = {
+    professional: 'A confident woman professional at a corporate event, deep purple and dark tones, premium feel, space for text overlay',
+    vibrant:      'Dynamic women leaders celebrating success, bold purple and orange gradients, energetic and empowering visual',
+    warm:         'Diverse group of women collaborating warmly, soft amber and rose tones, natural light, inclusive and human',
+    minimal:      'Clean minimal layout with subtle geometric shapes, generous white space, light gray tones, elegant typography',
+    tech:         'Women in tech working with futuristic interfaces, dark navy background, blue circuit patterns, innovation theme',
+    festive:      'Joyful celebration of women\'s achievements, colorful confetti, bright cheerful tones, festive and uplifting'
+  };
+
+  const AI_VISUALS = {
+    professional: 'background:linear-gradient(135deg,#1A1A2E 0%,#3D1158 50%,#7B2D8B 100%);',
+    vibrant:      'background:linear-gradient(135deg,#7B2D8B 0%,#C84FC8 50%,#F97316 100%);',
+    warm:         'background:linear-gradient(135deg,#FDE68A 0%,#F97316 40%,#EC4899 100%);',
+    minimal:      'background:linear-gradient(135deg,#F3F4F6 0%,#E5E7EB 60%,#D1D5DB 100%);',
+    tech:         'background:linear-gradient(135deg,#0F172A 0%,#1E3A5F 50%,#3B82F6 100%);',
+    festive:      'background:linear-gradient(135deg,#FEF9C3 0%,#34D399 35%,#3B82F6 70%,#C84FC8 100%);'
+  };
+
+  const AI_ICON = {
+    professional: '\u{1F4BC}', vibrant: '\u{1F680}', warm: '\u{1F91D}', minimal: '✦', tech: '\u{1F4BB}', festive: '\u{1F389}'
+  };
+
+  let aiCurrentStyle = 'professional';
+
+  function aiSelectStyle(el, style) {
+    document.querySelectorAll('.ai-style-card').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    aiCurrentStyle = style;
+    document.getElementById('aiPromptInput').value = AI_PROMPTS[style];
+    document.getElementById('aiPreviewArea').style.display = 'none';
+    document.getElementById('aiUsedBadge').style.display = 'none';
+    document.getElementById('aiUseBtn').style.background = 'var(--purple)';
+  }
+
+  function aiClearPrompt() {
+    document.getElementById('aiPromptInput').value = '';
+    document.getElementById('aiPromptInput').focus();
+  }
+
+  function aiGenerate() {
+    const btn      = document.getElementById('aiGenerateBtn');
+    const preview  = document.getElementById('aiPreviewArea');
+    const img      = document.getElementById('aiPreviewImg');
+    const usedBadge = document.getElementById('aiUsedBadge');
+
+    preview.style.display = 'none';
+    usedBadge.style.display = 'none';
+    document.getElementById('aiUseBtn').style.background = 'var(--purple)';
+
+    btn.innerHTML = '<svg class="ai-spin" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Generating…';
+    btn.disabled = true;
+    btn.style.opacity = '0.72';
+
+    setTimeout(() => {
+      const visual = AI_VISUALS[aiCurrentStyle];
+      const icon   = AI_ICON[aiCurrentStyle];
+      const name   = (document.getElementById('cfNameInput').value.trim()) || 'Your Campaign';
+      const prompt = document.getElementById('aiPromptInput').value.trim();
+      const words  = prompt.split(' ').slice(0, 6).join(' ');
+
+      img.innerHTML = `
+        <div style="${visual}width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0px,rgba(255,255,255,.06) 1px,transparent 1px,transparent 22px);pointer-events:none;"></div>
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(255,255,255,.12),transparent 60%);pointer-events:none;"></div>
+          <div style="position:absolute;top:12px;left:14px;font-size:9px;font-weight:700;color:rgba(255,255,255,.65);letter-spacing:.12em;text-transform:uppercase;">HerKey · Campaign Visual</div>
+          <div style="text-align:center;padding:0 28px;z-index:1;">
+            <div style="font-size:32px;margin-bottom:10px;">${icon}</div>
+            <div style="font-size:18px;font-weight:800;color:white;line-height:1.25;text-shadow:0 2px 14px rgba(0,0,0,.35);">${name}</div>
+            <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.75);font-style:italic;">${words}…</div>
+          </div>
+          <div style="position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.28);backdrop-filter:blur(6px);border-radius:6px;padding:3px 10px;font-size:9px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.04em;">AI Generated ✦</div>
+        </div>`;
+
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Generate with AI';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+
+      preview.style.display = 'block';
+      preview.classList.remove('ai-fade-in');
+      void preview.offsetWidth;
+      preview.classList.add('ai-fade-in');
+    }, 2000);
+  }
+
+  function aiUseImage() {
+    document.getElementById('aiUsedBadge').style.display = 'block';
+    document.getElementById('aiUseBtn').style.background = '#10B981';
+    showToast('Campaign image saved');
+  }
+
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.textContent = msg;
+    Object.assign(t.style, {
+      position: 'fixed', bottom: '28px', left: '50%',
+      transform: 'translateX(-50%)',
+      background: '#1A1A2E', color: 'white',
+      padding: '12px 24px', borderRadius: '24px',
+      fontSize: '13px', fontWeight: '600', zIndex: '9999',
+      boxShadow: '0 8px 24px rgba(0,0,0,.2)',
+      fontFamily: 'Inter,sans-serif', whiteSpace: 'nowrap',
+      transition: 'opacity .3s'
+    });
+    document.body.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; }, 2500);
+    setTimeout(() => t.remove(), 2900);
+  }
+</script>
+</body>
+</html>
