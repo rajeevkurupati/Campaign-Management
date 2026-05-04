@@ -2015,10 +2015,10 @@
   function openCampaignsPanel() {
     document.querySelector('main').style.display = 'none';
     document.getElementById('campaignsView').style.display = 'block';
-
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
     document.querySelector('.campaigns-item').classList.add('active');
     showList();
+    loadCampaigns();  // load from backend (replaces hardcoded cards when online)
   }
 
   function closeCampaignsPanel() {
@@ -2698,12 +2698,49 @@
         </div>
       </div>`;
 
-    // Prepend to list so it appears at the top
-    document.getElementById('cpList').prepend(card);
+    // ── Try to persist to backend, fall back to DOM-only ────────────────────
+    const payload = {
+      name:              name,
+      campaign_type:     type,
+      status:            'active',
+      tone:              document.getElementById('aiResTone')?.value  || '',
+      headline:          document.getElementById('aiResHeadline')?.value || name,
+      body_copy:         desc,
+      objective:         objective,
+      target_number:     parseInt(target) || 0,
+      start_date:        startDate || null,
+      end_date:          endDate   || null,
+      audience_segments: document.querySelectorAll('#wizStep3 .cf-tag.sel').length
+                           ? [...document.querySelectorAll('#wizStep3 .cf-tag.sel')].map(t=>t.textContent.trim()).join(',')
+                           : '',
+      locations:         document.getElementById('cfLocSelect')?.value || 'All India',
+      channels:          document.querySelectorAll('#wizStep4 .cf-tag.sel').length
+                           ? [...document.querySelectorAll('#wizStep4 .cf-tag.sel')].map(t=>t.textContent.trim()).join(',')
+                           : '',
+      budget:            budget ? parseFloat(budget) : null,
+    };
 
-    showToast('Campaign published! \u{1F389}');
-    wizGo(1);
-    showList();
+    fetch(API+'/api/campaigns', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+      signal:  AbortSignal.timeout(5000),
+    })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(saved => {
+      // Reload full list from DB (keeps counts accurate)
+      showToast('Campaign published! \u{1F389}');
+      wizGo(1);
+      showList();
+      loadCampaigns();
+    })
+    .catch(() => {
+      // Backend offline — append card built from local data
+      document.getElementById('cpList').prepend(card);
+      showToast('Campaign published! \u{1F389}');
+      wizGo(1);
+      showList();
+    });
   }
 
   // â”€â”€ VISUAL TAB TOGGLE â”€â”€
