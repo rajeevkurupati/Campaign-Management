@@ -2012,6 +2012,195 @@
   });
 
   // â”€â”€ CAMPAIGNS PANEL â”€â”€
+
+  // ── CAMPAIGN PERSISTENCE HELPERS ─────────────────────────────────────────
+
+  const API = 'http://localhost:8000';
+
+  const TYPE_CFG = {
+    'Event Drive':  { color:'#3B82F6', bg:'linear-gradient(135deg,#DBEAFE,#BFDBFE)', icon:'\u{1F3A4}' },
+    'Hiring Drive': { color:'#7B2D8B', bg:'linear-gradient(135deg,#EDE9FE,#DDD6FE)', icon:'\u{1F4BC}' },
+    'Awareness':    { color:'#10B981', bg:'linear-gradient(135deg,#D1FAE5,#A7F3D0)', icon:'\u{1F4E2}' },
+    'Learning':     { color:'#F59E0B', bg:'linear-gradient(135deg,#FEF3C7,#FDE68A)', icon:'\u{1F4DA}' },
+    'Mentorship':   { color:'#EC4899', bg:'linear-gradient(135deg,#FCE7F3,#FBCFE8)', icon:'\u{1F91D}' },
+    'Custom':       { color:'#6B7280', bg:'linear-gradient(135deg,#F3F4F6,#E5E7EB)', icon:'⭐'    },
+  };
+  const STATUS_COLOR = { active:'#10B981', scheduled:'#3B82F6', draft:'#9CA3AF', ended:'#6B7280', paused:'#F59E0B' };
+
+  function fmtN(n) {
+    if (!n || n === 0) return '0';
+    if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+    if (n >= 1e3) return Math.round(n).toLocaleString('en-IN');
+    return String(Math.round(n));
+  }
+  function fmtD(d) {
+    if (!d) return '';
+    return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  }
+
+  function renderCampaignCard(c) {
+    const cfg    = TYPE_CFG[c.campaign_type] || TYPE_CFG['Custom'];
+    const accent = STATUS_COLOR[c.status]    || '#9CA3AF';
+    const pct    = Math.min(c.progress_pct || 0, 100);
+    const dateRange = c.start_date && c.end_date ? fmtD(c.start_date)+' – '+fmtD(c.end_date) : '';
+    const budget = c.budget ? '₹'+Number(c.budget).toLocaleString('en-IN') : '—';
+    const spent  = c.spent  ? '₹'+Number(c.spent).toLocaleString('en-IN')+' spent' : '';
+
+    const badgeHtml = {
+      active:    '<span class="cp-badge cp-badge-active">&#x25CF; Active</span>',
+      scheduled: '<span class="cp-badge cp-badge-scheduled">&#x25CF; Scheduled</span>',
+      draft:     '<span class="cp-badge" style="background:#F3F4F6;color:#9CA3AF;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">&#x25CB; Draft</span>',
+      ended:     '<span class="cp-badge" style="background:#F3F4F6;color:#6B7280;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">&#x25A0; Ended</span>',
+      paused:    '<span class="cp-badge" style="background:#FEF3C7;color:#D97706;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">&#x23F8; Paused</span>',
+    };
+    const actionsHtml = {
+      active:    `<button class="cv-btn cv-btn-primary" onclick="showCampaignDetail(this.closest('.cv-card'))">View Details</button>
+                  <button class="cv-btn cv-btn-secondary" onclick="editCampaign(${c.id})">Edit</button>
+                  <button class="cv-btn cv-btn-warn" onclick="updateCampaignStatus(this.closest('.cv-card'),'paused')">Pause</button>`,
+      scheduled: `<button class="cv-btn cv-btn-primary" onclick="showCampaignDetail(this.closest('.cv-card'))">View Details</button>
+                  <button class="cv-btn cv-btn-secondary" onclick="editCampaign(${c.id})">Edit</button>
+                  <button class="cv-btn cv-btn-warn" onclick="updateCampaignStatus(this.closest('.cv-card'),'active')">Launch Now</button>`,
+      draft:     `<button class="cv-btn cv-btn-primary" onclick="editCampaign(${c.id})">Continue Editing</button>
+                  <button class="cv-btn cv-btn-secondary" onclick="updateCampaignStatus(this.closest('.cv-card'),'active')">Publish</button>`,
+      ended:     `<button class="cv-btn cv-btn-primary" onclick="showCampaignDetail(this.closest('.cv-card'))">View Report</button>
+                  <button class="cv-btn cv-btn-secondary" onclick="duplicateCampaign(${c.id})">Duplicate</button>`,
+      paused:    `<button class="cv-btn cv-btn-primary" onclick="showCampaignDetail(this.closest('.cv-card'))">View Details</button>
+                  <button class="cv-btn cv-btn-secondary" onclick="updateCampaignStatus(this.closest('.cv-card'),'active')">Resume</button>
+                  <button class="cv-btn cv-btn-warn" onclick="updateCampaignStatus(this.closest('.cv-card'),'ended')">End</button>`,
+    };
+
+    return `
+      <div class="cv-card"
+        data-id="${c.id}"
+        data-status="${c.status}"
+        data-type="${c.campaign_type}"
+        data-audience="${c.audience_segments}"
+        data-locations="${c.locations}"
+        data-objective="${c.objective}"
+        data-target="${c.target_number}"
+        data-start="${c.start_date||''}"
+        data-end="${c.end_date||''}">
+        <div class="cv-accent" style="background:${accent};"></div>
+        <div class="cv-body">
+          <div class="cv-top">
+            <div class="cv-thumb" style="${cfg.bg}">${cfg.icon}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <span class="cv-name">${c.name}</span>
+                ${badgeHtml[c.status]||''}
+              </div>
+              <div class="cv-desc">${c.body_copy||c.campaign_type+' campaign'}${dateRange?' · '+dateRange:''}</div>
+            </div>
+          </div>
+          <div class="cv-metrics">
+            <div class="cv-metric"><div class="cv-mval">${fmtN(c.reach)}</div><div class="cv-mlbl">Total Reach</div></div>
+            <div class="cv-metric"><div class="cv-mval">${fmtN(c.impressions)}</div><div class="cv-mlbl">Impressions</div></div>
+            <div class="cv-metric"><div class="cv-mval">${fmtN(c.clicks)}</div><div class="cv-mlbl">Clicks</div></div>
+            <div class="cv-metric"><div class="cv-mval">${c.ctr||'0%'}</div><div class="cv-mlbl">CTR</div></div>
+            <div class="cv-metric"><div class="cv-mval">${fmtN(c.conversions)}</div><div class="cv-mlbl">Conversions</div><div class="cv-mtag up">${c.progress_pct||0}% of goal</div></div>
+          </div>
+          <div style="margin-top:10px;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-light);margin-bottom:4px;">
+              <span>${c.objective}</span>
+              <span style="font-weight:700;color:var(--text-dark);">${fmtN(c.conversions)} / ${Number(c.target_number).toLocaleString('en-IN')} &nbsp; ${c.progress_pct||0}%</span>
+            </div>
+            <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;">
+              <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${accent},${accent}99);border-radius:3px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cv-actions">
+          ${actionsHtml[c.status]||actionsHtml['active']}
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);text-align:right;">
+            <div style="font-size:10px;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;">Budget</div>
+            <div style="font-size:15px;font-weight:800;color:var(--text-dark);">${budget}</div>
+            ${spent?`<div style="font-size:11px;color:var(--text-light);">${spent}</div>`:''}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function updateFilterCounts(campaigns) {
+    const counts = { all:0, active:0, scheduled:0, draft:0, ended:0 };
+    campaigns.forEach(c => {
+      counts.all++;
+      if (c.status === 'active' || c.status === 'paused') counts.active++;
+      else if (counts[c.status] !== undefined) counts[c.status]++;
+    });
+    const tabs = document.querySelectorAll('.cp-tabs .cp-tab');
+    const keys = ['all','active','scheduled','draft','ended'];
+    tabs.forEach((tab, i) => {
+      if (keys[i] !== undefined) {
+        const label = keys[i].charAt(0).toUpperCase()+keys[i].slice(1);
+        tab.textContent = label+' ('+counts[keys[i]]+')';
+      }
+    });
+  }
+
+  async function loadCampaigns() {
+    const list = document.getElementById('cpList');
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);font-size:13px;">Loading campaigns…</div>';
+    try {
+      const res = await fetch(API+'/api/campaigns', { signal: AbortSignal.timeout(5000) });
+      if (!res.ok) throw new Error('API error');
+      const campaigns = await res.json();
+      if (campaigns.length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);font-size:13px;">No campaigns yet. Click “Create New Campaign” to get started.</div>';
+        return;
+      }
+      list.innerHTML = campaigns.map(renderCampaignCard).join('');
+      updateFilterCounts(campaigns);
+    } catch(e) {
+      list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);font-size:13px;">Could not reach backend. Showing cached view.</div>';
+    }
+  }
+
+  async function updateCampaignStatus(card, newStatus) {
+    const id = card.dataset.id;
+    if (!id) { showToast('Cannot update — no campaign ID'); return; }
+    try {
+      const res = await fetch(API+'/api/campaigns/'+id, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+        signal: AbortSignal.timeout(5000),
+      });
+      if (!res.ok) throw new Error('Update failed');
+      const labels = { active:'resumed', scheduled:'launched', ended:'ended', paused:'paused', draft:'saved as draft' };
+      showToast('Campaign '+(labels[newStatus]||newStatus));
+      loadCampaigns();
+    } catch(e) {
+      showToast('Could not update — backend offline');
+    }
+  }
+
+  async function duplicateCampaign(id) {
+    try {
+      const res  = await fetch(API+'/api/campaigns/'+id);
+      if (!res.ok) throw new Error();
+      const orig = await res.json();
+      const data = {
+        name: 'Copy of '+orig.name, campaign_type: orig.campaign_type,
+        status: 'draft', tone: orig.tone, headline: orig.headline,
+        body_copy: orig.body_copy, objective: orig.objective,
+        target_number: orig.target_number, start_date: orig.start_date,
+        end_date: orig.end_date, audience_segments: orig.audience_segments,
+        locations: orig.locations, channels: orig.channels, budget: orig.budget,
+      };
+      const r2 = await fetch(API+'/api/campaigns', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data),
+      });
+      if (!r2.ok) throw new Error();
+      showToast('Campaign duplicated as draft \u{1F4CB}');
+      loadCampaigns();
+    } catch(e) {
+      showToast('Could not duplicate — backend offline');
+    }
+  }
+
+  function editCampaign(id) {
+    showToast('Edit coming soon — open the campaign wizard to make changes');
+  }
   function openCampaignsPanel() {
     document.querySelector('main').style.display = 'none';
     document.getElementById('campaignsView').style.display = 'block';
