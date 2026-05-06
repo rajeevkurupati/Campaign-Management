@@ -15,6 +15,11 @@ ANTHROPIC_MODEL   = os.getenv("ANTHROPIC_MODEL", "claude-3-5-haiku-20241022")
 OPENAI_API_KEY    = os.getenv("OPENAI_API_KEY", "")
 OPENAI_MODEL      = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
+# ── Auth (JWT) ────────────────────────────────────────────────────────────────
+JWT_SECRET_KEY     = os.getenv("JWT_SECRET_KEY", "change-this-to-a-random-secret-in-production")
+JWT_ALGORITHM      = os.getenv("JWT_ALGORITHM", "HS256")
+JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "1440"))  # 24 hours
+
 SUPPORTED_PROVIDERS = {"anthropic", "openai"}
 
 
@@ -29,3 +34,10 @@ def validate():
         raise ValueError("ANTHROPIC_API_KEY is not set in .env")
     if LLM_PROVIDER == "openai" and not OPENAI_API_KEY:
         raise ValueError("OPENAI_API_KEY is not set in .env")
+    if JWT_SECRET_KEY == "change-this-to-a-random-secret-in-production":
+        import warnings
+        warnings.warn(
+            "[HerKey] JWT_SECRET_KEY is using the default insecure value. "
+            "Set a strong random secret in .env for production.",
+            stacklevel=2,
+        )

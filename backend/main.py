@@ -1,12 +1,12 @@
 """
-HerKey Campaign API — Phase 2
-==============================
+Campaign Management API
+========================
 Run:
     pip install -r requirements.txt
     cp .env.example .env          # fill in your API key(s)
     uvicorn main:app --reload --port 8000
 
-Supported providers (set LLM_PROVIDER in .env):
+Supported LLM providers (set LLM_PROVIDER in .env):
     anthropic   — Claude via Anthropic API  (default)
     openai      — GPT via OpenAI API
 """
@@ -15,48 +15,53 @@ import config  # validates .env on import
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import inspect, text
 from sqlmodel import Session, select
 
 from database import create_db_and_tables, engine
 from models.db_models import Campaign, CampaignCreate
-from models.campaign import ExtractRequest, ExtractResponse
-from agents.extractor import extract_campaign as ai_extract
+from auth.router import router as auth_router
 from routers.campaigns import router as campaigns_router
+from routers.guardrails import router as guardrails_router
 
 # ── Validate config on startup ────────────────────────────────────────────────
 try:
     config.validate()
 except ValueError as exc:
-    raise SystemExit(f"[HerKey] Config error: {exc}") from exc
+    raise SystemExit(f"[Campaign API] Config error: {exc}") from exc
 
 # ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(
-    title="HerKey Campaign API",
-    description="AI-powered campaign management backend",
-    version="0.3.0",
+    title="Campaign Management API",
+    description="AI-powered campaign management backend with guardrails",
+    version="0.4.0",
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000",
-                   "http://localhost:5500", "http://127.0.0.1:5500",
-                   "null"],   # file:// origin
+    allow_origins=[
+        "http://localhost:3000", "http://127.0.0.1:3000",
+        "http://localhost:5500", "http://127.0.0.1:5500",
+        "null",   # file:// origin
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # ── Include routers ───────────────────────────────────────────────────────────
+app.include_router(auth_router)
+app.include_router(guardrails_router)   # must come before campaigns_router (path ordering)
 app.include_router(campaigns_router)
 
 
-# ── Startup: create tables + seed demo data ───────────────────────────────────
+# ── Demo seed data ────────────────────────────────────────────────────────────
 DEMO_CAMPAIGNS = [
     CampaignCreate(
         name="Women in Tech Summit 2026 – Registration Drive",
         campaign_type="Event Drive", status="active",
         tone="Tech-Forward",
         headline="Own the Stage at Women in Tech Summit 2026",
-        body_copy="Drive registrations for the flagship HerKey Women in Tech Summit. Join 5,000+ women leaders, innovators, and changemakers for three days of inspiration.",
+        body_copy="Drive registrations for the flagship Women in Tech Summit. Join 5,000+ women leaders, innovators, and changemakers for three days of inspiration.",
         objective="Registrations", target_number=5000,
         start_date="2026-04-10", end_date="2026-05-20",
         audience_segments="Women in Tech,Job Seekers,Mid-Senior",
@@ -78,7 +83,7 @@ DEMO_CAMPAIGNS = [
         budget=32000,
     ),
     CampaignCreate(
-        name="HerKey Hiring Drive Q2 2026 – Top 25 Employers",
+        name="Hiring Drive Q2 2026 – Top 25 Employers",
         campaign_type="Hiring Drive", status="scheduled",
         tone="Professional & Aspirational",
         headline="25 Top Employers. 1,000 Opportunities.",
@@ -117,38 +122,51 @@ DEMO_CAMPAIGNS = [
     ),
 ]
 
-# Seeded metrics for demo campaigns (index-aligned with DEMO_CAMPAIGNS)
 DEMO_METRICS = [
-    dict(reach=842310, impressions=2100000, clicks=62480, ctr="7.41%", conversions=4218, progress_pct=84,  spent=31200),
-    dict(reach=312000, impressions=890000,  clicks=28400, ctr="3.19%", conversions=1180, progress_pct=47,  spent=18500),
-    dict(reach=0,      impressions=0,       clicks=0,     ctr="0%",    conversions=0,    progress_pct=0,   spent=0),
-    dict(reach=0,      impressions=0,       clicks=0,     ctr="0%",    conversions=0,    progress_pct=0,   spent=None),
-    dict(reach=1840000,impressions=4200000, clicks=142000,ctr="7.72%", conversions=13420,progress_pct=134, spent=52000),
+    dict(reach=842310,  impressions=2100000, clicks=62480,  ctr="7.41%", conversions=4218,  progress_pct=84,  spent=31200),
+    dict(reach=312000,  impressions=890000,  clicks=28400,  ctr="3.19%", conversions=1180,  progress_pct=47,  spent=18500),
+    dict(reach=0,       impressions=0,       clicks=0,      ctr="0%",    conversions=0,     progress_pct=0,   spent=0),
+    dict(reach=0,       impressions=0,       clicks=0,      ctr="0%",    conversions=0,     progress_pct=0,   spent=None),
+    dict(reach=1840000, impressions=4200000, clicks=142000, ctr="7.72%", conversions=13420, progress_pct=134, spent=52000),
 ]
 
 
+# ── Startup ───────────────────────────────────────────────────────────────────
+
 @app.on_event("startup")
 def on_startup():
+    # 1. Create any new tables (User, etc.)
     create_db_and_tables()
-    # Seed demo campaigns only if the table is empty
+
+    # 2. Migrate campaign table: add user_id column if it doesn't exist yet
+    with engine.connect() as conn:
+        existing_cols = [col["name"] for col in inspect(engine).get_columns("campaign")]
+        if "user_id" not in existing_cols:
+            conn.execute(text("ALTER TABLE campaign ADD COLUMN user_id INTEGER"))
+            conn.commit()
+            print("[Campaign API] Migration: added user_id column to campaign table")
+
+    # 3. Seed demo campaigns (user_id = NULL so all users can see them)
     with Session(engine) as session:
         existing = session.exec(select(Campaign)).first()
         if existing:
             return
         for i, demo in enumerate(DEMO_CAMPAIGNS):
             c = Campaign.model_validate(demo)
+            c.user_id = None   # explicitly mark as demo / unowned
             for key, val in DEMO_METRICS[i].items():
                 setattr(c, key, val)
             session.add(c)
         session.commit()
+        print("[Campaign API] Seeded 5 demo campaigns")
 
 
-# ── Routes ────────────────────────────────────────────────────────────────────
+# ── Health / root routes ──────────────────────────────────────────────────────
 
 @app.get("/")
 def root():
     return {
-        "name":     "HerKey Campaign API",
+        "name":     "Campaign Management API",
         "version":  app.version,
         "provider": config.LLM_PROVIDER,
         "docs":     "/docs",
@@ -159,13 +177,3 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok", "version": app.version, "provider": config.LLM_PROVIDER}
-
-
-@app.post("/api/campaigns/extract", response_model=ExtractResponse)
-def extract(req: ExtractRequest):
-    """AI brief extraction — delegates to the configured LLM provider."""
-    result = ai_extract(req.brief)
-    if not result.ok:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=422, detail=result.error)
-    return result

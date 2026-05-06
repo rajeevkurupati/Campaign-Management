@@ -698,6 +698,12 @@
     }
     .cf-tag:hover { border-color: var(--purple-light); color: var(--purple); }
     .cf-tag.sel { border-color: var(--purple); background: var(--purple-bg); color: var(--purple); font-weight: 600; }
+    .cf-tag.plan-locked {
+      opacity: .5; cursor: not-allowed; border-style: dashed;
+      border-color: var(--border) !important; color: var(--text-light) !important;
+      background: transparent !important; position: relative;
+    }
+    .cf-tag.plan-locked::after { content: ' 🔒'; font-size: 9px; }
     .cp-form-footer {
       padding: 10px 14px; border-top: 1px solid var(--border);
       display: flex; gap: 8px; flex-shrink: 0;
@@ -890,9 +896,16 @@
       </svg>
     </button>
 
-    <div class="avatar-placeholder" title="Profile">R</div>
+    <div id="userInfoBadge" style="display:none;align-items:center;gap:8px;padding:4px 12px 4px 6px;background:var(--purple-bg);border:1.5px solid #DDD6FE;border-radius:20px;cursor:default;">
+      <div id="userAvatarHeader" style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#C84FC8);display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;">?</div>
+      <div style="line-height:1.2;">
+        <div id="userNameHeader" style="font-size:12px;font-weight:600;color:var(--text-dark);">Loading…</div>
+        <div id="userPlanHeader" style="font-size:10px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.04em;">—</div>
+      </div>
+    </div>
+    <button onclick="doLogout()" id="logoutBtn" style="display:none;padding:6px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);cursor:pointer;" title="Sign out">Sign out</button>
 
-    <a href="#" class="btn-business">HerKey for Business</a>
+    <a href="#" class="btn-business">For Business</a>
   </nav>
 </header>
 
@@ -1825,8 +1838,27 @@
               <select style="display:none" id="cfObjectiveSelect"><option>Select goal</option><option>Registrations</option><option>Job Applications</option><option>Session Attendance</option><option>Community Growth</option></select>
               <input type="hidden" id="cfTargetInput" />
             </div>
-          </div>
 
+            <!-- ── COMPLIANCE PANEL (shown after extraction) ─────────────── -->
+            <div id="compliancePanel" style="display:none;margin-top:12px;border-radius:12px;border:2px solid #DDD6FE;background:#F5EEF8;padding:14px 16px;">
+              <div id="compLoading" style="display:flex;align-items:center;gap:10px;color:var(--purple);font-size:13px;font-weight:500;">
+                <div style="width:8px;height:8px;border-radius:50%;background:currentColor;animation:aiPulse 1s infinite;flex-shrink:0;"></div>
+                <span>Checking content compliance&#x2026;</span>
+              </div>
+              <div id="compResult" style="display:none;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span id="compIcon" style="font-size:15px;"></span>
+                    <span id="compTitle" style="font-weight:700;font-size:13px;"></span>
+                  </div>
+                  <span id="compScoreBadge" style="font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;"></span>
+                </div>
+                <div id="compSummary" style="font-size:12px;color:#4B5563;margin-bottom:4px;"></div>
+                <div id="compIssuesList"></div>
+              </div>
+            </div>
+
+          </div>
         </div>
 
         <!-- STEP 2: VISUAL -->
@@ -1893,7 +1925,15 @@
         <!-- STEP 3: AUDIENCE -->
         <div id="wizStep3" class="wiz-panel">
           <div class="cf-section-title" style="margin-top:0;">Audience Segments</div>
-          <div class="cf-group"><div class="cf-tag-wrap"><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Job Seekers</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Career Break</span><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Women in Tech</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Mid-Senior</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Freshers</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Returnees</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Entrepreneurs</span></div></div>
+          <div class="cf-group"><div class="cf-tag-wrap">
+            <span class="cf-tag sel" data-segment="Job Seekers"  onclick="toggleSegment(this)">Job Seekers</span>
+            <span class="cf-tag"     data-segment="Career Break" onclick="toggleSegment(this)">Career Break</span>
+            <span class="cf-tag sel" data-segment="Women in Tech" onclick="toggleSegment(this)">Women in Tech</span>
+            <span class="cf-tag"     data-segment="Mid-Senior"   onclick="toggleSegment(this)">Mid-Senior</span>
+            <span class="cf-tag"     data-segment="Freshers"     onclick="toggleSegment(this)">Freshers</span>
+            <span class="cf-tag"     data-segment="Returnees"    onclick="toggleSegment(this)">Returnees</span>
+            <span class="cf-tag"     data-segment="Entrepreneurs" onclick="toggleSegment(this)">Entrepreneurs</span>
+          </div></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
             <div class="cf-group"><label class="cf-label">Experience Level</label><select class="cf-select" id="cfExpSelect"><option>All levels</option><option>Freshers</option><option>Mid-level (3-8 yrs)</option><option>Senior (8-15 yrs)</option></select></div>
             <div class="cf-group"><label class="cf-label">Location</label><select class="cf-select" id="cfLocSelect"><option>All India</option><option>Tier 1 Cities</option><option>Bengaluru</option><option>Mumbai</option><option>Delhi NCR</option></select></div>
@@ -1903,9 +1943,20 @@
         <!-- STEP 4: CHANNELS & BUDGET -->
         <div id="wizStep4" class="wiz-panel">
           <div class="cf-section-title" style="margin-top:0;">Distribution Channels</div>
-          <div class="cf-group"><div class="cf-tag-wrap"><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Feed Posts</span><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Email</span><span class="cf-tag sel" onclick="this.classList.toggle('sel')">Push Notifications</span><span class="cf-tag" onclick="this.classList.toggle('sel')">WhatsApp</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Groups</span><span class="cf-tag" onclick="this.classList.toggle('sel')">Jobs Board</span></div></div>
+          <div class="cf-group"><div class="cf-tag-wrap">
+            <span class="cf-tag sel" data-channel="Feed Posts"        onclick="toggleChannel(this)">Feed Posts</span>
+            <span class="cf-tag sel" data-channel="Email"             onclick="toggleChannel(this)">Email</span>
+            <span class="cf-tag"     data-channel="Push Notifications" onclick="toggleChannel(this)">Push Notifications</span>
+            <span class="cf-tag"     data-channel="WhatsApp"          onclick="toggleChannel(this)">WhatsApp</span>
+            <span class="cf-tag"     data-channel="Groups"            onclick="toggleChannel(this)">Groups</span>
+            <span class="cf-tag"     data-channel="Jobs Board"        onclick="toggleChannel(this)">Jobs Board</span>
+          </div></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
-            <div class="cf-group"><label class="cf-label">Budget (&#x20B9;)</label><input class="cf-input" id="cfBudgetInput" type="number" placeholder="e.g. 25000" /></div>
+            <div class="cf-group">
+              <label class="cf-label">Budget (&#x20B9;)</label>
+              <input class="cf-input" id="cfBudgetInput" type="number" placeholder="e.g. 25000" />
+              <div id="budgetPlanHint" style="font-size:11px;color:var(--purple);font-weight:600;margin-top:4px;"></div>
+            </div>
             <div class="cf-group"><label class="cf-label">Publish</label><select class="cf-select" id="cfPublishSelect"><option>Publish immediately</option><option>Schedule for start date</option><option>Save as draft</option></select></div>
           </div>
         </div>
@@ -3104,6 +3155,525 @@
     setTimeout(() => { t.style.opacity = '0'; }, 2500);
     setTimeout(() => t.remove(), 2900);
   }
+
+  // ══════════════════════════════════════════════════════════════
+  // AUTH STATE
+  // ══════════════════════════════════════════════════════════════
+
+  let currentUser = null;   // { id, email, name, plan, … }
+
+  // Authenticated fetch wrapper — automatically adds Bearer token
+  function apiFetch(url, options = {}) {
+    const token   = sessionStorage.getItem('hk_token');
+    const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+    return fetch(API + url, { ...options, headers });
+  }
+
+  function initAuth() {
+    const token    = sessionStorage.getItem('hk_token');
+    const userJson = sessionStorage.getItem('hk_user');
+    if (token && userJson) {
+      try {
+        currentUser = JSON.parse(userJson);
+        _updateHeaderUser();
+        document.getElementById('authOverlay').style.display = 'none';
+        applyPlanLimits();
+      } catch(e) {
+        _showAuthOverlay();
+      }
+    } else {
+      _showAuthOverlay();
+    }
+  }
+
+  function _showAuthOverlay() {
+    document.getElementById('authOverlay').style.display = 'flex';
+    document.getElementById('userInfoBadge').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'none';
+  }
+
+  function _updateHeaderUser() {
+    if (!currentUser) return;
+    const initials = currentUser.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    document.getElementById('userAvatarHeader').textContent  = initials;
+    document.getElementById('userNameHeader').textContent    = currentUser.name;
+    document.getElementById('userPlanHeader').textContent    = (currentUser.plan || 'starter') + ' plan';
+    document.getElementById('userInfoBadge').style.display   = 'flex';
+    document.getElementById('logoutBtn').style.display       = 'inline-flex';
+  }
+
+  function authTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('authTabLogin').style.background    = isLogin ? 'var(--purple)' : 'transparent';
+    document.getElementById('authTabLogin').style.color         = isLogin ? 'white' : 'var(--text-mid)';
+    document.getElementById('authTabRegister').style.background = isLogin ? 'transparent' : 'var(--purple)';
+    document.getElementById('authTabRegister').style.color      = isLogin ? 'var(--text-mid)' : 'white';
+    document.getElementById('loginForm').style.display          = isLogin ? 'block' : 'none';
+    document.getElementById('registerForm').style.display       = isLogin ? 'none'  : 'block';
+    document.getElementById('authError').style.display          = 'none';
+  }
+
+  function _setAuthError(msg) {
+    const el = document.getElementById('authError');
+    el.textContent = msg; el.style.display = 'block';
+  }
+
+  async function doLogin() {
+    const email    = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) { _setAuthError('Please enter email and password'); return; }
+    const btn = document.getElementById('loginBtn');
+    btn.disabled = true; btn.textContent = 'Signing in…';
+    try {
+      const res = await fetch(API + '/auth/login', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) { _setAuthError(data.detail || 'Login failed'); btn.disabled=false; btn.textContent='Sign In'; return; }
+      _storeAuth(data);
+    } catch(e) {
+      _setAuthError('Could not reach server. Is the backend running?');
+    }
+    btn.disabled = false; btn.textContent = 'Sign In';
+  }
+
+  async function doRegister() {
+    const name     = document.getElementById('regName').value.trim();
+    const email    = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const plan     = document.getElementById('regPlan').value;
+    if (!name || !email || !password) { _setAuthError('Please fill all fields'); return; }
+    if (password.length < 6) { _setAuthError('Password must be at least 6 characters'); return; }
+    const btn = document.getElementById('registerBtn');
+    btn.disabled = true; btn.textContent = 'Creating account…';
+    try {
+      const res = await fetch(API + '/auth/register', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ name, email, password, plan }),
+      });
+      const data = await res.json();
+      if (!res.ok) { _setAuthError(data.detail || 'Registration failed'); btn.disabled=false; btn.textContent='Create Account'; return; }
+      _storeAuth(data);
+    } catch(e) {
+      _setAuthError('Could not reach server. Is the backend running?');
+    }
+    btn.disabled = false; btn.textContent = 'Create Account';
+  }
+
+  function _storeAuth(data) {
+    sessionStorage.setItem('hk_token', data.access_token);
+    sessionStorage.setItem('hk_user',  JSON.stringify(data.user));
+    currentUser = data.user;
+    document.getElementById('authOverlay').style.display = 'none';
+    _updateHeaderUser();
+    applyPlanLimits();
+    loadCampaigns();
+  }
+
+  function doLogout() {
+    sessionStorage.removeItem('hk_token');
+    sessionStorage.removeItem('hk_user');
+    currentUser = null;
+    _showAuthOverlay();
+    authTab('login');
+  }
+
+  // ══════════════════════════════════════════════════════════════
+  // PLAN CONFIG (mirrors backend/plans/__init__.py)
+  // ══════════════════════════════════════════════════════════════
+
+  const PLAN_CONFIG = {
+    starter: {
+      display: 'Starter', max_active_campaigns: 2, max_budget: 25000,
+      allowed_campaign_types: ['Awareness', 'Event Drive'],
+      allowed_channels:  ['Feed Posts', 'Email', 'Social Media'],
+      allowed_segments:  ['Job Seekers', 'Freshers', 'Career Break'],
+    },
+    growth: {
+      display: 'Growth', max_active_campaigns: 10, max_budget: 200000,
+      allowed_campaign_types: ['Awareness', 'Event Drive', 'Hiring Drive', 'Mentorship'],
+      allowed_channels:  ['Feed Posts', 'Email', 'Social Media', 'Push Notifications', 'Groups', 'In-App'],
+      allowed_segments:  ['Job Seekers', 'Freshers', 'Career Break', 'Women in Tech', 'Mid-Senior', 'Returnees'],
+    },
+    enterprise: {
+      display: 'Enterprise', max_active_campaigns: null, max_budget: null,
+      allowed_campaign_types: null, allowed_channels: null, allowed_segments: null,
+    },
+  };
+
+  function _getPlan() { return PLAN_CONFIG[currentUser?.plan] || PLAN_CONFIG.starter; }
+
+  function applyPlanLimits() {
+    const plan = _getPlan();
+
+    // Segment tags
+    document.querySelectorAll('#wizStep3 .cf-tag[data-segment]').forEach(tag => {
+      const locked = plan.allowed_segments && !plan.allowed_segments.includes(tag.dataset.segment);
+      tag.classList.toggle('plan-locked', locked);
+      if (locked) tag.setAttribute('title', 'Requires ' + _upgradeName(plan) + ' plan or above');
+      else tag.removeAttribute('title');
+    });
+
+    // Channel tags
+    document.querySelectorAll('#wizStep4 .cf-tag[data-channel]').forEach(tag => {
+      const locked = plan.allowed_channels && !plan.allowed_channels.includes(tag.dataset.channel);
+      tag.classList.toggle('plan-locked', locked);
+      if (locked) tag.setAttribute('title', 'Requires ' + _upgradeName(plan) + ' plan or above');
+      else tag.removeAttribute('title');
+    });
+
+    // Budget cap hint
+    const budgetInput = document.getElementById('cfBudgetInput');
+    const budgetHint  = document.getElementById('budgetPlanHint');
+    if (budgetInput && plan.max_budget) {
+      budgetInput.max = plan.max_budget;
+      budgetInput.placeholder = 'e.g. 25000 (max ₹' + Number(plan.max_budget).toLocaleString('en-IN') + ')';
+      if (budgetHint) budgetHint.textContent = plan.display + ' cap: ₹' + Number(plan.max_budget).toLocaleString('en-IN');
+    } else if (budgetInput) {
+      budgetInput.removeAttribute('max');
+      budgetInput.placeholder = 'e.g. 25000';
+      if (budgetHint) budgetHint.textContent = '';
+    }
+  }
+
+  function _upgradeName(plan) {
+    if (plan === PLAN_CONFIG.starter) return 'Growth';
+    return 'Enterprise';
+  }
+
+  function toggleSegment(tag) {
+    if (tag.classList.contains('plan-locked')) {
+      showToast('🔒 ' + tag.dataset.segment + ' is not available on your ' + _getPlan().display + ' plan. Upgrade to unlock.');
+      return;
+    }
+    tag.classList.toggle('sel');
+  }
+
+  function toggleChannel(tag) {
+    if (tag.classList.contains('plan-locked')) {
+      showToast('🔒 ' + tag.dataset.channel + ' is not available on your ' + _getPlan().display + ' plan. Upgrade to unlock.');
+      return;
+    }
+    tag.classList.toggle('sel');
+  }
+
+  // ══════════════════════════════════════════════════════════════
+  // AI CONTENT COMPLIANCE VALIDATOR
+  // ══════════════════════════════════════════════════════════════
+
+  let aiValidated = false;
+
+  async function runComplianceCheck() {
+    aiValidated = false;
+    const panel   = document.getElementById('compliancePanel');
+    const loading = document.getElementById('compLoading');
+    const result  = document.getElementById('compResult');
+    panel.style.cssText = 'display:block;margin-top:12px;border-radius:12px;border:2px solid #DDD6FE;background:#F5EEF8;padding:14px 16px;';
+    loading.style.display = 'flex';
+    result.style.display  = 'none';
+
+    const brief        = document.getElementById('aiCampaignBrief').value.trim();
+    const headline     = document.getElementById('aiResHeadline')?.value?.trim() || null;
+    const bodyCopy     = document.getElementById('aiResBody')?.value?.trim() || null;
+    const typeRaw      = document.getElementById('aiResType')?.value || '';
+    const campaignType = typeRaw.replace(/^[^\w]+/, '').trim();
+
+    try {
+      const res = await apiFetch('/api/campaigns/validate', {
+        method: 'POST',
+        body: JSON.stringify({ brief, headline, body_copy: bodyCopy, campaign_type: campaignType }),
+        signal: AbortSignal.timeout(20000),
+      });
+      if (!res.ok) throw new Error('Validation API error');
+      const data = await res.json();
+      _showComplianceResult(data);
+    } catch(e) {
+      // Backend offline or timeout — silently allow proceed
+      panel.style.display = 'none';
+      aiValidated = true;
+    }
+  }
+
+  function _showComplianceResult(data) {
+    const panel   = document.getElementById('compliancePanel');
+    const loading = document.getElementById('compLoading');
+    const result  = document.getElementById('compResult');
+    loading.style.display = 'none';
+    result.style.display  = 'block';
+
+    const pass = data.gate === 'pass';
+    aiValidated = pass;
+
+    panel.style.borderColor = pass ? '#10B981' : '#EF4444';
+    panel.style.background  = pass ? '#ECFDF5' : '#FEF2F2';
+
+    document.getElementById('compIcon').textContent         = pass ? '✅' : '❌';
+    document.getElementById('compTitle').textContent        = pass ? 'Content Approved' : 'Content Blocked';
+    document.getElementById('compTitle').style.color        = pass ? '#065F46' : '#991B1B';
+    document.getElementById('compScoreBadge').textContent   = 'Score ' + data.score + '/100';
+    document.getElementById('compScoreBadge').style.background = pass ? '#D1FAE5' : '#FEE2E2';
+    document.getElementById('compScoreBadge').style.color      = pass ? '#065F46' : '#991B1B';
+    document.getElementById('compSummary').textContent      = data.summary;
+
+    const issuesList = document.getElementById('compIssuesList');
+    if (data.issues && data.issues.length > 0) {
+      issuesList.style.display = 'block';
+      issuesList.innerHTML = data.issues.map(issue =>
+        '<div style="display:flex;gap:8px;padding:8px 10px;background:rgba(255,255,255,.7);border-radius:8px;margin-top:6px;border-left:3px solid ' +
+        (issue.severity==='error' ? '#EF4444' : '#F59E0B') + ';">' +
+        '<span style="font-size:13px;">' + (issue.severity==='error' ? '⚠️' : 'ℹ️') + '</span>' +
+        '<div><div style="font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.04em;">' + issue.field + '</div>' +
+        '<div style="font-size:12px;color:var(--text-dark);margin-top:2px;">' + issue.message + '</div></div></div>'
+      ).join('');
+      if (!pass) issuesList.innerHTML += '<div style="margin-top:10px;font-size:12px;color:#991B1B;font-weight:500;">Fix the issues above and click “Edit brief” to revise your campaign.</div>';
+    } else {
+      issuesList.style.display = 'none';
+    }
+  }
+
+  // Override wizNext to require compliance before Step 1 → Step 2
+  const _wizNextOrig = wizNext;
+  wizNext = function() {
+    if (wizStep === 1 && aiExtracted && !aiValidated) {
+      showToast('⚠️ Campaign content did not pass compliance check. Fix the issues and re-extract.');
+      return;
+    }
+    _wizNextOrig();
+  };
+
+  // Patch loadCampaigns to use apiFetch
+  const _loadCampaignsOrig = loadCampaigns;
+  loadCampaigns = async function() {
+    if (!currentUser) return;
+    const list = document.getElementById('cpList');
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);font-size:13px;">Loading campaigns…</div>';
+    try {
+      const res = await apiFetch('/api/campaigns', { signal: AbortSignal.timeout(5000) });
+      if (res.status === 401) { doLogout(); return; }
+      if (!res.ok) throw new Error('API error');
+      const campaigns = await res.json();
+      if (campaigns.length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);font-size:13px;">No campaigns yet. Click "Create New Campaign" to get started.</div>';
+        return;
+      }
+      list.innerHTML = campaigns.map(renderCampaignCard).join('');
+      updateFilterCounts(campaigns);
+    } catch(e) {
+      list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);font-size:13px;">Could not reach backend. Showing cached view.</div>';
+    }
+  };
+
+  // Patch updateCampaignStatus
+  updateCampaignStatus = async function(card, newStatus) {
+    const id = card.dataset.id;
+    if (!id) { showToast('Cannot update — no campaign ID'); return; }
+    try {
+      const res = await apiFetch('/api/campaigns/' + id, {
+        method: 'PATCH', body: JSON.stringify({ status: newStatus }),
+        signal: AbortSignal.timeout(5000),
+      });
+      if (res.status === 401) { doLogout(); return; }
+      if (res.status === 403) { const e = await res.json(); showToast(e.detail || 'Permission denied'); return; }
+      if (!res.ok) throw new Error('Update failed');
+      const labels = { active:'resumed', scheduled:'launched', ended:'ended', paused:'paused', draft:'saved as draft' };
+      showToast('Campaign ' + (labels[newStatus] || newStatus));
+      loadCampaigns();
+    } catch(e) { showToast('Could not update — backend offline'); }
+  };
+
+  // Patch duplicateCampaign
+  duplicateCampaign = async function(id) {
+    try {
+      const res = await apiFetch('/api/campaigns/' + id);
+      if (!res.ok) throw new Error();
+      const orig = await res.json();
+      const data = {
+        name: 'Copy of ' + orig.name, campaign_type: orig.campaign_type,
+        status: 'draft', tone: orig.tone, headline: orig.headline,
+        body_copy: orig.body_copy, objective: orig.objective,
+        target_number: orig.target_number, start_date: orig.start_date,
+        end_date: orig.end_date, audience_segments: orig.audience_segments,
+        locations: orig.locations, channels: orig.channels, budget: orig.budget,
+      };
+      const r2 = await apiFetch('/api/campaigns', { method: 'POST', body: JSON.stringify(data) });
+      if (!r2.ok) { const e = await r2.json(); showToast(e.detail || 'Could not duplicate'); return; }
+      showToast('Campaign duplicated as draft 📋');
+      loadCampaigns();
+    } catch(e) { showToast('Could not duplicate — backend offline'); }
+  };
+
+  // Patch cfPublish: use apiFetch + plan limit pre-check
+  cfPublish = async function() {
+    const nameInput = document.getElementById('cfNameInput');
+    if (!nameInput.value.trim()) {
+      wizGo(1);
+      setTimeout(() => { nameInput.focus(); nameInput.style.borderColor='#EF4444'; setTimeout(()=>nameInput.style.borderColor='',2000); },100);
+      showToast('Please enter a campaign name'); return;
+    }
+    const name      = nameInput.value.trim();
+    const desc      = (document.getElementById('cfDescInput').value||'').trim();
+    const startDate = document.getElementById('cfStartDate').value;
+    const endDate   = document.getElementById('cfEndDate').value;
+    const target    = document.getElementById('cfTargetInput')?.value || '0';
+    const objective = document.getElementById('cfObjectiveSelect')?.value || 'Registrations';
+    const budget    = document.getElementById('cfBudgetInput')?.value || '';
+    const typeEl    = document.querySelector('#wizStep1 .cf-type-card.sel .cf-type-name');
+    const type      = typeEl ? typeEl.textContent.trim() : 'Custom';
+    const audSegs   = [...document.querySelectorAll('#wizStep3 .cf-tag.sel')].map(t=>t.textContent.trim());
+    const channels  = [...document.querySelectorAll('#wizStep4 .cf-tag.sel')].map(t=>t.textContent.trim());
+
+    // Plan limit pre-check
+    try {
+      const chkRes = await apiFetch('/api/campaigns/check-limits', {
+        method: 'POST',
+        body: JSON.stringify({ campaign_type: type, budget: budget?parseFloat(budget):null,
+          start_date: startDate||null, end_date: endDate||null,
+          audience_segments: audSegs, channels }),
+        signal: AbortSignal.timeout(5000),
+      });
+      if (chkRes.ok) {
+        const chk = await chkRes.json();
+        if (!chk.ok) { showToast('🚫 ' + chk.violations[0].message); return; }
+      }
+    } catch(e) { /* offline — proceed */ }
+
+    const payload = {
+      name, campaign_type: type, status: 'active',
+      tone: document.getElementById('aiResTone')?.value||'',
+      headline: document.getElementById('aiResHeadline')?.value||name,
+      body_copy: desc, objective,
+      target_number: parseInt(target)||0,
+      start_date: startDate||null, end_date: endDate||null,
+      audience_segments: audSegs.join(','),
+      locations: document.getElementById('cfLocSelect')?.value||'All India',
+      channels: channels.join(','),
+      budget: budget?parseFloat(budget):null,
+    };
+
+    try {
+      const r = await apiFetch('/api/campaigns', { method:'POST', body:JSON.stringify(payload), signal:AbortSignal.timeout(8000) });
+      if (!r.ok) { const e=await r.json(); showToast('🚫 '+(e.detail||'Could not publish')); return; }
+      showToast('Campaign published! 🎉');
+      wizGo(1); showList(); loadCampaigns();
+    } catch(e) { showToast('Could not reach backend. Campaign not saved.'); }
+  };
+
+  // Patch aiExtract to trigger compliance check on success
+  aiExtract = function() {
+    aiValidated = false;
+    document.getElementById('compliancePanel').style.display = 'none';
+    const brief = document.getElementById('aiCampaignBrief').value.trim();
+    if (!brief) {
+      document.getElementById('aiCampaignBrief').focus();
+      document.getElementById('aiCampaignBrief').style.borderColor = '#EF4444';
+      setTimeout(()=>document.getElementById('aiCampaignBrief').style.borderColor='',2000);
+      return;
+    }
+    const btn = document.getElementById('aiExtractBtn');
+    btn.disabled=true; btn.style.opacity='.6';
+    document.getElementById('wizAiResultPhase').style.display='block';
+    document.getElementById('aiThinkingBar').style.display='block';
+    document.getElementById('aiResultCard').style.display='none';
+
+    const token = sessionStorage.getItem('hk_token') || '';
+    fetch(API+'/api/campaigns/extract', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({brief}), signal:AbortSignal.timeout(15000),
+    })
+    .then(res=>{ if(!res.ok) return res.json().then(e=>{throw new Error(e.detail||'API error');}); return res.json(); })
+    .then(json=>{
+      const d = json.data;
+      aiPopulateCard(d, d.audience_segments, d.locations);
+      document.getElementById('aiThinkingBar').style.display='none';
+      document.getElementById('aiResultCard').style.display='block';
+      aiExtracted=true; btn.disabled=false; btn.style.opacity='1';
+      if(json.usage) console.log('[AI] Token usage:',json.usage);
+      runComplianceCheck();
+    })
+    .catch(()=>{
+      // Mock fallback
+      const lower=brief.toLowerCase();
+      const type=AI_CORPUS.types.find(t=>t.keys.some(k=>lower.includes(k)))||AI_CORPUS.types[4];
+      const tone=AI_CORPUS.tones.find(t=>t.keys.some(k=>lower.includes(k)))||AI_CORPUS.tones[0];
+      const audTags=[...new Set(AI_CORPUS.audience.filter(a=>a.keys.some(k=>lower.includes(k))).map(a=>a.tag))];
+      if(!audTags.length) audTags.push('Job Seekers');
+      const locTags=AI_CORPUS.locations.filter(l=>l.keys.some(k=>lower.includes(k))).map(l=>l.tag);
+      if(!locTags.length) locTags.push('All India');
+      const numMatch=brief.match(/\b(\d[\d,]*)\s*(job applications?|registrations?|sign.?ups?|matches?|attendees?|participants?|users?)/i);
+      const targetNum=numMatch?parseInt(numMatch[1].replace(/,/g,'')):5000;
+      const monthIdx={jan:'01',feb:'02',mar:'03',apr:'04',may:'05',jun:'06',jul:'07',aug:'08',sep:'09',oct:'10',nov:'11',dec:'12'};
+      const daysInMonth={jan:31,feb:28,mar:31,apr:30,may:31,jun:30,jul:31,aug:31,sep:30,oct:31,nov:30,dec:31};
+      const mMatch=brief.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*/i);
+      const m=mMatch?mMatch[1].toLowerCase().slice(0,3):'jun';
+      const headlines=AI_CORPUS.headlines[type.label]||AI_CORPUS.headlines['Awareness'];
+      const mockData={
+        campaign_type:type.label, tone:tone.label,
+        headline:headlines[Math.floor(Math.random()*headlines.length)],
+        body_copy:AI_CORPUS.bodies[type.label]||AI_CORPUS.bodies['Awareness'],
+        objective:type.objective, target_number:targetNum,
+        start_date:'2026-05-10',
+        end_date:`2026-${monthIdx[m]||'06'}-${String(daysInMonth[m]||30).padStart(2,'0')}`,
+        audience_segments:audTags, locations:locTags,
+      };
+      setTimeout(()=>{
+        aiPopulateCard(mockData,audTags,locTags);
+        document.getElementById('aiThinkingBar').style.display='none';
+        document.getElementById('aiResultCard').style.display='block';
+        aiExtracted=true; btn.disabled=false; btn.style.opacity='1';
+        aiValidated=true;  // mock fallback skips compliance
+      },800);
+    });
+  };
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  initAuth();
+
 </script>
+
+<!-- ══ AUTH OVERLAY ════════════════════════════════════════════════════════════ -->
+<div id="authOverlay" style="display:flex;position:fixed;inset:0;background:rgba(30,10,40,.72);backdrop-filter:blur(4px);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;padding:36px 32px;width:420px;max-width:92vw;box-shadow:0 24px 64px rgba(0,0,0,.35);">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#7B2D8B,#C84FC8);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:20px;letter-spacing:-1px;">H</div>
+        <span style="font-size:22px;font-weight:700;color:#7B2D8B;">her<span style="color:#F97316;">key</span></span>
+      </div>
+      <div style="font-size:12px;color:#9CA3AF;margin-top:4px;">Campaign Management Platform</div>
+    </div>
+    <div style="display:flex;background:#F3F4F6;border-radius:10px;padding:4px;margin-bottom:24px;gap:4px;">
+      <button id="authTabLogin" onclick="authTab('login')" style="flex:1;padding:9px;border:none;background:#7B2D8B;color:white;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Sign In</button>
+      <button id="authTabRegister" onclick="authTab('register')" style="flex:1;padding:9px;border:none;background:transparent;color:#4B5563;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Create Account</button>
+    </div>
+    <div id="loginForm">
+      <input id="loginEmail" type="email" placeholder="Email address" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()"
+        style="width:100%;padding:11px 14px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;margin-bottom:10px;font-family:inherit;box-sizing:border-box;">
+      <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"
+        style="width:100%;padding:11px 14px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;margin-bottom:16px;font-family:inherit;box-sizing:border-box;">
+      <button id="loginBtn" onclick="doLogin()"
+        style="width:100%;padding:12px;background:#7B2D8B;color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;">Sign In</button>
+    </div>
+    <div id="registerForm" style="display:none;">
+      <input id="regName" type="text" placeholder="Full name" autocomplete="name"
+        style="width:100%;padding:11px 14px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;margin-bottom:10px;font-family:inherit;box-sizing:border-box;">
+      <input id="regEmail" type="email" placeholder="Email address" autocomplete="email"
+        style="width:100%;padding:11px 14px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;margin-bottom:10px;font-family:inherit;box-sizing:border-box;">
+      <input id="regPassword" type="password" placeholder="Password (min 6 characters)" autocomplete="new-password"
+        style="width:100%;padding:11px 14px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;margin-bottom:10px;font-family:inherit;box-sizing:border-box;">
+      <select id="regPlan"
+        style="width:100%;padding:11px 14px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;margin-bottom:16px;font-family:inherit;background:white;cursor:pointer;box-sizing:border-box;">
+        <option value="starter">Starter &#x2014; 2 campaigns &middot; &#x20B9;25K budget cap</option>
+        <option value="growth">Growth &#x2014; 10 campaigns &middot; &#x20B9;2L budget cap</option>
+        <option value="enterprise">Enterprise &#x2014; Unlimited campaigns &amp; budget</option>
+      </select>
+      <button id="registerBtn" onclick="doRegister()"
+        style="width:100%;padding:12px;background:#7B2D8B;color:white;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;">Create Account</button>
+    </div>
+    <div id="authError" style="color:#DC2626;font-size:12px;font-weight:500;margin-top:10px;display:none;padding:8px 12px;background:#FEF2F2;border-radius:8px;"></div>
+  </div>
+</div>
+
 </body>
 </html>

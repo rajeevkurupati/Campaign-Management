@@ -14,6 +14,9 @@ from datetime import datetime
 class Campaign(SQLModel, table=True):
     id:               Optional[int] = Field(default=None, primary_key=True)
 
+    # Owner (nullable — NULL means seeded demo campaign visible to all users)
+    user_id:          Optional[int] = Field(default=None, foreign_key=None, index=True)
+
     # Core identity
     name:             str
     campaign_type:    str     = Field(default="Custom")
@@ -60,6 +63,7 @@ class CampaignCreate(SQLModel):
     name:              str
     campaign_type:     str            = "Custom"
     status:            str            = "active"
+    user_id:           Optional[int]  = None
     tone:              Optional[str]  = None
     headline:          Optional[str]  = None
     body_copy:         Optional[str]  = None
@@ -100,6 +104,7 @@ class CampaignUpdate(SQLModel):
 
 class CampaignRead(SQLModel):
     id:                int
+    user_id:           Optional[int]
     name:              str
     campaign_type:     str
     status:            str
