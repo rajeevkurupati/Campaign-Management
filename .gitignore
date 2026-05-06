@@ -25,3 +25,6 @@ Thumbs.db
 
 # Claude internal
 .claude/
+
+# ChromaDB vector store (auto-built from guidelines/ at startup)
+backend/chroma_db/

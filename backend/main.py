@@ -135,6 +135,13 @@ DEMO_METRICS = [
 
 @app.on_event("startup")
 def on_startup():
+    # 0. Ingest / refresh RAG guidelines
+    try:
+        from rag.ingestion import ingest_guidelines
+        ingest_guidelines()
+    except Exception as exc:
+        print(f'[RAG] Ingestion skipped: {exc}')
+
     # 1. Create any new tables (User, etc.)
     create_db_and_tables()
 

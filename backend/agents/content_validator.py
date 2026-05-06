@@ -150,10 +150,34 @@ def validate_content(
     """Run AI compliance check. Uses the same LLM_PROVIDER as extraction."""
     user_message = _build_user_message(brief, headline, body_copy, campaign_type)
 
+    # ── RAG: retrieve relevant guideline chunks ───────────────────────────────
+    system_prompt = VALIDATOR_SYSTEM_PROMPT
+    try:
+        from rag.retriever import retrieve
+        rag_query_parts = [brief]
+        if campaign_type:
+            rag_query_parts.append(campaign_type)
+        if headline:
+            rag_query_parts.append(headline)
+        if body_copy:
+            rag_query_parts.append(body_copy)
+        rag_query = " ".join(rag_query_parts)
+        rag_context = retrieve(rag_query, top_k=3)
+        if rag_context:
+            system_prompt = (
+                VALIDATOR_SYSTEM_PROMPT
+                + "\n\n## Retrieved Brand Guidelines\n"
+                "The following excerpts were retrieved from the platform's brand and content policy documents. "
+                "Use them to ground your assessment:\n\n"
+                + rag_context
+            )
+    except Exception:
+        pass  # RAG failure must never block validation
+
     if config.LLM_PROVIDER == "anthropic":
-        return _validate_anthropic(user_message)
+        return _validate_anthropic(user_message, system_prompt)
     elif config.LLM_PROVIDER == "openai":
-        return _validate_openai(user_message)
+        return _validate_openai(user_message, system_prompt)
     else:
         return ValidationResult(
             ok=False,
@@ -164,7 +188,7 @@ def validate_content(
         )
 
 
-def _validate_anthropic(user_message: str) -> ValidationResult:
+def _validate_anthropic(user_message: str, system_prompt: str) -> ValidationResult:
     import anthropic
     client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY)
     try:
@@ -174,7 +198,7 @@ def _validate_anthropic(user_message: str) -> ValidationResult:
             system=[
                 {
                     "type":          "text",
-                    "text":          VALIDATOR_SYSTEM_PROMPT,
+                    "text":          system_prompt,
                     "cache_control": {"type": "ephemeral"},
                 }
             ],
@@ -220,14 +244,14 @@ def _validate_anthropic(user_message: str) -> ValidationResult:
         return ValidationResult(ok=False, score=0, gate="block", summary=str(e), issues=[])
 
 
-def _validate_openai(user_message: str) -> ValidationResult:
+def _validate_openai(user_message: str, system_prompt: str) -> ValidationResult:
     from openai import OpenAI, APIStatusError
     client = OpenAI(api_key=config.OPENAI_API_KEY)
     try:
         response = client.chat.completions.create(
             model=config.OPENAI_MODEL,
             messages=[
-                {"role": "system",  "content": VALIDATOR_SYSTEM_PROMPT},
+                {"role": "system",  "content": system_prompt},
                 {"role": "user",    "content": user_message},
             ],
             tools=[_OPENAI_FUNCTION],
