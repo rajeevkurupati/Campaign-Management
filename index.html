@@ -2861,7 +2861,8 @@
     const objective = document.getElementById('cfObjectiveSelect')?.value || 'Registrations';
     const budget    = document.getElementById('cfBudgetInput')?.value || '';
     const typeEl    = document.querySelector('#wizStep1 .cf-type-card.sel .cf-type-name');
-    const type      = typeEl ? typeEl.textContent.trim() : 'Custom';
+    const type      = typeEl ? typeEl.textContent.trim()
+                             : (document.getElementById('aiResType')?.value || '').replace(/^[^\w]+/, '').trim() || 'Awareness';
 
     // ── Type → visual config ──────────────────────────────────────────────────
     const typeConfig = {
@@ -3520,7 +3521,8 @@
     const objective = document.getElementById('cfObjectiveSelect')?.value || 'Registrations';
     const budget    = document.getElementById('cfBudgetInput')?.value || '';
     const typeEl    = document.querySelector('#wizStep1 .cf-type-card.sel .cf-type-name');
-    const type      = typeEl ? typeEl.textContent.trim() : 'Custom';
+    const type      = typeEl ? typeEl.textContent.trim()
+                             : (document.getElementById('aiResType')?.value || '').replace(/^[^\w]+/, '').trim() || 'Awareness';
     const audSegs   = [...document.querySelectorAll('#wizStep3 .cf-tag.sel')].map(t=>t.textContent.trim());
     const channels  = [...document.querySelectorAll('#wizStep4 .cf-tag.sel')].map(t=>t.textContent.trim());
 
