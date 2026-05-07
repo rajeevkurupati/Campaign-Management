@@ -28,3 +28,6 @@ Thumbs.db
 
 # ChromaDB vector store (auto-built from guidelines/ at startup)
 backend/chroma_db/
+
+# Node — pptxgenjs was used as a dev tool; modules don't belong in the repo
+node_modules/
